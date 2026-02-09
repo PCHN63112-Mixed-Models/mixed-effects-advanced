@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Introduction &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Clustered Data &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,10 +60,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '0.intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.clustered-data';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Different Data Structures" href="1.data-structures.html" />
+    <link rel="next" title="Repeated Measures Data" href="4.repeated-measures-data.html" />
+    <link rel="prev" title="Building Mixed-effects Models" href="2.building-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -115,8 +116,6 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
@@ -136,7 +135,7 @@
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="0.intro.html">
   
   
   
@@ -163,16 +162,16 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
                     Introduction
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Different Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.clustered-data.html">Clustered Data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Clustered Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -252,7 +251,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F0.intro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F3.clustered-data.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -282,7 +281,7 @@
       
       
       
-      <li><a href="_sources/0.intro.ipynb" target="_blank"
+      <li><a href="_sources/3.clustered-data.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -358,7 +357,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Introduction</h1>
+    <h1>Clustered Data</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -368,8 +367,8 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-authors">About the Authors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-clustered">Two-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
 </ul>
             </nav>
         </div>
@@ -381,31 +380,15 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
-<p>… In this lesson…</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Different Data Structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.clustered-data.html">Clustered Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
-<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
-</ul>
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="clustered-data">
+<h1>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h1>
+<p>…</p>
+<section id="two-level-clustered">
+<h2>Two-level Clustered<a class="headerlink" href="#two-level-clustered" title="Link to this heading">#</a></h2>
+<p>…</p>
 </section>
-<section id="about-the-authors">
-<h2>About the Authors<a class="headerlink" href="#about-the-authors" title="Link to this heading">#</a></h2>
-<figure class="align-right">
-<a class="reference internal image-reference" href="_images/martyn.jpeg"><img alt="_images/martyn.jpeg" src="_images/martyn.jpeg" style="width: 185.7px; height: 223.04999999999998px;" /></a>
-</figure>
-<p><strong>Dr Martyn McFarquhar | PhD FHEA</strong></p>
-<p>Lecturer in Neuroimaging</p>
-<p>4.33 Booth Street East | Division of Psychology, Communication and Human Neuroscience | School of Health Sciences | The University of Manchester M13 9PL</p>
-<p>t: +44 (0)161 275 2688 | e: <a class="reference external" href="mailto:martyn&#46;mcfarquhar&#37;&#52;&#48;manchester&#46;ac&#46;uk">martyn<span>&#46;</span>mcfarquhar<span>&#64;</span>manchester<span>&#46;</span>ac<span>&#46;</span>uk</a></p>
+<section id="three-level-clustered">
+<h2>Three-level Clustered<a class="headerlink" href="#three-level-clustered" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -439,12 +422,21 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="2.building-mixed.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building Mixed-effects Models</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="1.data-structures.html"
+       href="4.repeated-measures-data.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Different Data Structures</p>
+        <p class="prev-next-title">Repeated Measures Data</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -465,8 +457,8 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-authors">About the Authors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-clustered">Two-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
 </ul>
   </nav></div>
 

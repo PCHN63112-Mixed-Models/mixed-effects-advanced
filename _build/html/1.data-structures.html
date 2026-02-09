@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Beyond Repeated Measures &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Different Data Structures &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,11 +60,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '4.beyond-repeated-measures';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '1.data-structures';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Summary" href="summary.html" />
-    <link rel="prev" title="Crossed Random Effects" href="3.crossed-random.html" />
+    <link rel="next" title="Building Mixed-effects Models" href="2.building-mixed.html" />
+    <link rel="prev" title="Introduction" href="0.intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -169,10 +169,11 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="1.higher-order-mixed.html">Higher-order Repeated Measures Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2.multiple-obs.html">Models for Multiple Observations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.crossed-random.html">Crossed Random Effects</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Beyond Repeated Measures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Different Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.clustered-data.html">Clustered Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -250,7 +251,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F4.beyond-repeated-measures.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F1.data-structures.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -280,7 +281,7 @@
       
       
       
-      <li><a href="_sources/4.beyond-repeated-measures.ipynb" target="_blank"
+      <li><a href="_sources/1.data-structures.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -343,9 +344,7 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -356,21 +355,11 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Beyond Repeated Measures</h1>
+    <h1>Different Data Structures</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudinal-data">Longitudinal Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal-data">Clustered-Longitudinal Data</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -380,19 +369,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="beyond-repeated-measures">
-<h1>Beyond Repeated Measures<a class="headerlink" href="#beyond-repeated-measures" title="Link to this heading">#</a></h1>
-<p>… The advantage is that any covariance structure, no matter how complex, will be <em>automatically</em> taken into consideration by the mixed-effects model. The only caveat is that we have to express the structure within the data correctly in order for this to work. So, the focus of mixed-effects models is capturing the <em>structure</em> of the data, with the correlation falling-out as a byproduct. This means that we can use mixed-effects models to capture all sorts of complex structures, <em>beyond</em> repeated measurements. We do not even need to think about how these structures translate into complicated variance-covariance matrices, we just let the model work it out.</p>
-<section id="clustered-data">
-<h2>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h2>
-<p>… Observations on pupils inside classrooms inside schools.</p>
-</section>
-<section id="longitudinal-data">
-<h2>Longitudinal Data<a class="headerlink" href="#longitudinal-data" title="Link to this heading">#</a></h2>
-</section>
-<section id="clustered-longitudinal-data">
-<h2>Clustered-Longitudinal Data<a class="headerlink" href="#clustered-longitudinal-data" title="Link to this heading">#</a></h2>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="different-data-structures">
+<h1>Different Data Structures<a class="headerlink" href="#different-data-structures" title="Link to this heading">#</a></h1>
+<p>…</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -426,20 +405,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="3.crossed-random.html"
+       href="0.intro.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Crossed Random Effects</p>
+        <p class="prev-next-title">Introduction</p>
       </div>
     </a>
     <a class="right-next"
-       href="summary.html"
+       href="2.building-mixed.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Summary</p>
+        <p class="prev-next-title">Building Mixed-effects Models</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -449,24 +428,6 @@
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudinal-data">Longitudinal Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal-data">Clustered-Longitudinal Data</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

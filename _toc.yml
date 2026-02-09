@@ -4,8 +4,9 @@
 format: jb-book
 root: 0.intro
 chapters:
-- file: 1.higher-order-mixed
-- file: 2.multiple-obs
-- file: 3.crossed-random
-- file: 4.beyond-repeated-measures
+- file: 1.data-structures
+- file: 2.building-mixed
+- file: 3.clustered-data
+- file: 4.repeated-measures-data
+- file: 5.longitudinal-clustered-data
 - file: summary
