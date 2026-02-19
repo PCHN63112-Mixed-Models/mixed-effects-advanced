@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Different Data Structures &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Data Structures &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -169,7 +169,7 @@
             </li>
         </ul>
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Different Data Structures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data.html">Clustered Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
@@ -344,7 +344,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -355,11 +357,25 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Different Data Structures</h1>
+    <h1>Data Structures</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-structure">Types of Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#repeated-measurements">Repeated Measurements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudianal">Longitudianal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered-Longitudinal</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -369,9 +385,31 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="different-data-structures">
-<h1>Different Data Structures<a class="headerlink" href="#different-data-structures" title="Link to this heading">#</a></h1>
-<p>…</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="data-structures">
+<h1>Data Structures<a class="headerlink" href="#data-structures" title="Link to this heading">#</a></h1>
+<p>… Note that many of these examples are taken from <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki?context=ubx&amp;amp;refId=4dbda113-7f59-4ba9-a710-897ef536cfee">West, Welch &amp; Galecki (2022)</a>, which is the recommended text for this part of the unit.</p>
+<section id="types-of-structure">
+<h2>Types of Structure<a class="headerlink" href="#types-of-structure" title="Link to this heading">#</a></h2>
+<section id="clustered-data">
+<h3>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h3>
+<p>The first type of data structure is referred to as <em>clustered data</em>. Unlike all the examples we have seen so far, clustered data has no repeated measurements on the units of analysis. Instead, the units are grouped, or nested, within <em>clusters</em> of units.</p>
+<p>For example, the first clustered dataset we will see concerns the birth weight of rat pups. The rat pups represent the units of analysis and each only has a single weight, so there are no repeated measurements here. However, the pups can be grouped into <em>litters</em> from the same mother. The assumption here is that pups from the same litter may be correlated in some fashion. Perhaps one mother consistently has pups that are <em>underweight</em>, or <em>overweight</em>? We can also think of this as <em>two levels</em> of variation, one between the weights within a litter and one between litters. A LME model can be used to capture this structure.</p>
+<p>Similarly, our second clustered dataset concerns maths scores from students. Each student is the unit of analysis and only has a single maths score, so there are no repeated measurements. Nevertheless, there is structure here, as each student is clustered within a class, and classes are clustered within a school. Much like the rat pups, the assumptions here is that students from the same class may be correlated, but also that classes from the same school may also be correlated. Perhaps some schools generally produce higher maths grades than other schools, and within those schools some classes also perform consistently better or worse. There are therefore <em>three levels</em> of variation here: scores, classes and schools. Again, even without repeated measurement of the unit of analysis, a LME model can capture this structure</p>
+</section>
+<section id="repeated-measurements">
+<h3>Repeated Measurements<a class="headerlink" href="#repeated-measurements" title="Link to this heading">#</a></h3>
+<p>The second type of data structure is <em>repeated measurements</em>. Obviously, we know a fair amount about these types of data by this point. However, as has been mentioned multiple times so far, there is a key difference between repeated measurements <em>with</em> replications and repeated measurements <em>without</em> replications. The power of LME models is only really available when we have replications. In other words, when there are <em>multiple</em> observations per-subject and per-repeat. Without this, we are confined to <em>random-intercepts</em> and must assume a compound symmetric covariance structure. This is effectively a repeated measures ANOVA without any sphericity correction.</p>
+<p>For example, the repeated measurements dataset we will examine in this lesson concerns measurements of a chemical in the brains of rats under two different treatments. The treatments are defined <em>within-subject</em>, so each rat (the unit of analysis) gets <em>both</em>. Importantly, these measurements are collected from <em>three</em> different brain regions. Each rat therefore has 6 measurements, 3 for each treatment. If our interest is only on the effects of treatment, we can think of these as 3 replications per-repeat. Rather than averaging-over these replications to create a mean per-rat and per-treatment, we can instead use the replications directly in the model. This then allows much greater scope to capture complex random-effects structures, as we will see later in this lesson.</p>
+</section>
+<section id="longitudianal">
+<h3>Longitudianal<a class="headerlink" href="#longitudianal" title="Link to this heading">#</a></h3>
+<p>The third type of data structure is <em>longitudinal</em>. This is very similar to repeated measurements in the sense that each unit of analysis is measured <em>multiple times</em>. The difference is that these measurements are both <em>spaced</em> over a longer period of time and have a <em>natural order</em>. Repeated measurements are typically collected close together in time and the order of collection is largely immaterial. For instance, in the rat brain example above, the measurements were taken from each brain at the same point in time and it does not matter what order the brain regions were sampled in. Typically, this means that missing data is <em>less</em> common under repeated measurements, unless there is equipment failure or a subject decided to withdraw midway through collection. <em>Longitudinal</em> data is spaced much further in time, typically days, weeks, months or years. This has <em>two</em> consequences. Firstly, there is a naturalistic ordering to the measurements that needs to be taken into account. If we are looking for patterns in the data, we want these to be defined in terms of <em>time</em>. Secondly, the gap of time between the measurements needs to be considered. If we taken measurements at 1 year, 2 years and 5 years, we cannot treat the effect of a 2 year gap the same as a 5 year gap. The amount of time passed needs to be in the model. This is not true of repeated measurements, where we can model the effects of the different levels without consideration of <em>order</em> or <em>measurement gap</em>. Missing data is also much more common in longitudinal data, as you might imagine. This is where LME models have an advantage over other methods, thanks to <em>pooling</em> and <em>shrinkage</em> in the presence of missing values.</p>
+<p>As an example of longitudinal data, we will examine a dataset of autistic children measured on a scale of <em>socialisation</em> at ages 2, 3, 5, 9 and 13 years. Notice that there are uneven gaps between these measurements, which needs to be accommodated. In addition, there will almost certainly be missing data considering the practical difficulties of getting autistic children to reliably return for measurement across 11 years of their lives. Of importance is that we need to consider the <em>reasons</em> for missing data. If these are innocuous, such as the family moving house, then this is unfortunate be not disastrous. However, if the missingness speaks to some sort of <em>confound</em> then we are in trouble. For instance, if the reason why children do not return is <em>related</em> to poor socialisation skills, then this will create a bias, as the <em>worst</em> cases will disappear over time and it will appear as if socialisation is improving when the <em>opposite</em> might actually be true. This highlights the serious difficulties around longitudinal data and the inferences that we can draw.</p>
+</section>
+<section id="clustered-longitudinal">
+<h3>Clustered-Longitudinal<a class="headerlink" href="#clustered-longitudinal" title="Link to this heading">#</a></h3>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -428,6 +466,28 @@
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-structure">Types of Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#repeated-measurements">Repeated Measurements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudianal">Longitudianal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered-Longitudinal</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
