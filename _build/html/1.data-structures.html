@@ -370,10 +370,15 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-structure">Types of Structure</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#repeated-measurements">Repeated Measurements</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudianal">Longitudianal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered-Longitudinal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudinal">Longitudinal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered Longitudinal</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structures-as-hierarchies">Structures as Hierarchies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-determine-the-structure-of-a-dataset">How to Determine the Structure of a Dataset?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-determine-the-unit-of-analysis">Step 1. Determine the <em>unit</em> of analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-determine-what-each-row-of-the-dataset-represents">Step 2. Determine what each <em>row</em> of the dataset represents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-determine-whether-you-have-clusters">Step 3. Determine whether you have clusters</a></li>
 </ul>
             </nav>
         </div>
@@ -401,18 +406,98 @@
 <p>The second type of data structure is <em>repeated measurements</em>. Obviously, we know a fair amount about these types of data by this point. However, as has been mentioned multiple times so far, there is a key difference between repeated measurements <em>with</em> replications and repeated measurements <em>without</em> replications. The power of LME models is only really available when we have replications. In other words, when there are <em>multiple</em> observations per-subject and per-repeat. Without this, we are confined to <em>random-intercepts</em> and must assume a compound symmetric covariance structure. This is effectively a repeated measures ANOVA without any sphericity correction.</p>
 <p>For example, the repeated measurements dataset we will examine in this lesson concerns measurements of a chemical in the brains of rats under two different treatments. The treatments are defined <em>within-subject</em>, so each rat (the unit of analysis) gets <em>both</em>. Importantly, these measurements are collected from <em>three</em> different brain regions. Each rat therefore has 6 measurements, 3 for each treatment. If our interest is only on the effects of treatment, we can think of these as 3 replications per-repeat. Rather than averaging-over these replications to create a mean per-rat and per-treatment, we can instead use the replications directly in the model. This then allows much greater scope to capture complex random-effects structures, as we will see later in this lesson.</p>
 </section>
-<section id="longitudianal">
-<h3>Longitudianal<a class="headerlink" href="#longitudianal" title="Link to this heading">#</a></h3>
-<p>The third type of data structure is <em>longitudinal</em>. This is very similar to repeated measurements in the sense that each unit of analysis is measured <em>multiple times</em>. The difference is that these measurements are both <em>spaced</em> over a longer period of time and have a <em>natural order</em>. Repeated measurements are typically collected close together in time and the order of collection is largely immaterial. For instance, in the rat brain example above, the measurements were taken from each brain at the same point in time and it does not matter what order the brain regions were sampled in. Typically, this means that missing data is <em>less</em> common under repeated measurements, unless there is equipment failure or a subject decided to withdraw midway through collection. <em>Longitudinal</em> data is spaced much further in time, typically days, weeks, months or years. This has <em>two</em> consequences. Firstly, there is a naturalistic ordering to the measurements that needs to be taken into account. If we are looking for patterns in the data, we want these to be defined in terms of <em>time</em>. Secondly, the gap of time between the measurements needs to be considered. If we taken measurements at 1 year, 2 years and 5 years, we cannot treat the effect of a 2 year gap the same as a 5 year gap. The amount of time passed needs to be in the model. This is not true of repeated measurements, where we can model the effects of the different levels without consideration of <em>order</em> or <em>measurement gap</em>. Missing data is also much more common in longitudinal data, as you might imagine. This is where LME models have an advantage over other methods, thanks to <em>pooling</em> and <em>shrinkage</em> in the presence of missing values.</p>
-<p>As an example of longitudinal data, we will examine a dataset of autistic children measured on a scale of <em>socialisation</em> at ages 2, 3, 5, 9 and 13 years. Notice that there are uneven gaps between these measurements, which needs to be accommodated. In addition, there will almost certainly be missing data considering the practical difficulties of getting autistic children to reliably return for measurement across 11 years of their lives. Of importance is that we need to consider the <em>reasons</em> for missing data. If these are innocuous, such as the family moving house, then this is unfortunate be not disastrous. However, if the missingness speaks to some sort of <em>confound</em> then we are in trouble. For instance, if the reason why children do not return is <em>related</em> to poor socialisation skills, then this will create a bias, as the <em>worst</em> cases will disappear over time and it will appear as if socialisation is improving when the <em>opposite</em> might actually be true. This highlights the serious difficulties around longitudinal data and the inferences that we can draw.</p>
+<section id="longitudinal">
+<h3>Longitudinal<a class="headerlink" href="#longitudinal" title="Link to this heading">#</a></h3>
+<p>The third type of data structure is <em>longitudinal</em>. This is very similar to repeated measurements in the sense that each unit of analysis is measured <em>multiple times</em>. The difference is that these measurements are both <em>spaced</em> over a longer period of time and have a <em>natural order</em>. Repeated measurements are typically collected close together in time and the order of collection is largely immaterial. For instance, in the rat brain example above, the measurements were taken from each brain at the same point in time and it does not matter what order the brain regions were sampled in. Typically, this means that missing data is <em>less</em> common under repeated measurements, unless there is equipment failure or a subject decided to withdraw midway through collection. <em>Longitudinal</em> data is spaced much further in time, typically days, weeks, months or years. This has <em>two</em> consequences. Firstly, there is a naturalistic ordering to the measurements that needs to be taken into account. If we are looking for patterns in the data, we want these to be defined in terms of <em>time</em>. Secondly, the gap of time between the measurements needs to be considered. If we taken measurements at 1 year, 2 years and 5 years, we cannot treat the effect of a 2 year gap the same as a 5 year gap. The amount of time passed needs to be in the model. This is not true of repeated measurements, where we can model the effects of the different levels without consideration of <em>order</em> or <em>measurement gap</em>. Missing data is also much more common in longitudinal data, as you might imagine. This is where LME models have an advantage over other methods, thanks to <em>pooling</em> and <em>shrinkage</em>.</p>
+<p>As an example of longitudinal data, we will examine a dataset of autistic children measured on a scale of <em>socialisation</em> at ages 2, 3, 5, 9 and 13 years. Notice that there are uneven gaps between these measurements, which needs to be accommodated. In addition, there will almost certainly be missing data considering the practical difficulties of getting autistic children to reliably return for measurement across 11 years of their lives. Of importance is that we need to consider the <em>reasons</em> for missing data. If these are innocuous, such as the family moving house, then this is unfortunate be not disastrous. However, if the missingness speaks to some sort of <em>confound</em> then we are in trouble. For instance, if the reason why children do not return is <em>related</em> to poor socialisation skills, then this will create a bias, as the <em>worst</em> cases will disappear over time and it will appear as if socialisation is improving when the <em>opposite</em> might be true. This highlights the serious difficulties around longitudinal data and the inferences that we can draw.</p>
 </section>
 <section id="clustered-longitudinal">
-<h3>Clustered-Longitudinal<a class="headerlink" href="#clustered-longitudinal" title="Link to this heading">#</a></h3>
+<h3>Clustered Longitudinal<a class="headerlink" href="#clustered-longitudinal" title="Link to this heading">#</a></h3>
+<p>Finally, clustered longitudinal data combines elements of both <em>longitudinal</em> and <em>clustered</em> data. In these types of datasets, measurements are taken repeatedly from the unit of analysis, but these units are also grouped within clusters. We therefore have a correlation structure that relates to both the repeated measurements over time and to the clusters.</p>
+<p>As an example, we will look at a dataset where measurements of gingivitis were taken from teeth that had been fitted with dental veneers. These measurements were taken 3 months after fitting and 6 months after fitting. This time gap is long and has a clear temporal ordering, so we would think of this of <em>longitudinal</em> rather than <em>repeated measurements</em>. In addition, <em>multiple</em> teeth were sampled from each patient. So, each tooth has two measurements over time and is clustered within a specific individual. This adds an addition layer of variation, because teeth from the same subject are likely to be correlated. Hence, this is clustered longitudinal data.</p>
 <div class="tip admonition">
-<p class="admonition-title">A Note on Time-series Data</p>
-<p>As a point of clarity…</p>
+<p class="admonition-title">A Note on Time Series Data</p>
+<p>As a point of clarity, another type of data you may come across is <em>time series</em> data. Unlike longitudinal data, time series data are generated from a <em>single</em> unit and tend to have many more measurements taken much closer in time. One example could be real-time measurements of gait from someone with Parkinson’s disease who is asked to perform a walking task. By the end of the task, there may be hundreds or thousands of measurements taken from across time on this single unit. Importantly, these type of data will exhibit a <em>very specific</em> correlation pattern, where values close together in time will be <em>more correlated</em> than values further away in time. This requires a specialised correlation structure, known as an <em>autoregressive</em> model, which parameterises the correlation as decreasing with time. These types of structure are more difficult to specify using mixed-effects models and provide a good opportunity to use GLS.</p>
 </div>
 </section>
+</section>
+<section id="structures-as-hierarchies">
+<h2>Structures as Hierarchies<a class="headerlink" href="#structures-as-hierarchies" title="Link to this heading">#</a></h2>
+<p>… It is important to define your <em>unit of analysis</em> …</p>
+<p>A summary of the types of data, their associated examples and the various levels of the hierarchy are given in the table below. For each example, the <em>unit</em> of analysis is given in <em>italics</em>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Data Type</strong></p></th>
+<th class="head"><p><strong>Clustered (2-level)</strong></p></th>
+<th class="head"><p><strong>Clustered (3-level)</strong></p></th>
+<th class="head"><p><strong>Repeated Measures</strong></p></th>
+<th class="head"><p><strong>Longitudinal</strong></p></th>
+<th class="head"><p><strong>Clustered Longitudinal</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Example</strong></p></td>
+<td><p>Rat Pup</p></td>
+<td><p>Classroom</p></td>
+<td><p>Rat Brain</p></td>
+<td><p>Autism</p></td>
+<td><p>Dental Veneer</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Level 1</strong></p></td>
+<td><p><em>Rat Pup</em></p></td>
+<td><p><em>Student</em></p></td>
+<td><p>Replications within each treatment</p></td>
+<td><p>Measures across years</p></td>
+<td><p>Measures across months</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Level 2</strong></p></td>
+<td><p>Litter</p></td>
+<td><p>Classroom</p></td>
+<td><p><em>Rat</em></p></td>
+<td><p><em>Child</em></p></td>
+<td><p><em>Tooth</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Level 3</strong></p></td>
+<td><p></p></td>
+<td><p>School</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p>Patient</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The easiest way to think about this is as follows:</p>
+<ul class="simple">
+<li><p><strong>Level 1</strong> represents observations at the <em>most detailed</em> level of the dataset. For <em>clustered</em> data, this represents the <em>units</em> of analysis, whereas for <em>repeated measurement/longitudinal</em> data this represents the repeated measurements collected for each unit. Remember, the outcome variable is always measured at Level 1 and so Level 1 represents the finest granularity of whatever that measurement is.</p></li>
+<li><p><strong>Level 2</strong> represents the next level in the hierarchy. For <em>clustered</em> data, this will be the <em>clusters of units</em>. For <em>repeated measurement/longitudinal</em> data, this will represent the <em>units</em> of analysis.</p></li>
+<li><p><strong>Level 3</strong> represents the next level in the hierarchy, above Level 2. For <em>clustered</em> data, this will represent <em>clusters of clusters</em>. For <em>clustered longitudinal</em> data, this will represent clusters of the units defined at Level 2.</p></li>
+</ul>
+<p>There is not usually more than 3 levels in these types of datasets, though this is neither a rule nor a limitation. Part of the challenge of using a multilevel conceptualisations is defining what a particular dataset actually is. We can use the rules above to define each level of the data, but only is we know what type of structure we have. We will now turn to a set of steps you can use to try and determine this. Once it is known, apply the definitions of the levels above, and you should be able to write a table similar to the above for your data. This will be the first step in building the most suitable model.</p>
+</section>
+<section id="how-to-determine-the-structure-of-a-dataset">
+<h2>How to Determine the Structure of a Dataset?<a class="headerlink" href="#how-to-determine-the-structure-of-a-dataset" title="Link to this heading">#</a></h2>
+</section>
+<section id="step-1-determine-the-unit-of-analysis">
+<h2>Step 1. Determine the <em>unit</em> of analysis<a class="headerlink" href="#step-1-determine-the-unit-of-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="step-2-determine-what-each-row-of-the-dataset-represents">
+<h2>Step 2. Determine what each <em>row</em> of the dataset represents<a class="headerlink" href="#step-2-determine-what-each-row-of-the-dataset-represents" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>If each row is <em>one unit</em> measured <em>multiple times</em>, then this is either repeated measures or longitudinal.</p></li>
+<li><p>If each row is <em>one unit</em> measured</p></li>
+</ul>
+</section>
+<section id="step-3-determine-whether-you-have-clusters">
+<h2>Step 3. Determine whether you have clusters<a class="headerlink" href="#step-3-determine-whether-you-have-clusters" title="Link to this heading">#</a></h2>
+<p>To make the distinctions, consider whether the grouping represents something the unit HAS vs something that the unit is IN. Clustering corresponds to shared context and thus is something a unit is IN: a school, a classroom, a clinic, a hospital, a litter, a neighbourhood. Between-subjects grouping corresponds to a shared characteristic of the unit and thus is something the unit HAS: a diagnosis, a blood type, a gender, an experimental treatment, IQ level.</p>
+<p>Another way to think about this is that a between-subjects variable represents a <em>systematic difference</em> that we want to capture. These variables affect the <em>mean structure</em>. Clusters, on the other hand, represent a <em>shared latent influence</em> that affects the <em>covariance structure</em>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Clusters vs Between-subject Groups</p>
+<p>… The difference comes down to <em>error structure</em>. Imagine we are only focussed on a single school and take a single pupil from a specific maths classroom and find that their test score is unusually <em>low</em> compared to the population mean of <em>all</em> maths scores across <em>all</em> the maths classrooms. The question is then, does this tell us anything about another pupil from a <em>different</em> classroom? In general, <em>no</em>. Just because that student’s score is low, it does not mean another pupil from an entirely separate classroom with a different teacher would also be low. <em>However</em>, if we take a <em>different</em> pupil from the <em>same</em> classroom, this student’s score may well tell us <em>something</em> about another pupil. Because they both share the same <em>context</em> (classroom environment, teacher, pupils), there could be a relationship here. If one student is scoring <em>below</em> the average, it could be that <em>all</em> pupils in that classroom are also scoring below the average due to the teacher, or another other shared elements. So, in this example, the <em>clustering</em> creates the potential for correlation.</p>
+<p>To see how this differs from a between-subject grouping, imagine we had a sample of patients diagnosed with major depressive disorder (MDD). If we take one patient at random and calculate a mood score, it might be below the average mood of all people with depression. It might also be above the average mood, or pretty much spot-on. Either way, this tells us <em>nothing</em> about the mood of someone else with MDD. We cannot predict the deviation from the average in one person based on another. So the patients are <em>independent</em> and this is a <em>between-subjects</em> grouping, rather than a <em>cluster</em>. There is no shared environment or context that would induce correlation within the errors.</p>
+<p>However, there <em>could</em> be additional structure here that would induce correlation. For instance, imagine that the patients with MDD are also clustered within <em>treatment clinics</em>. These clinics correspond to a shared environment, with the same doctors, nurses, location and equipment. In this instance, patients treated at the same clinic <em>could</em> be correlated. Perhaps one clinic is just more effective at treatment than another. In this case, all mood scores from that clinical will be <em>higher</em> than the population average. Knowing one patient’s deviation <em>does</em> allow us to predict another patient’s deviation. Because they were treated at the <em>same</em> clinic, they may <em>both</em> have similarly high deviations from the population mean. Importantly, this does not allow us to predict another patient’s deviation in mood from an entirely separate clinic. So, in this structure, clinics are independent, but patients within clinics may share some degree of dependency.</p>
+</div>
 </section>
 </section>
 
@@ -484,10 +569,15 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-structure">Types of Structure</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-data">Clustered Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#repeated-measurements">Repeated Measurements</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudianal">Longitudianal</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered-Longitudinal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#longitudinal">Longitudinal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal">Clustered Longitudinal</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structures-as-hierarchies">Structures as Hierarchies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-determine-the-structure-of-a-dataset">How to Determine the Structure of a Dataset?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-determine-the-unit-of-analysis">Step 1. Determine the <em>unit</em> of analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-determine-what-each-row-of-the-dataset-represents">Step 2. Determine what each <em>row</em> of the dataset represents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-determine-whether-you-have-clusters">Step 3. Determine whether you have clusters</a></li>
 </ul>
   </nav></div>
 
