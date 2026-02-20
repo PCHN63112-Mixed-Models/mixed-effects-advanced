@@ -60,6 +60,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '3.clustered-data';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -367,7 +369,17 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-clustered">Two-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-differ-across-units">4. Identify Terms that Differ Across Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-predictor-variables">Adding More Predictor Variables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
 </ul>
             </nav>
@@ -383,12 +395,58 @@
   <section class="tex2jax_ignore mathjax_ignore" id="clustered-data">
 <h1>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h1>
 <p>…</p>
-<section id="two-level-clustered">
-<h2>Two-level Clustered<a class="headerlink" href="#two-level-clustered" title="Link to this heading">#</a></h2>
-<p>…</p>
+<section id="building-the-two-level-clustered-model">
+<h2>Building the Two-level Clustered Model<a class="headerlink" href="#building-the-two-level-clustered-model" title="Link to this heading">#</a></h2>
+<p>… So Step 1 is already completed. However, we will run through the logic for these data anyway, for the sake of completeness.</p>
+<section id="identify-the-structure">
+<h3>1. Identify the Structure<a class="headerlink" href="#identify-the-structure" title="Link to this heading">#</a></h3>
+</section>
+<section id="model-a-single-dependency-structure">
+<h3>2. Model a Single Dependency Structure<a class="headerlink" href="#model-a-single-dependency-structure" title="Link to this heading">#</a></h3>
+<p>So, what is the dependency structure here? With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>.</p>
+<p>In this example, the clusters are independent, so we need to write the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single cluster. For this example, rather than have multiple litters of rats, we only run the experiment on a single litter of rats. What would the model then be?</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i} = \mu + \epsilon_{i}
+\]</div>
+</section>
+<section id="add-multiple-dependency-structures">
+<h3>3. Add Multiple Dependency Structures<a class="headerlink" href="#add-multiple-dependency-structures" title="Link to this heading">#</a></h3>
+<p>Now imagine that we had <em>multiple</em> clusters. How would the model change?</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \mu_{j} + \epsilon_{ij}
+\]</div>
+</section>
+<section id="identify-terms-that-differ-across-units">
+<h3>4. Identify Terms that Differ Across Units<a class="headerlink" href="#identify-terms-that-differ-across-units" title="Link to this heading">#</a></h3>
+<p>In this example, the terms <span class="math notranslate nohighlight">\(\mu_{j}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span> both have the index <span class="math notranslate nohighlight">\(j\)</span>. This means that their value will be different for each cluster. In other words, these terms differ <em>across</em> the units. Because our interest extends beyond the selection of litters we have in this dataset, we think of both these terms as <em>random variables</em>. Whenever we collect new data from a new litter of rats, both of these will change.</p>
+</section>
+<section id="write-the-higher-level-models">
+<h3>5. Write the Higher-level Models<a class="headerlink" href="#write-the-higher-level-models" title="Link to this heading">#</a></h3>
+<p>So what then determines the mean weight of each litter? Well, remember in this experiment that the experimental treatment that is thought to affect weight was applied to a selection of litters as a whole. So the main element that might affect the average weight in litter <span class="math notranslate nohighlight">\(j\)</span> is the treatment they were given</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y_{ij}  &amp;= \mu_{j} + \eta_{ij} \\
+    \mu_{j} &amp;= \mu +\alpha_{k} + \xi_{j}
+\end{alignat*}
+\end{split}\]</div>
+</section>
+<section id="collapse-to-form-the-mixed-effects-model">
+<h3>6. Collapse to Form the Mixed-effects Model<a class="headerlink" href="#collapse-to-form-the-mixed-effects-model" title="Link to this heading">#</a></h3>
+<p>We can now collapse these levels together to give the mixed-effects specification.</p>
+</section>
+</section>
+<section id="specifying-the-two-level-clustered-model-in-r">
+<h2>Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#specifying-the-two-level-clustered-model-in-r" title="Link to this heading">#</a></h2>
+</section>
+<section id="adding-more-predictor-variables">
+<h2>Adding More Predictor Variables<a class="headerlink" href="#adding-more-predictor-variables" title="Link to this heading">#</a></h2>
 </section>
 <section id="three-level-clustered">
 <h2>Three-level Clustered<a class="headerlink" href="#three-level-clustered" title="Link to this heading">#</a></h2>
+<p>… We will leave it as an exercise to try and apply the steps above to these data. We will walk through this in the workshop this week.</p>
 </section>
 </section>
 
@@ -457,7 +515,17 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-level-clustered">Two-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-differ-across-units">4. Identify Terms that Differ Across Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-predictor-variables">Adding More Predictor Variables</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
 </ul>
   </nav></div>
