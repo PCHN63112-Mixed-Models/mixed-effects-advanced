@@ -172,6 +172,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data.html">Clustered Data</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -483,6 +484,7 @@
 </section>
 <section id="step-2-determine-what-each-row-of-the-dataset-represents">
 <h2>Step 2. Determine what each <em>row</em> of the dataset represents<a class="headerlink" href="#step-2-determine-what-each-row-of-the-dataset-represents" title="Link to this heading">#</a></h2>
+<p>Importantly, this corresponds to rows in the <em>long format</em>, so any wide-formatted data need to be converted first.</p>
 <ul class="simple">
 <li><p>If each row is <em>one unit</em> measured <em>multiple times</em>, then this is either repeated measures or longitudinal.</p></li>
 <li><p>If each row is <em>one unit</em> measured</p></li>
@@ -490,6 +492,7 @@
 </section>
 <section id="step-3-determine-whether-you-have-clusters">
 <h2>Step 3. Determine whether you have clusters<a class="headerlink" href="#step-3-determine-whether-you-have-clusters" title="Link to this heading">#</a></h2>
+<p>… We can use a <em>visual metaphor</em> here to try and make the distinction clear: <em>rubber bands</em> vs <em>sticky notes</em>.</p>
 <p>To make the distinctions, consider whether the grouping represents something the unit HAS vs something that the unit is IN. Clustering corresponds to shared context and thus is something a unit is IN: a school, a classroom, a clinic, a hospital, a litter, a neighbourhood. Between-subjects grouping corresponds to a shared characteristic of the unit and thus is something the unit HAS: a diagnosis, a blood type, a gender, an experimental treatment, IQ level.</p>
 <p>Another way to think about this is that a between-subjects variable represents a <em>systematic difference</em> that we want to capture. These variables affect the <em>mean structure</em>. Clusters, on the other hand, represent a <em>shared latent influence</em> that affects the <em>covariance structure</em>.</p>
 <div class="tip admonition">

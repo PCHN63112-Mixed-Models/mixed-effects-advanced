@@ -174,6 +174,7 @@
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Clustered Data</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -369,19 +370,24 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Clustered Data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-differ-across-units">4. Identify Terms that Differ Across Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-predictor-variables">Adding More Predictor Variables</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -395,41 +401,150 @@
   <section class="tex2jax_ignore mathjax_ignore" id="clustered-data">
 <h1>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h1>
 <p>…</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-rat-pup-data">
+<h1>The Rat Pup Data<a class="headerlink" href="#the-rat-pup-data" title="Link to this heading">#</a></h1>
+<p>… The data are available from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a> and need to be downloaded into the current working directory before being loaded. In these examples, we have put the data in a separate <code class="docutils literal notranslate"><span class="pre">data</span></code> folder, so just be aware of this before copying and pasting any code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&#39;data/rat_pup.dat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">24</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex litter litsize treatment
+1       1   6.60   Male      1      12   Control
+2       2   7.40   Male      1      12   Control
+3       3   7.15   Male      1      12   Control
+4       4   7.24   Male      1      12   Control
+5       5   7.10   Male      1      12   Control
+6       6   6.04   Male      1      12   Control
+7       7   6.98   Male      1      12   Control
+8       8   7.05   Male      1      12   Control
+9       9   6.95 Female      1      12   Control
+10     10   6.29 Female      1      12   Control
+11     11   6.77 Female      1      12   Control
+12     12   6.57 Female      1      12   Control
+13     13   6.37   Male      2      14   Control
+14     14   6.37   Male      2      14   Control
+15     15   6.90   Male      2      14   Control
+16     16   6.34   Male      2      14   Control
+17     17   6.50   Male      2      14   Control
+18     18   6.10   Male      2      14   Control
+19     19   6.44   Male      2      14   Control
+20     20   6.94   Male      2      14   Control
+21     21   6.41   Male      2      14   Control
+22     22   5.92 Female      2      14   Control
+23     23   6.04 Female      2      14   Control
+24     24   5.82 Female      2      14   Control
+</pre></div>
+</div>
+</div>
+</div>
 <section id="building-the-two-level-clustered-model">
 <h2>Building the Two-level Clustered Model<a class="headerlink" href="#building-the-two-level-clustered-model" title="Link to this heading">#</a></h2>
-<p>… So Step 1 is already completed. However, we will run through the logic for these data anyway, for the sake of completeness.</p>
+<p>We will use the steps described in the previous part of the lesson to build this model. We will detail each one so you get a good idea of how this process applied to this dataset. The aim is to build intuition and confidence so that you can do the same for any dataset you come across.</p>
 <section id="identify-the-structure">
 <h3>1. Identify the Structure<a class="headerlink" href="#identify-the-structure" title="Link to this heading">#</a></h3>
+<p>We already discussed identifying the structure of a dataset at the beginning of this lesson. We are also organising these examples <em>by structure</em>, so this first step is somewhat redundant. However, we will keep it here for completeness.</p>
+<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. So, in this example, our units are <em>individual rat pups</em>. Our primary question is about how the treatments affect the weight of the rat pups, so these are clearly the units of interest.</p>
+<p>In the second step, we need to determine what each row of the data represents. As we can see above, each row corresponds to only a single unit measured <em>once</em>. So this <em>could</em> be <em>clustered</em> data.</p>
+<p>In the final step, we need to determine if there are any clusters. If there are, we use a multilevel/LME approach. If there are not, the data are known as <em>cross-sectional</em> and we go back to plain old linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are labels that we give those units?</p>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">More on Litter Size</p>
+<p>You may find <code class="docutils literal notranslate"><span class="pre">litsize</span></code> a confusing inclusion because it <em>refers</em> to litter and thus sounds like it should relate to clustering. However, this is a <em>description</em> rather than a structure. The way to think about it is if, hypothetically, litter size was a <em>rubber band</em> it would mean that all pups from litters of the same size were connected, irrespective of their mother, rearing environment or siblings. So, it is simply the total number of pups in the litter that matters biologically, rather than anything else. Thus all pups from a litter of size 8 would be connected together. Their mother, genetics and other factors <em>do not matter</em>. Consider for yourself whether this sounds plausible and thus whether you think <code class="docutils literal notranslate"><span class="pre">litsize</span></code> should be treated as a <em>rubber band</em> or a <em>sticky note</em>.</p>
+</div>
 </section>
 <section id="model-a-single-dependency-structure">
 <h3>2. Model a Single Dependency Structure<a class="headerlink" href="#model-a-single-dependency-structure" title="Link to this heading">#</a></h3>
 <p>So, what is the dependency structure here? With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>.</p>
 <p>In this example, the clusters are independent, so we need to write the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single cluster. For this example, rather than have multiple litters of rats, we only run the experiment on a single litter of rats. What would the model then be?</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i} = \mu + \epsilon_{i}
-\]</div>
+<p>For pup <span class="math notranslate nohighlight">\(i\)</span> from level <span class="math notranslate nohighlight">\(j\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, we would have
+$<span class="math notranslate nohighlight">\(
+y_{ij} = \mu + \alpha_{j} + \epsilon_{ij}
+\)</span>$</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">litter.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex litter litsize treatment
+1       1   6.60   Male      1      12   Control
+2       2   7.40   Male      1      12   Control
+3       3   7.15   Male      1      12   Control
+4       4   7.24   Male      1      12   Control
+5       5   7.10   Male      1      12   Control
+6       6   6.04   Male      1      12   Control
+7       7   6.98   Male      1      12   Control
+8       8   7.05   Male      1      12   Control
+9       9   6.95 Female      1      12   Control
+10     10   6.29 Female      1      12   Control
+11     11   6.77 Female      1      12   Control
+12     12   6.57 Female      1      12   Control
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of only one litter and so cannot be used as predictors. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. We could even go as far as removing these from <code class="docutils literal notranslate"><span class="pre">litter.1</span></code>, if we wanted to make this <em>very</em> explicit. Though, for this example, we will leave the data as-is.</p>
+<p>We can actually run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code> just to check that we have a structure that makes modelling a single litter possible. This is not wholly necessary, but can be a useful exercise when building these models logically. It is also useful because we can see the model formula for <em>one litter</em>, which will become relevant a little later on. We also make the intercept parameter <em>explicit</em> here for clarity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.1</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lm.litter.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = weight ~ 1 + sex, data = litter.1)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9050 -0.1425  0.1150  0.2275  0.4550 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   6.6450     0.1969  33.749 1.23e-11 ***
+sexMale       0.3000     0.2411   1.244    0.242    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3938 on 10 degrees of freedom
+Multiple R-squared:  0.134,	Adjusted R-squared:  0.04743 
+F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="add-multiple-dependency-structures">
 <h3>3. Add Multiple Dependency Structures<a class="headerlink" href="#add-multiple-dependency-structures" title="Link to this heading">#</a></h3>
-<p>Now imagine that we had <em>multiple</em> clusters. How would the model change?</p>
+<p>Now imagine that we had <em>multiple</em> litters. How would the model change?</p>
 <div class="math notranslate nohighlight">
 \[
-y_{ij} = \mu_{j} + \epsilon_{ij}
+y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij}
 \]</div>
+<p>So <span class="math notranslate nohighlight">\(\mu_{k}\)</span> is the average weight for litter <span class="math notranslate nohighlight">\(k\)</span>. So this is a <em>litter-specific</em> effects.</p>
 </section>
-<section id="identify-terms-that-differ-across-units">
-<h3>4. Identify Terms that Differ Across Units<a class="headerlink" href="#identify-terms-that-differ-across-units" title="Link to this heading">#</a></h3>
+<section id="identify-terms-that-change-with-the-dependency-structure">
+<h3>4. Identify Terms that Change with the Dependency Structure<a class="headerlink" href="#identify-terms-that-change-with-the-dependency-structure" title="Link to this heading">#</a></h3>
 <p>In this example, the terms <span class="math notranslate nohighlight">\(\mu_{j}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span> both have the index <span class="math notranslate nohighlight">\(j\)</span>. This means that their value will be different for each cluster. In other words, these terms differ <em>across</em> the units. Because our interest extends beyond the selection of litters we have in this dataset, we think of both these terms as <em>random variables</em>. Whenever we collect new data from a new litter of rats, both of these will change.</p>
 </section>
 <section id="write-the-higher-level-models">
 <h3>5. Write the Higher-level Models<a class="headerlink" href="#write-the-higher-level-models" title="Link to this heading">#</a></h3>
 <p>So what then determines the mean weight of each litter? Well, remember in this experiment that the experimental treatment that is thought to affect weight was applied to a selection of litters as a whole. So the main element that might affect the average weight in litter <span class="math notranslate nohighlight">\(j\)</span> is the treatment they were given</p>
+<p>We also have a <em>choice</em> here about allowing the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to vary per-litter, or assuming that it is <em>constant</em> across all litters …</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    y_{ij}  &amp;= \mu_{j} + \eta_{ij} \\
-    \mu_{j} &amp;= \mu +\alpha_{k} + \xi_{j}
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi_{k} \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt} + \phi_{jt}
 \end{alignat*}
 \end{split}\]</div>
 </section>
@@ -440,13 +555,126 @@ y_{ij} = \mu_{j} + \epsilon_{ij}
 </section>
 <section id="specifying-the-two-level-clustered-model-in-r">
 <h2>Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#specifying-the-two-level-clustered-model-in-r" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
+
+<span class="n">lme.ratpup.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lme.ratpup.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratpup 
+      AIC      BIC    logLik
+  438.799 476.3564 -209.3995
+
+Random effects:
+ Formula: ~1 + sex | litter
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev    Corr  
+(Intercept) 0.5019186 (Intr)
+sexMale     0.1554335 0.888 
+Residual    0.4005464       
+
+Fixed effects:  weight ~ sex * treatment 
+                          Value Std.Error  DF  t-value p-value
+(Intercept)            6.200295 0.1685194 292 36.79278  0.0000
+sexMale                0.441064 0.0878297 292  5.02181  0.0000
+treatmentHigh         -0.293458 0.2647520  24 -1.10843  0.2787
+treatmentLow          -0.315255 0.2376438  24 -1.32658  0.1971
+sexMale:treatmentHigh -0.083920 0.1529263 292 -0.54876  0.5836
+sexMale:treatmentLow  -0.077938 0.1272381 292 -0.61253  0.5407
+ Correlation: 
+                      (Intr) sexMal trtmnH trtmnL sxMl:H
+sexMale                0.262                            
+treatmentHigh         -0.637 -0.167                     
+treatmentLow          -0.709 -0.186  0.451              
+sexMale:treatmentHigh -0.151 -0.574  0.200  0.107       
+sexMale:treatmentLow  -0.181 -0.690  0.115  0.277  0.396
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-7.26679491 -0.48614772 -0.01516589  0.55664434  2.81749341 
+
+Number of Observations: 322
+Number of Groups: 27 
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="adding-more-predictor-variables">
-<h2>Adding More Predictor Variables<a class="headerlink" href="#adding-more-predictor-variables" title="Link to this heading">#</a></h2>
+<section id="making-sex-constant-across-litters">
+<h2>Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters<a class="headerlink" href="#making-sex-constant-across-litters" title="Link to this heading">#</a></h2>
+<p>… We can also see why we made the intercept explicit in the model formula earlier, because it more easily connects with why we are now using <code class="docutils literal notranslate"><span class="pre">1|litter</span></code> instead of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex|litter</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lme.ratpup.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratpup 
+       AIC      BIC    logLik
+  439.6887 469.7346 -211.8444
+
+Random effects:
+ Formula: ~1 | litter
+        (Intercept)  Residual
+StdDev:   0.5676074 0.4053673
+
+Fixed effects:  weight ~ sex * treatment 
+                          Value Std.Error  DF  t-value p-value
+(Intercept)            6.212773 0.1885557 292 32.94928  0.0000
+sexMale                0.415931 0.0734525 292  5.66259  0.0000
+treatmentHigh         -0.300908 0.2958837  24 -1.01698  0.3193
+treatmentLow          -0.325592 0.2659971  24 -1.22404  0.2328
+sexMale:treatmentHigh -0.099680 0.1330752 292 -0.74905  0.4544
+sexMale:treatmentLow  -0.093269 0.1063180 292 -0.87726  0.3811
+ Correlation: 
+                      (Intr) sexMal trtmnH trtmnL sxMl:H
+sexMale               -0.228                            
+treatmentHigh         -0.637  0.146                     
+treatmentLow          -0.709  0.162  0.452              
+sexMale:treatmentHigh  0.126 -0.552 -0.232 -0.089       
+sexMale:treatmentLow   0.158 -0.691 -0.101 -0.205  0.381
+
+Standardized Within-Group Residuals:
+         Min           Q1          Med           Q3          Max 
+-7.358181418 -0.484194371  0.008458083  0.557578982  3.086834875 
+
+Number of Observations: 322
+Number of Groups: 27 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">36</span><span class="p">,],</span>
+<span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span>
+<span class="w">           </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="o">~</span><span class="n">litter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b009ffe6257b3556ad7a5e919eb134645ea979d3e6b70caa765e9883591222c5.png" src="_images/b009ffe6257b3556ad7a5e919eb134645ea979d3e6b70caa765e9883591222c5.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+</pre></div>
+</div>
+</div>
+</div>
 </section>
-<section id="three-level-clustered">
-<h2>Three-level Clustered<a class="headerlink" href="#three-level-clustered" title="Link to this heading">#</a></h2>
-<p>… We will leave it as an exercise to try and apply the steps above to these data. We will walk through this in the workshop this week.</p>
+<section id="adding-litsize">
+<h2>Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code><a class="headerlink" href="#adding-litsize" title="Link to this heading">#</a></h2>
 </section>
 </section>
 
@@ -515,19 +743,24 @@ y_{ij} = \mu_{j} + \epsilon_{ij}
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Clustered Data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-differ-across-units">4. Identify Terms that Differ Across Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-more-predictor-variables">Adding More Predictor Variables</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#three-level-clustered">Three-level Clustered</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>
