@@ -656,17 +656,16 @@ Number of Groups: 27
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
 
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">36</span><span class="p">,],</span>
-<span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span>
-<span class="w">           </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="o">+</span>
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">57</span><span class="p">,],</span><span class="w"> </span><span class="c1"># first 5 litters</span>
+<span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="o">~</span><span class="n">litter</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/b009ffe6257b3556ad7a5e919eb134645ea979d3e6b70caa765e9883591222c5.png" src="_images/b009ffe6257b3556ad7a5e919eb134645ea979d3e6b70caa765e9883591222c5.png" />
+<img alt="_images/2315e2b81361049fccccea0be2c7dd75b9e3fb8a3a34c2c57c354bfffc16aa66.png" src="_images/2315e2b81361049fccccea0be2c7dd75b9e3fb8a3a34c2c57c354bfffc16aa66.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
 </pre></div>
 </div>
