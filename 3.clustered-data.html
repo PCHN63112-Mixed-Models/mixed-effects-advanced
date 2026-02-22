@@ -174,7 +174,6 @@
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Clustered Data</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="4.repeated-measures-data.html">Repeated Measures Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.longitudinal-clustered-data.html">Longitudinal and Clustered Longitudinal</a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
@@ -370,14 +369,21 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Clustered Data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
 </ul>
 </li>
@@ -385,9 +391,6 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
-</li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -401,10 +404,9 @@
   <section class="tex2jax_ignore mathjax_ignore" id="clustered-data">
 <h1>Clustered Data<a class="headerlink" href="#clustered-data" title="Link to this heading">#</a></h1>
 <p>…</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="the-rat-pup-data">
-<h1>The Rat Pup Data<a class="headerlink" href="#the-rat-pup-data" title="Link to this heading">#</a></h1>
-<p>… The data are available from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a> and need to be downloaded into the current working directory before being loaded. In these examples, we have put the data in a separate <code class="docutils literal notranslate"><span class="pre">data</span></code> folder, so just be aware of this before copying and pasting any code.</p>
+<section id="the-rat-pup-data">
+<h2>The Rat Pup Data<a class="headerlink" href="#the-rat-pup-data" title="Link to this heading">#</a></h2>
+<p>… The data are available from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a> and need to be downloaded into the current working directory before being loaded. In these examples, we have put the data in a separate <code class="docutils literal notranslate"><span class="pre">data</span></code> folder, so just be aware of this if you are copying and pasting code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&#39;data/rat_pup.dat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
@@ -442,15 +444,26 @@
 </div>
 </div>
 </div>
+<p>These data are already in <em>long-format</em>, so all we need to do is make sure that all categorical variables are correctly defined as a <code class="docutils literal notranslate"><span class="pre">factor</span></code> using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="o">$</span><span class="n">sex</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="o">$</span><span class="n">treatment</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">treatment</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="building-the-two-level-clustered-model">
 <h2>Building the Two-level Clustered Model<a class="headerlink" href="#building-the-two-level-clustered-model" title="Link to this heading">#</a></h2>
-<p>We will use the steps described in the previous part of the lesson to build this model. We will detail each one so you get a good idea of how this process applied to this dataset. The aim is to build intuition and confidence so that you can do the same for any dataset you come across.</p>
+<p>We will use the steps described in the previous part of the lesson to build this model. We will detail each one so you get a good idea of how the process applies to this dataset. The aim is to build intuition and confidence so that you can do the same for any dataset.</p>
 <section id="identify-the-structure">
 <h3>1. Identify the Structure<a class="headerlink" href="#identify-the-structure" title="Link to this heading">#</a></h3>
 <p>We already discussed identifying the structure of a dataset at the beginning of this lesson. We are also organising these examples <em>by structure</em>, so this first step is somewhat redundant. However, we will keep it here for completeness.</p>
-<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. So, in this example, our units are <em>individual rat pups</em>. Our primary question is about how the treatments affect the weight of the rat pups, so these are clearly the units of interest.</p>
-<p>In the second step, we need to determine what each row of the data represents. As we can see above, each row corresponds to only a single unit measured <em>once</em>. So this <em>could</em> be <em>clustered</em> data.</p>
-<p>In the final step, we need to determine if there are any clusters. If there are, we use a multilevel/LME approach. If there are not, the data are known as <em>cross-sectional</em> and we go back to plain old linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are labels that we give those units?</p>
+<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. So, in this example, our units are <em>individual rat pups</em>. Our primary question is about how the treatments affect the weight of the rat pups.</p>
+<p>In the second step, we need to determine what each row of the data represents. As we can see above, each row corresponds to only a single unit measured <em>once</em>. So this is <em>not</em> repeated measures or longitudinal data, but it <em>could</em> be <em>clustered</em> data.</p>
+<p>In the final step, we need to determine if there are any clusters. If there are, we use a multilevel/LME approach. If there are not, the data are <em>cross-sectional</em> and we go back to normal linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation between pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are simply labels that we give those units?</p>
 <p>In this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">More on Litter Size</p>
@@ -459,15 +472,11 @@
 </section>
 <section id="model-a-single-dependency-structure">
 <h3>2. Model a Single Dependency Structure<a class="headerlink" href="#model-a-single-dependency-structure" title="Link to this heading">#</a></h3>
-<p>So, what is the dependency structure here? With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>.</p>
-<p>In this example, the clusters are independent, so we need to write the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single cluster. For this example, rather than have multiple litters of rats, we only run the experiment on a single litter of rats. What would the model then be?</p>
-<p>For pup <span class="math notranslate nohighlight">\(i\)</span> from level <span class="math notranslate nohighlight">\(j\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, we would have
-$<span class="math notranslate nohighlight">\(
-y_{ij} = \mu + \alpha_{j} + \epsilon_{ij}
-\)</span>$</p>
+<p>In our second step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. So, we start by writing the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
+<p>We can look at this in <code class="docutils literal notranslate"><span class="pre">R</span></code> by subsetting the data to just those values from the first litter</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">litter.1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -490,8 +499,14 @@ y_{ij} = \mu + \alpha_{j} + \epsilon_{ij}
 </div>
 </div>
 </div>
-<p>As we can see, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of only one litter and so cannot be used as predictors. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. We could even go as far as removing these from <code class="docutils literal notranslate"><span class="pre">litter.1</span></code>, if we wanted to make this <em>very</em> explicit. Though, for this example, we will leave the data as-is.</p>
-<p>We can actually run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code> just to check that we have a structure that makes modelling a single litter possible. This is not wholly necessary, but can be a useful exercise when building these models logically. It is also useful because we can see the model formula for <em>one litter</em>, which will become relevant a little later on. We also make the intercept parameter <em>explicit</em> here for clarity.</p>
+<p>As we can see, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter and so cannot be used as predictors. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. We could even go as far as removing these from <code class="docutils literal notranslate"><span class="pre">litter.1</span></code>. If you are working with very complex datasets, this is something you may want to do to help clarify the model you are building. However, for this example, we will leave the data as-is.</p>
+<p>Based on the above, the only useable variables we have at the level of a single litter are <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code>. Because there are no repeated measurements, <code class="docutils literal notranslate"><span class="pre">pup_id</span></code> simply indexes the rows of the data frame and is not of much use. So, based on all this, the only model we can build at the level of a single litter is one that models <code class="docutils literal notranslate"><span class="pre">weights</span></code> as a function of the <code class="docutils literal notranslate"><span class="pre">sex</span></code> of the pup. This is not wholly unreasonable, as we expect male pups to be heavier than female pups. So our starting point is the normal linear model</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \mu + \alpha_{j} + \eta_{ij},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(y_{ij}\)</span> is the value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for pup <span class="math notranslate nohighlight">\(i\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(\mu\)</span> is the average weight of all pups in this litter, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at level <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is the error. This is effectively a one-way ANOVA model of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within a single litter.</p>
+<p>We can run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code> to check that we have a model that is possible with a single litter. This is not wholly necessary, but can be a useful exercise when building these models up slowly. It is also useful because we can see the model formula for <em>one litter</em>, which will become relevant a little later on.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.1</span><span class="p">)</span>
@@ -521,32 +536,85 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 </div>
 </div>
 </div>
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. More importantly, we can see that this model <em>is</em> possible and is not constrained by the data. So we do not need to make any further adjustments here and can carry on.</p>
 </section>
 <section id="add-multiple-dependency-structures">
 <h3>3. Add Multiple Dependency Structures<a class="headerlink" href="#add-multiple-dependency-structures" title="Link to this heading">#</a></h3>
-<p>Now imagine that we had <em>multiple</em> litters. How would the model change?</p>
+<p>For step 3, we need to imagine that we had <em>multiple</em> litters and then need to rewrite the model above accordingly. To begin, we need another index to make it clear <em>which litter</em> the model is referring to. To do this, we will use <span class="math notranslate nohighlight">\(k\)</span> to indicate <code class="docutils literal notranslate"><span class="pre">litter</span></code>, but will use a slightly different notation to illustrate which elements <em>belong</em> to the model for litter <span class="math notranslate nohighlight">\(k\)</span>. So, we write the model for litter <span class="math notranslate nohighlight">\(k\)</span> as</p>
 <div class="math notranslate nohighlight">
 \[
 y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij}
 \]</div>
-<p>So <span class="math notranslate nohighlight">\(\mu_{k}\)</span> is the average weight for litter <span class="math notranslate nohighlight">\(k\)</span>. So this is a <em>litter-specific</em> effects.</p>
+<p>This indicates that <em>everything</em> in the model has the potential to change with each new litter. This is generally our theoretical starting-point. However, in the next step, we will determine whether everything here <em>can</em> change within each litter, given the data we have, and whether we <em>want</em> them to change with each litter.</p>
 </section>
 <section id="identify-terms-that-change-with-the-dependency-structure">
 <h3>4. Identify Terms that Change with the Dependency Structure<a class="headerlink" href="#identify-terms-that-change-with-the-dependency-structure" title="Link to this heading">#</a></h3>
+<p>Now that we have our model for each level of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we need to make some decisions. As indicated above, every element has the <em>potential</em> to be different for each litter. Of course, the data itself always will be, as will the errors. So our question is about how to treat those elements that form</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>For each term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> in each litter?</p>
+<section id="how-to-treat-mu-k">
+<h4>How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?<a class="headerlink" href="#how-to-treat-mu-k" title="Link to this heading">#</a></h4>
+<p>We start with <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>, which is the <em>average weight</em> per-litter.</p>
+<p>From a purely <em>theoretical</em> perspective, do we think that each litter should get its own baeline weight, or do we want to constrain the model so that all litters share the same expected baseline weight? In effect, we are deciding which model form to use</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{3}
+    y^{(k)}_{ij} &amp;= \mu^{(k)} &amp;+&amp; \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij} &amp;\quad\text{Litter-specific intercept} \\
+    y^{(k)}_{ij} &amp;= \mu       &amp;+&amp; \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij} &amp;\quad\text{Global intercept}
+\end{alignat*}
+\end{split}\]</div>
+<p>In this case, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will just be heavier or lighter than others. If asked whether we expect average weight to change per-litter, we would probably say “yes” rather than “no”. So, in this case, it makes most sense to allow <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> to differ per-litter.</p>
+<p>We also need to examine the data from a <em>practical</em> perspective, to see if it can support an average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. Even if we <em>want</em> to do this, that data needs to allow it. This requires <em>at least</em> two values of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for each litter, so that there is variance left over once <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> has been fit. In this example, each litter has multiple values and so a varying-intercept is perfectly possible. So, we conclude that both <em>theoretically</em> and <em>practically</em> we can allow a different baseline weight per-litter.</p>
+</section>
+<section id="how-to-treat-alpha-k-j">
+<h4>How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?<a class="headerlink" href="#how-to-treat-alpha-k-j" title="Link to this heading">#</a></h4>
+<p>Now, moving on to <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>, this is the <em>effect</em> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. So, the decision here</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{3}
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha^{(k)}_{j} &amp;+&amp; \epsilon^{(k)}_{ij} &amp;\quad\text{Litter-specific sex effect} \\
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha_{j}       &amp;+&amp; \epsilon^{(k)}_{ij} &amp;\quad\text{Global sex effect}
+\end{alignat*}
+\end{split}\]</div>
 <p>In this example, the terms <span class="math notranslate nohighlight">\(\mu_{j}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span> both have the index <span class="math notranslate nohighlight">\(j\)</span>. This means that their value will be different for each cluster. In other words, these terms differ <em>across</em> the units. Because our interest extends beyond the selection of litters we have in this dataset, we think of both these terms as <em>random variables</em>. Whenever we collect new data from a new litter of rats, both of these will change.</p>
+<div class="tip admonition">
+<p class="admonition-title">Modelling Decisions</p>
+<p>Hopefully, it is now becoming clear that decisions around whether to treat terms at Level 1 as <em>fixed</em> or <em>random</em> are <em>modelling decisions</em> and not <em>absolute truths</em>. These decisions require both <em>reasoning</em> and <em>justification</em>. … If you are ever stuck and it could be argued <em>either way</em> for a term to be fixed or random, use the principles of allowing everything that <em>can</em> vary, to vary. You can then use model comparisons to see if the simpler explanation is equally as supported by the data. So, start with <em>complexity</em> and aim to simplify if the data agrees.</p>
+</div>
+</section>
 </section>
 <section id="write-the-higher-level-models">
 <h3>5. Write the Higher-level Models<a class="headerlink" href="#write-the-higher-level-models" title="Link to this heading">#</a></h3>
+<p>In the previous step, we determined whether to allow certain terms to vary per-litter, or whether we want to treat them as global effects <em>irrespective</em> of litter. What we were actually doing here was deciding whether a term was to be treated as <em>random</em> or <em>fixed</em>. For instance, allowing the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> to change for each litter implies that each value of <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> is the realisation of a <em>random variable</em>. For each new sample (i.e. each new litter of rat pups) this value will change. As such, <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> must have some <em>probability distribution</em>. For simplicity, this is assumed normal such that</p>
+<div class="math notranslate nohighlight">
+\[
+\mu^{(k)} \sim \mathcal{N}(\mu,\sigma^{2}).
+\]</div>
+<p>In other words, the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for litter <span class="math notranslate nohighlight">\(k\)</span> is drawn from some normal distribution with mean <span class="math notranslate nohighlight">\(\mu\)</span> (the population average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code>) and some variance <span class="math notranslate nohighlight">\(\sigma^{2}\)</span>. Alternatively, if we chose to treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> as a <em>global</em> value, then it would <em>not</em> vary from litter-to-litter. It would be the same value. Meaning that</p>
+<div class="math notranslate nohighlight">
+\[
+\mu^{(k)} = \mu.
+\]</div>
+<p>In other words, this value is <em>fixed</em> from litter-to-litter.</p>
+<p>Where this distinction matters is in terms of writing the higher-level models. For each term that <em>could</em> vary per-litter, we need a 2nd-level model. The decisions made in the previous step determine <em>how</em> those models are written.</p>
+<section id="modelling-mu-k">
+<h4>Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span><a class="headerlink" href="#modelling-mu-k" title="Link to this heading">#</a></h4>
 <p>So what then determines the mean weight of each litter? Well, remember in this experiment that the experimental treatment that is thought to affect weight was applied to a selection of litters as a whole. So the main element that might affect the average weight in litter <span class="math notranslate nohighlight">\(j\)</span> is the treatment they were given</p>
+</section>
+<section id="modelling-alpha-k-j">
+<h4>Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span><a class="headerlink" href="#modelling-alpha-k-j" title="Link to this heading">#</a></h4>
 <p>We also have a <em>choice</em> here about allowing the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to vary per-litter, or assuming that it is <em>constant</em> across all litters …</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
-    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi_{k} \\
-    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt} + \phi_{jt}
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt} + \phi_{jt} \\
+    \phi_{jt}        &amp;\sim \mathcal{N}(0,\sigma^{2}_{3})
 \end{alignat*}
 \end{split}\]</div>
+</section>
 </section>
 <section id="collapse-to-form-the-mixed-effects-model">
 <h3>6. Collapse to Form the Mixed-effects Model<a class="headerlink" href="#collapse-to-form-the-mixed-effects-model" title="Link to this heading">#</a></h3>
@@ -607,6 +675,39 @@ Number of Groups: 27
 </section>
 <section id="making-sex-constant-across-litters">
 <h2>Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters<a class="headerlink" href="#making-sex-constant-across-litters" title="Link to this heading">#</a></h2>
+<p>As a point of comparison, what would happen if we treated <code class="docutils literal notranslate"><span class="pre">sex</span></code> as <em>fixed</em> rather than varying per-litter? In that case, it would not be <em>random</em>, so we removed any random element in the definition above. What random element is there? The error-term <span class="math notranslate nohighlight">\(\phi_{jt}\)</span>. So the 2nd-level model would simplify to</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{alignat*}{1}
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt},
+\end{alignat*}
+\]</div>
+<p>which is simply saying that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for litter <span class="math notranslate nohighlight">\(k\)</span> is simply the population effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, as broken down into its main effect and interaction with whatever treatment that litter was given. This does not depend upon litter and so is the <em>same</em> for every litter. So the full model is now</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\ \quad\\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi^{(k)} \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt}.
+\end{alignat*}
+\end{split}\]</div>
+<p>Because the model for <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is simply an identity with no random error, we could collapse it back into Level 1 to give</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha_{j} + (\alpha\beta)_{jt} + \eta^{(k)}_{ij} \\ \quad\\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi^{(k)}
+\end{alignat*}
+\end{split}\]</div>
+<p>Which now makes it clearer that this model only has a <em>random intercept</em> term, with everything else fixed. Collapsing all this together into mixed-effects form gives</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ijk} = \mu + \alpha_{j} + \beta_{t} + (\alpha\beta)_{jt} + \xi_{k} + \eta_{ijk}.
+\]</div>
 <p>… We can also see why we made the intercept explicit in the model formula earlier, because it more easily connects with why we are now using <code class="docutils literal notranslate"><span class="pre">1|litter</span></code> instead of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex|litter</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -654,9 +755,26 @@ Number of Groups: 27
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup.1.ml</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.ratpup.1</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="n">lme.ratpup.2.ml</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.ratpup.2</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="nf">anova</span><span class="p">(</span><span class="n">lme.ratpup.2.ml</span><span class="p">,</span><span class="w"> </span><span class="n">lme.ratpup.1.ml</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+lme.ratpup.2.ml     1  8 425.9672 456.1636 -204.9836                        
+lme.ratpup.1.ml     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, in this case, there is still a degree of ambiguity. There is a suggestion here that assuming a global effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> across all litters is acceptable. This does match with some degree of biological intution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
 
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">57</span><span class="p">,],</span><span class="w"> </span><span class="c1"># first 5 litters</span>
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="c1"># first 5 litters</span>
 <span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
 <span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
@@ -665,7 +783,7 @@ Number of Groups: 27
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2315e2b81361049fccccea0be2c7dd75b9e3fb8a3a34c2c57c354bfffc16aa66.png" src="_images/2315e2b81361049fccccea0be2c7dd75b9e3fb8a3a34c2c57c354bfffc16aa66.png" />
+<img alt="_images/7836d4077e81f2f43ec4d511243b2f911541fba99328cd194ccb78e48deb074b.png" src="_images/7836d4077e81f2f43ec4d511243b2f911541fba99328cd194ccb78e48deb074b.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
 </pre></div>
 </div>
@@ -674,6 +792,7 @@ Number of Groups: 27
 </section>
 <section id="adding-litsize">
 <h2>Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code><a class="headerlink" href="#adding-litsize" title="Link to this heading">#</a></h2>
+<p>… Have a go at trying to do this yourself and then have a look in the drop-down below for one particular way of doing this.</p>
 </section>
 </section>
 
@@ -742,14 +861,21 @@ Number of Groups: 27
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Clustered Data</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-two-level-clustered-model">Building the Two-level Clustered Model</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-a-single-dependency-structure">2. Model a Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-multiple-dependency-structures">3. Add Multiple Dependency Structures</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-terms-that-change-with-the-dependency-structure">4. Identify Terms that Change with the Dependency Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-higher-level-models">5. Write the Higher-level Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-to-form-the-mixed-effects-model">6. Collapse to Form the Mixed-effects Model</a></li>
 </ul>
 </li>
@@ -757,9 +883,6 @@ Number of Groups: 27
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
-</li>
-</ul>
-
   </nav></div>
 
 </div></div>
