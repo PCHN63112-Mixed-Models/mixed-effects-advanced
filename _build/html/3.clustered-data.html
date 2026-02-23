@@ -389,6 +389,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-mu-k-fixed">Making <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> Fixed</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
             </nav>
@@ -536,7 +537,7 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 </div>
 </div>
 </div>
-<p>As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. More importantly, we can see that this model <em>is</em> possible and is not constrained by the data. So we do not need to make any further adjustments here and can carry on.</p>
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. More importantly, we can see that this model <em>is</em> possible and is not constrained by the data.</p>
 </section>
 <section id="add-multiple-dependency-structures">
 <h3>3. Add Multiple Dependency Structures<a class="headerlink" href="#add-multiple-dependency-structures" title="Link to this heading">#</a></h3>
@@ -545,45 +546,77 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 \[
 y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij}
 \]</div>
-<p>This indicates that <em>everything</em> in the model has the potential to change with each new litter. This is generally our theoretical starting-point. However, in the next step, we will determine whether everything here <em>can</em> change within each litter, given the data we have, and whether we <em>want</em> them to change with each litter.</p>
+<p>This indicates that <em>everything</em> in the model depends upon the specific litter. This is generally our theoretical starting-point. However, in the next step, we will determine whether everything here <em>can</em> change within each litter, given the data we have, and whether we <em>want</em> them to change with each litter. We have already gone some way towards this in the previous step by fitting the model for a single litter, but we will formalise it now.</p>
 </section>
 <section id="identify-terms-that-change-with-the-dependency-structure">
 <h3>4. Identify Terms that Change with the Dependency Structure<a class="headerlink" href="#identify-terms-that-change-with-the-dependency-structure" title="Link to this heading">#</a></h3>
-<p>Now that we have our model for each level of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we need to make some decisions. As indicated above, every element has the <em>potential</em> to be different for each litter. Of course, the data itself always will be, as will the errors. So our question is about how to treat those elements that form</p>
+<p>Now that we have our model for each level of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we need to make some decisions. As indicated above, every element has the <em>potential</em> to be different for each litter. Of course, the data itself always will be, as will the errors. So our question is about how to treat those elements that form the <em>mean function</em> of each litter:</p>
 <div class="math notranslate nohighlight">
 \[
 E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
 \]</div>
-<p>For each term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> in each litter?</p>
+<p>For each of these term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> across all litters? In other words, we are trying to capture <em>why</em> the <code class="docutils literal notranslate"><span class="pre">litter</span></code> variable matters. What influence does <code class="docutils literal notranslate"><span class="pre">litter</span></code> have on the weight of the pups within it? Any element that <em>changes</em> from litter-to-litter captures why <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>, whereas any element that is the <em>same</em> suggests that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is irrelevant.</p>
+<p>As will hopefully become clear, there is no <em>absolute truth</em> here. These decisions have to be made by reasoning about the problem and considering what the model is saying, given the choices we make. Although we can use model comparisons to see which choice is most compatible with the data, we also need to start from a position of justifying our choices. So there is no shortcut to engaging your brain and thinking about the problem in front of you. This can be difficult, but is part of the reality of analysing data and part of your worth as a data analyst.</p>
 <section id="how-to-treat-mu-k">
 <h4>How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?<a class="headerlink" href="#how-to-treat-mu-k" title="Link to this heading">#</a></h4>
-<p>We start with <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>, which is the <em>average weight</em> per-litter.</p>
-<p>From a purely <em>theoretical</em> perspective, do we think that each litter should get its own baeline weight, or do we want to constrain the model so that all litters share the same expected baseline weight? In effect, we are deciding which model form to use</p>
+<p>To start with, let us consider how to treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. This is the <em>average weight</em> per-litter. So, from a purely <em>theoretical</em> perspective, do we think that each litter should get its own baseline weight, or do we want to constrain the model so that all litters share the same baseline weight? In other words, do we think that the reason that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is important is because it influences the average weight of the pups within each litter, or do we think that each litter has the same baseline weight and any deviations are sampling noise that is unrelated to litter?</p>
+<div class="info admonition">
+<p class="admonition-title">Thought Experiment</p>
+<p>Imagine that we were able to take <em>two</em> mother rats and make them give birth to new litters over and over again. Our key question is whether we believe that</p>
+<ol class="arabic simple">
+<li><p>Over time the average weight of all the litters, irrespective of their mother and rearing environment, will converge on the <em>same value</em>. In other words, the mother and rearing environment <em>does not matter</em>. Any discrepancy in our measurements is simply sampling variation that is unrelated to each mother and rearing environment.</p></li>
+<li><p>Over time, the average weight of all litters per-mother will converge on their own <em>unique</em> value. In other words, the mother and rearing environment <em>does</em> matter. For instance, mother rat A always produces litters that are heavier on average than mother rat B. Any discrepancy in our measurements is then a mixture of sampling variation <em>and</em> the effect of a specific mother and rearing environment.</p></li>
+</ol>
+<p>This is precisely the choice between treating the mean weight per-litter as a <em>constant</em> across litters (option 1) or as unique <em>per-litter</em> (option 2). Our question is simple: which of these descriptions of reality is more plausible?</p>
+</div>
+<p>In effect, we are deciding which of the following models to use. Either we allow <span class="math notranslate nohighlight">\(\mu\)</span> to change from litter-to-litter because we think that this explains part of the effect of <code class="docutils literal notranslate"><span class="pre">litter</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code></p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{3}
-    y^{(k)}_{ij} &amp;= \mu^{(k)} &amp;+&amp; \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij} &amp;\quad\text{Litter-specific intercept} \\
-    y^{(k)}_{ij} &amp;= \mu       &amp;+&amp; \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij} &amp;\quad\text{Global intercept}
-\end{alignat*}
-\end{split}\]</div>
-<p>In this case, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will just be heavier or lighter than others. If asked whether we expect average weight to change per-litter, we would probably say “yes” rather than “no”. So, in this case, it makes most sense to allow <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> to differ per-litter.</p>
-<p>We also need to examine the data from a <em>practical</em> perspective, to see if it can support an average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. Even if we <em>want</em> to do this, that data needs to allow it. This requires <em>at least</em> two values of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for each litter, so that there is variance left over once <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> has been fit. In this example, each litter has multiple values and so a varying-intercept is perfectly possible. So, we conclude that both <em>theoretically</em> and <em>practically</em> we can allow a different baseline weight per-litter.</p>
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>or we fix <span class="math notranslate nohighlight">\(\mu\)</span> to the same value for each litter, because we think that the average weight of the litter is not relevant to explaining the effect of <code class="docutils literal notranslate"><span class="pre">litter</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code></p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu + \alpha^{(k)}_{j}
+\]</div>
+<p>In this example, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will just be heavier or lighter than others. This goes beyond just random sampling noise and becomes a systematic source of variation that directly relates to the different litters. In fact, this is the main way of capturing the idea that <code class="docutils literal notranslate"><span class="pre">litter</span></code> matters. So, in this instance, we will argue that it makes most sense to allow <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> to differ per-litter. In fact, irrespective of whether we are dealing with <em>clusters</em> or <em>subjects</em>, it is <em>almost always</em> sensible to start with this <em>random-intercepts</em> model (see box below).</p>
+<p>Once we have made this decision, we also need to examine the data from a <em>practical</em> perspective, to see if it can support a different average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. Even if we <em>want</em> to do this, that data needs to allow it. This requires <em>at least</em> two values of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for each litter, so that there is variance left over once <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> has been fit. In this example, each litter has multiple values and so a varying-intercept is perfectly possible. So, we conclude that both <em>theoretically</em> and <em>practically</em> we can allow a different baseline weight per-litter.</p>
+<div class="tip admonition">
+<p class="admonition-title">Random Intercepts</p>
+<p>In general, it would be very rare to have <em>non-random</em> intercepts for clusters/subjects. This is generally the <em>bare minimum</em> for any dependency structure because it is the effect that the data can always support. There will always be multiple measures per-cluster or per-subject (otherwise, we are back to plain cross-sectional data). The reasoning above was there fore completeness and to provide intuition about <em>why</em> a random-intercept would be included. It would usually be undefensible to <em>exclude</em> this, unless you were choosing to ignore the clustering or repeated measurements entirely. So, the rule-of-thumb is always to <em>start</em> with random intercepts as a minimum and then build from there.</p>
+</div>
 </section>
 <section id="how-to-treat-alpha-k-j">
 <h4>How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?<a class="headerlink" href="#how-to-treat-alpha-k-j" title="Link to this heading">#</a></h4>
-<p>Now, moving on to <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>, this is the <em>effect</em> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. So, the decision here</p>
+<p>Now, we need to provide the same treatment to <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. Remember, this is the <em>effect</em> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> <em>per-litter</em>. Unlike the random-intercepts, the decision about how to treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is less clear-cut. If our bare minimum is to include an intercept per-litter, then we can still capture the importance of litter whether we also allow <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> to vary or not. So this choice is much more about our <em>reasoning</em> than it is about the need to capture the importance of <code class="docutils literal notranslate"><span class="pre">litter</span></code>.</p>
+<p>Consider our two options. If we allow the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to differ per-litter, we are assuming</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{3}
-    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha^{(k)}_{j} &amp;+&amp; \epsilon^{(k)}_{ij} &amp;\quad\text{Litter-specific sex effect} \\
-    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha_{j}       &amp;+&amp; \epsilon^{(k)}_{ij} &amp;\quad\text{Global sex effect}
-\end{alignat*}
-\end{split}\]</div>
-<p>In this example, the terms <span class="math notranslate nohighlight">\(\mu_{j}\)</span> and <span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span> both have the index <span class="math notranslate nohighlight">\(j\)</span>. This means that their value will be different for each cluster. In other words, these terms differ <em>across</em> the units. Because our interest extends beyond the selection of litters we have in this dataset, we think of both these terms as <em>random variables</em>. Whenever we collect new data from a new litter of rats, both of these will change.</p>
-<div class="tip admonition">
-<p class="admonition-title">Modelling Decisions</p>
-<p>Hopefully, it is now becoming clear that decisions around whether to treat terms at Level 1 as <em>fixed</em> or <em>random</em> are <em>modelling decisions</em> and not <em>absolute truths</em>. These decisions require both <em>reasoning</em> and <em>justification</em>. … If you are ever stuck and it could be argued <em>either way</em> for a term to be fixed or random, use the principles of allowing everything that <em>can</em> vary, to vary. You can then use model comparisons to see if the simpler explanation is equally as supported by the data. So, start with <em>complexity</em> and aim to simplify if the data agrees.</p>
+\[
+y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij}
+\]</div>
+<p>Alternatively, if we fix the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to be the <em>same</em> across all litters, we are assuming</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu^{(k)} + \alpha_{j} + \epsilon^{(k)}_{ij}.
+\]</div>
+<p>So, our question is one of <em>reasoning</em>. Do we think that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> that is always there irrespective of genetics or rearing environment? Or, do we believe that the magnitude of the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> depends, at least to some degree, on both genetics and rearing environment?</p>
+<p>Of course, the problem here is that you could argue it <em>either way</em>. It very much depends on how strongly we believe that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> is heterogeneous across rat pups, or how strongly we believe that there could be clear gene <span class="math notranslate nohighlight">\(\times\)</span> environment interactions that change the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for each litter. Our decision here is either to (a) pick one and stick with it or (b) pick the most general case and then use model comparisons to see which the data supports.</p>
+<p>It is interesting to note that, in their description of this analysis, <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki?context=ubx&amp;amp;refId=4dbda113-7f59-4ba9-a710-897ef536cfee">West, Welch &amp; Galecki (2022)</a> make the decision to fix <code class="docutils literal notranslate"><span class="pre">sex</span></code> to a constant across litters, under the belief that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on weight that is not influences by individual litters. This is defensible in the sense that we expect male rat pups to be heavier than female rat pups, irrespective of the mother or rearing environment. This could be seen as a simple fact of nature that is always present. However, for our example, we will take the latter approach of fitting the more geneal case of allowing <code class="docutils literal notranslate"><span class="pre">sex</span></code> to vary on a per-litter basis and then see whether the simple model is justifiable using model comparisons.</p>
+<p>Once we have made this decision, we again need to examine the data from a <em>practical</em> perspective, to see if it can support a different <code class="docutils literal notranslate"><span class="pre">sex</span></code> effect per-litter. In order to do so, we need <em>at least</em> two male pups and two female pups on average per-litter. If each litter only consisted of a single male and a single female, this would not be possible. Similarly, if each litter consisted of only a single sex, this would also not be possible. We can have a look at the average number of male and female pups across litters using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">colMeans</span><span class="p">(</span><span class="nf">xtabs</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">))</span>
+</pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Female     Male 
+5.592593 6.333333 
+</pre></div>
+</div>
+</div>
+</div>
+<p>This indicates that there should be enough variation on average per-litter to allow this. Even if there was not, we would soon find our because the model would fail to fit. However, we can at least avoid this by trying to reason about it first.</p>
 </section>
 </section>
 <section id="write-the-higher-level-models">
@@ -790,6 +823,56 @@ lme.ratpup.1.ml     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </div>
 </section>
+<section id="making-mu-k-fixed">
+<h2>Making <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> Fixed<a class="headerlink" href="#making-mu-k-fixed" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup.3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lme.ratpup.3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratpup 
+      AIC      BIC    logLik
+  438.799 476.3564 -209.3995
+
+Random effects:
+ Formula: ~0 + sex | litter
+ Structure: General positive-definite, Log-Cholesky parametrization
+          StdDev    Corr  
+sexFemale 0.5019205 sexFml
+sexMale   0.6439542 0.994 
+Residual  0.4005462       
+
+Fixed effects:  weight ~ sex * treatment 
+                          Value  Std.Error  DF  t-value p-value
+(Intercept)            6.200295 0.16851989 292 36.79266  0.0000
+sexMale                0.441064 0.08782993 292  5.02179  0.0000
+treatmentHigh         -0.293458 0.26475283  24 -1.10842  0.2787
+treatmentLow          -0.315254 0.23764462  24 -1.32658  0.1971
+sexMale:treatmentHigh -0.083920 0.15292663 292 -0.54876  0.5836
+sexMale:treatmentLow  -0.077937 0.12723840 292 -0.61253  0.5407
+ Correlation: 
+                      (Intr) sexMal trtmnH trtmnL sxMl:H
+sexMale                0.262                            
+treatmentHigh         -0.637 -0.167                     
+treatmentLow          -0.709 -0.186  0.451              
+sexMale:treatmentHigh -0.151 -0.574  0.200  0.107       
+sexMale:treatmentLow  -0.181 -0.690  0.115  0.277  0.396
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-7.26679582 -0.48614774 -0.01516564  0.55664381  2.81749213 
+
+Number of Observations: 322
+Number of Groups: 27 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="adding-litsize">
 <h2>Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code><a class="headerlink" href="#adding-litsize" title="Link to this heading">#</a></h2>
 <p>… Have a go at trying to do this yourself and then have a look in the drop-down below for one particular way of doing this.</p>
@@ -881,6 +964,7 @@ lme.ratpup.1.ml     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-two-level-clustered-model-in-r">Specifying the Two-level Clustered Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-mu-k-fixed">Making <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> Fixed</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
 </ul>
   </nav></div>
