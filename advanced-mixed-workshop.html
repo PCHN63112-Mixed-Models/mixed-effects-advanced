@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>The 3-level Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Additional Options in the 2-level Rat Pup Example &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,6 +60,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'advanced-mixed-workshop';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -357,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>The 3-level Clustered Data Example</h1>
+    <h1>Additional Options in the 2-level Rat Pup Example</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -367,7 +369,12 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The 3-level Clustered Data Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Additional Options in the 2-level Rat Pup Example</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-3-level-clustered-data-example">The 3-level Clustered Data Example</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal-data">Clustered Longitudinal Data</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-assumptions">Mixed-effects Assumptions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-random-effects-structures">Comparing Random Effects Structures</a></li>
@@ -384,7 +391,131 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="the-3-level-clustered-data-example">
+  <section id="additional-options-in-the-2-level-rat-pup-example">
+<h1>Additional Options in the 2-level Rat Pup Example<a class="headerlink" href="#additional-options-in-the-2-level-rat-pup-example" title="Link to this heading">#</a></h1>
+<section id="making-sex-constant-across-litters">
+<h2>Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters<a class="headerlink" href="#making-sex-constant-across-litters" title="Link to this heading">#</a></h2>
+<p>As a point of comparison, what would happen if we treated <code class="docutils literal notranslate"><span class="pre">sex</span></code> as <em>fixed</em> rather than varying per-litter? In that case, it would not be <em>random</em>, so we removed any random element in the definition above. What random element is there? The error-term <span class="math notranslate nohighlight">\(\phi_{jt}\)</span>. So the 2nd-level model would simplify to</p>
+<div class="math notranslate nohighlight">
+\[
+\begin{alignat*}{1}
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt},
+\end{alignat*}
+\]</div>
+<p>which is simply saying that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for litter <span class="math notranslate nohighlight">\(k\)</span> is simply the population effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, as broken down into its main effect and interaction with whatever treatment that litter was given. This does not depend upon litter and so is the <em>same</em> for every litter. So the full model is now</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\ \quad\\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi^{(k)} \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt}.
+\end{alignat*}
+\end{split}\]</div>
+<p>Because the model for <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is simply an identity with no random error, we could collapse it back into Level 1 to give</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij} &amp;= \mu^{(k)} + \alpha_{j} + (\alpha\beta)_{jt} + \eta^{(k)}_{ij} \\ \quad\\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{t} + \xi^{(k)}
+\end{alignat*}
+\end{split}\]</div>
+<p>Which now makes it clearer that this model only has a <em>random intercept</em> term, with everything else fixed. Collapsing all this together into mixed-effects form gives</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ijk} = \mu + \alpha_{j} + \beta_{t} + (\alpha\beta)_{jt} + \xi_{k} + \eta_{ijk}.
+\]</div>
+<p>… We can also see why we made the intercept explicit in the model formula earlier, because it more easily connects with why we are now using <code class="docutils literal notranslate"><span class="pre">1|litter</span></code> instead of <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex|litter</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lme.ratpup.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratpup 
+       AIC      BIC    logLik
+  439.6887 469.7346 -211.8444
+
+Random effects:
+ Formula: ~1 | litter
+        (Intercept)  Residual
+StdDev:   0.5676074 0.4053673
+
+Fixed effects:  weight ~ sex * treatment 
+                          Value Std.Error  DF  t-value p-value
+(Intercept)            6.212773 0.1885557 292 32.94928  0.0000
+sexMale                0.415931 0.0734525 292  5.66259  0.0000
+treatmentHigh         -0.300908 0.2958837  24 -1.01698  0.3193
+treatmentLow          -0.325592 0.2659971  24 -1.22404  0.2328
+sexMale:treatmentHigh -0.099680 0.1330752 292 -0.74905  0.4544
+sexMale:treatmentLow  -0.093269 0.1063180 292 -0.87726  0.3811
+ Correlation: 
+                      (Intr) sexMal trtmnH trtmnL sxMl:H
+sexMale               -0.228                            
+treatmentHigh         -0.637  0.146                     
+treatmentLow          -0.709  0.162  0.452              
+sexMale:treatmentHigh  0.126 -0.552 -0.232 -0.089       
+sexMale:treatmentLow   0.158 -0.691 -0.101 -0.205  0.381
+
+Standardized Within-Group Residuals:
+         Min           Q1          Med           Q3          Max 
+-7.358181418 -0.484194371  0.008458083  0.557578982  3.086834875 
+
+Number of Observations: 322
+Number of Groups: 27 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup.1.ml</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.ratpup.1</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="n">lme.ratpup.2.ml</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.ratpup.2</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="nf">anova</span><span class="p">(</span><span class="n">lme.ratpup.2.ml</span><span class="p">,</span><span class="w"> </span><span class="n">lme.ratpup.1.ml</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+lme.ratpup.2.ml     1  8 425.9672 456.1636 -204.9836                        
+lme.ratpup.1.ml     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
+</pre></div>
+</div>
+</div>
+</div>
+<p>So, in this case, there is still a degree of ambiguity. There is a suggestion here that assuming a global effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> across all litters is acceptable. This does match with some degree of biological intution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="c1"># first 5 litters</span>
+<span class="w">       </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="o">~</span><span class="n">litter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7836d4077e81f2f43ec4d511243b2f911541fba99328cd194ccb78e48deb074b.png" src="_images/7836d4077e81f2f43ec4d511243b2f911541fba99328cd194ccb78e48deb074b.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="adding-litsize">
+<h2>Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code><a class="headerlink" href="#adding-litsize" title="Link to this heading">#</a></h2>
+<p>… Have a go at trying to do this yourself and then have a look in the drop-down below for one particular way of doing this.</p>
+</section>
+</section>
+<section id="the-3-level-clustered-data-example">
 <h1>The 3-level Clustered Data Example<a class="headerlink" href="#the-3-level-clustered-data-example" title="Link to this heading">#</a></h1>
 <p>Answer questions to build model then share answer? Students can follow the process and see where they may have gone wrong?</p>
 </section>
@@ -448,7 +579,12 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The 3-level Clustered Data Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Additional Options in the 2-level Rat Pup Example</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-sex-constant-across-litters">Making <code class="docutils literal notranslate"><span class="pre">sex</span></code> Constant Across Litters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-litsize">Adding <code class="docutils literal notranslate"><span class="pre">litsize</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-3-level-clustered-data-example">The 3-level Clustered Data Example</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered-longitudinal-data">Clustered Longitudinal Data</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mixed-effects-assumptions">Mixed-effects Assumptions</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-random-effects-structures">Comparing Random Effects Structures</a></li>
