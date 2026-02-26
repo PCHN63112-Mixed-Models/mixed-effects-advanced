@@ -756,6 +756,28 @@ y^{(k)}_{ij} = \mu^{(k)} + \alpha_{j} + \epsilon^{(k)}_{ij}.
 <section id="collapse-to-form-the-mixed-effects-model">
 <h3>6. Collapse to Form the Mixed-effects Model<a class="headerlink" href="#collapse-to-form-the-mixed-effects-model" title="Link to this heading">#</a></h3>
 <p>… So, at present, our two-level model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}  \\
+    \quad \\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \gamma_{l} + \xi^{(k)}  \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\gamma)_{jl} + \phi^{(k)}_{j}
+\end{alignat*}
+\end{split}\]</div>
+<p>…</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu + \alpha_{j} + \gamma_{l} + (\alpha\gamma)_{jl} + \xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij}
+\]</div>
+<p>…</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ijk} = \mu + \alpha_{j} + \gamma_{l} + (\alpha\gamma)_{jl} + \xi_{k} + \phi_{jk} + \eta_{ijk}
+\]</div>
+<p>Where we end up with what is essentially a two-way ANOVA model with <em>three</em> error terms.</p>
 <p>We can now collapse these levels together to give the mixed-effects specification.</p>
 </section>
 </section>
