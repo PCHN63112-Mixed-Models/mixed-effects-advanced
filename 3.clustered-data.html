@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Clustered Data &#8212; More Advanced Uses of Mixed-effects Models</title>
   
@@ -16,33 +16,30 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -53,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -69,7 +66,6 @@
     <link rel="prev" title="Building Mixed-effects Models" href="2.building-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -85,8 +81,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -94,6 +101,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -101,8 +109,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -118,8 +126,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -149,17 +156,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="More Advanced Uses of Mixed-effects Models - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -185,14 +196,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -336,16 +342,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -676,31 +690,72 @@ y^{(k)}_{ij} = \mu^{(k)} + \alpha_{j} + \epsilon^{(k)}_{ij}.
 <p>However, there is more we can now do with the two 2nd-level models.</p>
 <section id="modelling-mu-k">
 <h4>Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span><a class="headerlink" href="#modelling-mu-k" title="Link to this heading">#</a></h4>
-<p>Let us start by focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. If we treat it like any other regression model, we can decide whether there is more we can include to model the population mean <span class="math notranslate nohighlight">\(\mu\)</span>. So, let us pretend we <em>only</em> have the model</p>
+<p>Let us start by focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. If we treat it like any other regression model, we can decide whether there is more we can include to model the mean weight of litter, beyond just the population mean <span class="math notranslate nohighlight">\(\mu\)</span>. So, let us pretend we <em>only</em> have the model</p>
 <div class="math notranslate nohighlight">
 \[
 \mu^{(k)} = \mu + \xi^{(k)}.
 \]</div>
-<p>Is there anything else in this dataset that we think might relate to the mean weight of this litter? Well, remember in this experiment that the experimental treatment that is thought to affect weight was applied to litters individually. So an additional element that might affect the average weight in litter <span class="math notranslate nohighlight">\(j\)</span> is the treatment they were given. If we denote the effect of the treatment that has been applied <span class="math notranslate nohighlight">\(\beta_{l}\)</span>, then our model of the mean becomes</p>
+<p>Is there anything else in this dataset that we think might relate to the mean weight of each litter? Well, remember in this experiment that the experimental treatment was applied to litters individually. So, an additional element that might affect the average weight in litter <span class="math notranslate nohighlight">\(k\)</span> is the treatment they were given. If we denote the effect of the treatment that has been applied <span class="math notranslate nohighlight">\(\gamma_{l}\)</span>, then our model of the mean becomes</p>
 <div class="math notranslate nohighlight">
 \[
-\mu^{(k)} = \mu + \beta_{l} + \xi^{(k)}.
+\mu^{(k)} = \mu + \gamma_{l} + \xi^{(k)}.
 \]</div>
-</section>
-<section id="modelling-alpha-k-j">
-<h4>Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span><a class="headerlink" href="#modelling-alpha-k-j" title="Link to this heading">#</a></h4>
-<p>We also have a <em>choice</em> here about allowing the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to vary per-litter, or assuming that it is <em>constant</em> across all litters …</p>
+<p>If we imagine, for simplicity, that there are 4 litters where the first two are given treatment 1 and the last two are given treatment 2, this model implies</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jt} + \phi_{jt} \\
-    \phi_{jt}        &amp;\sim \mathcal{N}(0,\sigma^{2}_{3})
+    \mu^{(1)} &amp;= \mu + \gamma_{1} + \xi^{(1)} \\
+    \mu^{(2)} &amp;= \mu + \gamma_{1} + \xi^{(2)} \\
+    \mu^{(3)} &amp;= \mu + \gamma_{2} + \xi^{(3)} \\
+    \mu^{(4)} &amp;= \mu + \gamma_{2} + \xi^{(4)} \\
 \end{alignat*}
 \end{split}\]</div>
+<p>Sometimes, the clearest picture can come from simply expanding the indices and seeing what the model is implying.</p>
+</section>
+<section id="modelling-alpha-k-j">
+<h4>Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span><a class="headerlink" href="#modelling-alpha-k-j" title="Link to this heading">#</a></h4>
+<p>Now, let us move on to focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. Again, if we treat this like any other regression model, we can decide whether there is more we can include to model the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter, beyond the population effect <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. So, let us pretend we <em>only</em> have the model</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha^{(k)}_{j} = \alpha_{j} + \phi^{(k)}_{j}
+\]</div>
+<p>Is there anything else in this dataset that we think might relate to the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on the average weight in this litter? Well, again, we might want to consider the treatment was applied. If the treatment works differentially in male vs female pups then there <em>could</em> be a treatment <span class="math notranslate nohighlight">\(\times\)</span> sex interaction effect. If this is of interest, we can expand this model to</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha^{(k)}_{j} = \alpha_{j} + (\alpha\gamma)_{jl} + \phi^{(k)}_{j}
+\]</div>
+<p>So this is saying that the unique effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> in litter <span class="math notranslate nohighlight">\(k\)</span> is governed by the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>), plus the interaction between <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code> (<span class="math notranslate nohighlight">\((\alpha\gamma)_{jl}\)</span>). As with before, it can be helpful to expand the indices here. For each litter <span class="math notranslate nohighlight">\(k\)</span> we have an additional index for <code class="docutils literal notranslate"><span class="pre">sex</span></code> in the form of <span class="math notranslate nohighlight">\(j\)</span>. So, for 4 litters given 2 different treatments, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Litter 1 Treatment 1}
+    \begin{cases}
+        \alpha_{1}^{(1)} &amp;= \alpha_{1} + (\alpha\gamma)_{11} + \phi^{(1)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(1)} &amp;= \alpha_{2} + (\alpha\gamma)_{21} + \phi^{(1)}_{2} \quad\text{Female pups}\\
+    \end{cases} \\
+    \text{Litter 2 Treatment 1}
+    \begin{cases}
+        \alpha_{1}^{(2)} &amp;= \alpha_{1} + (\alpha\gamma)_{11} + \phi^{(2)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(2)} &amp;= \alpha_{2} + (\alpha\gamma)_{21} + \phi^{(2)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+    \text{Litter 3 Treatment 2}
+    \begin{cases}
+        \alpha_{1}^{(3)} &amp;= \alpha_{1} + (\alpha\gamma)_{12} + \phi^{(3)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(3)} &amp;= \alpha_{2} + (\alpha\gamma)_{22} + \phi^{(3)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+    \text{Litter 4 Treatment 2}
+    \begin{cases}
+        \alpha_{1}^{(4)} &amp;= \alpha_{1} + (\alpha\gamma)_{12} + \phi^{(4)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(4)} &amp;= \alpha_{2} + (\alpha\gamma)_{22} + \phi^{(4)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>This looks complicated, but it is the simple expansion of the model above, where we replace the indices with actual numbers. You can spend some time studying this, but do not get too bogged down in it.</p>
 </section>
 </section>
 <section id="collapse-to-form-the-mixed-effects-model">
 <h3>6. Collapse to Form the Mixed-effects Model<a class="headerlink" href="#collapse-to-form-the-mixed-effects-model" title="Link to this heading">#</a></h3>
+<p>… So, at present, our two-level model is</p>
 <p>We can now collapse these levels together to give the mixed-effects specification.</p>
 </section>
 </section>
@@ -776,7 +831,7 @@ Number of Groups: 27
 </div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="sextextbook-foot" role="note">
+<aside class="footnote brackets" id="sextextbook-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>It is interesting to note that, in their description of this analysis, <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki?context=ubx&amp;amp;refId=4dbda113-7f59-4ba9-a710-897ef536cfee">West, Welch &amp; Galecki (2022)</a> make the decision to fix <code class="docutils literal notranslate"><span class="pre">sex</span></code> to a constant across litters, under the belief that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on weight that is not influenced by individual litters.</p>
 </aside>
@@ -839,8 +894,7 @@ Number of Groups: 27
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -916,8 +970,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
