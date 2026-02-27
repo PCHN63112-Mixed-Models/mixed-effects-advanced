@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Example Dataset &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -171,7 +171,7 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Clustered Data Example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Example Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Clustered Data Example</h1>
+    <h1>Example Dataset</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,7 +370,14 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-description">Data Description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-and-wrangling-the-data">Downloading and Wrangling the Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-the-structure">Identifying the Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-units-of-analysis">1. Identify the Units of Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-rows-of-the-data">2. Identify the Rows of the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-clusters">3. Identify Clusters</a></li>
 </ul>
 </li>
 </ul>
@@ -384,12 +391,17 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="clustered-data-example">
-<h1>Clustered Data Example<a class="headerlink" href="#clustered-data-example" title="Link to this heading">#</a></h1>
-<p>…
-This first example will necessarily be more detailed as we work through the logic of each step. Once this had been established, the examples in the remaining parts of the lesson will be more brief.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="example-dataset">
+<h1>Example Dataset<a class="headerlink" href="#example-dataset" title="Link to this heading">#</a></h1>
+<p>For the remainder of this lesson, we will walk slowly through the process of building a multilevel/mixed-effects model for a single example data structure. This will be broken down into the individual steps described previously. Each step will contain a reasonable amount of exposition so that you can see how the generic steps can be applied to this specific example. This will include all the decision making and logic behind our final choices. The hope is that, by the end, the process itself will be clearer. In the associated workshop, there will be multiple examples to choose from, so you can see the same steps and logic applied to other types of data structure.</p>
 <section id="the-rat-pup-data">
 <h2>The Rat Pup Data<a class="headerlink" href="#the-rat-pup-data" title="Link to this heading">#</a></h2>
+<p>… Of course, in the realm of psychology you may not ever find yourself working with baby rats. However, it is useful to see many different examples from different fields so you get a sense of how these methods can be applied <em>generically</em>. Otherwise, it is quite easy to get stuck with only conceptualising these approaches in terms of <code class="docutils literal notranslate"><span class="pre">subjects</span></code> and nothing else.</p>
+<section id="data-description">
+<h3>Data Description<a class="headerlink" href="#data-description" title="Link to this heading">#</a></h3>
+</section>
+<section id="downloading-and-wrangling-the-data">
+<h3>Downloading and Wrangling the Data<a class="headerlink" href="#downloading-and-wrangling-the-data" title="Link to this heading">#</a></h3>
 <p>… The data are available from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a> and need to be downloaded into the current working directory before being loaded. In these examples, we have put the data in a separate <code class="docutils literal notranslate"><span class="pre">data</span></code> folder, so just be aware of this if you are copying and pasting code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -438,12 +450,23 @@ This first example will necessarily be more detailed as we work through the logi
 </div>
 </div>
 </div>
-<section id="identify-the-structure">
-<h3>1. Identify the Structure<a class="headerlink" href="#identify-the-structure" title="Link to this heading">#</a></h3>
-<p>We already discussed identifying the structure of a dataset at the beginning of this lesson. We are also organising these examples <em>by structure</em>, so this first step is somewhat redundant. However, we will keep it here for completeness.</p>
+</section>
+</section>
+<section id="identifying-the-structure">
+<h2>Identifying the Structure<a class="headerlink" href="#identifying-the-structure" title="Link to this heading">#</a></h2>
+<p>As a first step, we need to determine what <em>structure</em> we are dealing with, as this provides us with the first clues around how to start modelling these data.</p>
+<section id="identify-the-units-of-analysis">
+<h3>1. Identify the Units of Analysis<a class="headerlink" href="#identify-the-units-of-analysis" title="Link to this heading">#</a></h3>
 <p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. So, in this example, our units are <em>individual rat pups</em>. Our primary question is about how the treatments affect the weight of the rat pups.</p>
+</section>
+<section id="identify-the-rows-of-the-data">
+<h3>2. Identify the Rows of the Data<a class="headerlink" href="#identify-the-rows-of-the-data" title="Link to this heading">#</a></h3>
 <p>In the second step, we need to determine what each row of the data represents. As we can see above, each row corresponds to only a single unit measured <em>once</em>. So this is <em>not</em> repeated measures or longitudinal data, but it <em>could</em> be <em>clustered</em> data.</p>
-<p>In the final step, we need to determine if there are any clusters. If there are, we use a multilevel/LME approach. If there are not, the data are <em>cross-sectional</em> and we go back to normal linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation between pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are simply labels that we give those units?</p>
+</section>
+<section id="identify-clusters">
+<h3>3. Identify Clusters<a class="headerlink" href="#identify-clusters" title="Link to this heading">#</a></h3>
+<p>In the final step, we need to determine if there are any clusters. There <em>may</em> or <em>may not</em> be, and there also may be several nested clusters.</p>
+<p>If there are, we use a multilevel/LME approach. If there are not, the data are <em>cross-sectional</em> and we go back to normal linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation between pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are simply labels that we give those units?</p>
 <p>In this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">More on Litter Size</p>
@@ -519,7 +542,14 @@ This first example will necessarily be more detailed as we work through the logi
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-description">Data Description</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-and-wrangling-the-data">Downloading and Wrangling the Data</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-the-structure">Identifying the Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-units-of-analysis">1. Identify the Units of Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-rows-of-the-data">2. Identify the Rows of the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-clusters">3. Identify Clusters</a></li>
 </ul>
 </li>
 </ul>
