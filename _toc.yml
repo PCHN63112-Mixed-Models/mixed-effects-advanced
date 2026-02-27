@@ -6,7 +6,9 @@ root: 0.intro
 chapters:
 - file: 1.data-structures
 - file: 2.building-mixed
-- file: 3.clustered-data
-- file: 4.repeated-measures-data
-- file: 5.longitudinal-clustered-data
+- file: 3.clustered-data-example
+- file: 4.step-one
+- file: 5.step-two
+- file: 6.step-three
+- file: 7.example-in-R
 - file: summary

@@ -1,0 +1,620 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Building the Model: Step 2 &#8212; More Advanced Uses of Mixed-effects Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.step-two';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building the Model: Step 3" href="6.step-three.html" />
+    <link rel="prev" title="Building the Model: Step 1" href="4.step-one.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Clustered Data Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building the Model: Step 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F5.step-two.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/5.step-two.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Building the Model: Step 2</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-which-terms-are-random">Identifying Which Terms are <em>Random</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#does-the-data-support-what-we-want">Does the Data Support What we Want?</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-step-2">
+<h1>Building the Model: Step 2<a class="headerlink" href="#building-the-model-step-2" title="Link to this heading">#</a></h1>
+<div class="info admonition">
+<p class="admonition-title">Aim: Expand the Model to Multiple Dependency Structures</p>
+<p>The overall aim of Step 2 is to expand the model from Step 1 to <em>multiple</em> dependency structures. For instance, <em>multiple</em> clusters or <em>multiple</em> subjects. In doing so, we characterise which of the parameters from Step 1 we imagine <em>change</em> with each new dependency structure and which of the parameters stay <em>constant</em>. This is effectively a decision about which terms are <em>random effects</em> and which are <em>fixed effects</em>.</p>
+</div>
+<p>For step 3, we need to imagine that we had <em>multiple</em> litters and then need to rewrite the model above accordingly. To begin, we need another index to make it clear <em>which litter</em> the model is referring to. To do this, we will use <span class="math notranslate nohighlight">\(k\)</span> to indicate <code class="docutils literal notranslate"><span class="pre">litter</span></code>, but will use a slightly different notation to illustrate which elements <em>belong</em> to the model for litter <span class="math notranslate nohighlight">\(k\)</span>. So, we write the model for litter <span class="math notranslate nohighlight">\(k\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}
+\]</div>
+<p>This indicates that <em>everything</em> in the model depends upon the specific litter. This is generally our theoretical starting-point. However, in the next step, we will determine whether everything here <em>can</em> change within each litter, given the data we have, and whether we <em>want</em> them to change with each litter. We have already gone some way towards this in the previous step by fitting the model for a single litter, but we will formalise it now.</p>
+<section id="identifying-which-terms-are-random">
+<h2>Identifying Which Terms are <em>Random</em><a class="headerlink" href="#identifying-which-terms-are-random" title="Link to this heading">#</a></h2>
+<p>Now that we have our model for each level of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we need to make some decisions. As indicated above, every element has the <em>potential</em> to be different for each litter. Of course, the data itself always will be, as will the errors. So our question is about how to treat those elements that form the <em>mean function</em> of each litter:</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>For each of these term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> across all litters? In other words, we are trying to capture <em>why</em> the <code class="docutils literal notranslate"><span class="pre">litter</span></code> variable matters. What influence does <code class="docutils literal notranslate"><span class="pre">litter</span></code> have on the weight of the pups within it? Any element that <em>changes</em> from litter-to-litter captures why <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>, whereas any element that is the <em>same</em> suggests that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is irrelevant.</p>
+<p>As will hopefully become clear, there is no <em>absolute truth</em> here. These decisions have to be made by reasoning about the problem and considering what the model is saying, given the choices we make. Although we can use model comparisons to see which choice is most compatible with the data, we also need to start from a position of justifying our choices. So there is no shortcut to engaging your brain and thinking about the problem in front of you. This can be difficult, but is part of the reality of analysing data and part of your worth as a data analyst.</p>
+<section id="how-to-treat-mu-k">
+<h3>How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?<a class="headerlink" href="#how-to-treat-mu-k" title="Link to this heading">#</a></h3>
+<p>To start with, let us consider how to treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. This is the <em>average weight</em> per-litter. So, from a purely <em>theoretical</em> perspective, do we think that each litter should get its own baseline weight, or do we want to constrain the model so that all litters share the same baseline weight? In other words, do we think that the reason that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is important is because it influences the average weight of the pups within each litter, or do we think that each litter has the same baseline weight and any deviations are sampling noise that is unrelated to litter? For this model, we choose to allow the baseline weight to vary and so our model per-litter remains</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>The reasoning behind this is explored in the drop-down below</p>
+<div class="info dropdown admonition">
+<p class="admonition-title">Reasoning About the Intercept</p>
+<p>Our choice in terms of the intercept <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> is effectively a decision between the following models. Either we allow <span class="math notranslate nohighlight">\(\mu\)</span> to change from litter-to-litter</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>or we fix <span class="math notranslate nohighlight">\(\mu\)</span> to the same value for each litter</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu + \alpha^{(k)}_{j}.
+\]</div>
+<p>To think about this more clearly, imagine that we were able to take <em>two</em> mother rats and make them give birth to new litters over and over again. Our key question is whether we believe that</p>
+<ol class="arabic simple">
+<li><p>Over time the average weight of all the litters, irrespective of their mother and rearing environment, will converge on the <em>same value</em>. In other words, the mother and rearing environment <em>does not matter</em>. Any discrepancy in our measurements is simply sampling variation that is unrelated to each mother and rearing environment.</p></li>
+<li><p>Over time, the average weight of all litters from the same mother will converge on their own <em>unique</em> value that will be different from another mother. In other words, the mother and rearing environment <em>does</em> matter. For instance, mother rat A always produces litters that are heavier on average than mother rat B. Any discrepancy in our measurements is then a mixture of sampling variation <em>and</em> the effect of a specific mother and rearing environment.</p></li>
+</ol>
+<p>This is precisely the choice between treating the mean weight per-litter as a <em>constant</em> across litters or as unique <em>per-litter</em>. Our question is which of these descriptions of reality is more plausible?</p>
+<p>In this example, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will be heavier or lighter than others. This goes beyond just random sampling noise and becomes a systematic source of variation that directly relates to the different litters. In fact, this was the whole reason for characterising <code class="docutils literal notranslate"><span class="pre">litter</span></code> as a clustering variable in the first place. So, in this instance, we will argue that it makes most sense to allow <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> to differ per-litter. Irrespective of whether we are dealing with <em>clusters</em> or <em>subjects</em>, it is <em>almost always</em> sensible to start with this <em>random-intercepts</em> model.</p>
+</div>
+<p>Once we have made this decision, we also need to examine the data from a <em>practical</em> perspective, to see if it can support a different average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> per-litter. Even if we <em>want</em> to do this, that data needs to allow it. This requires <em>at least</em> two values of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for each litter, so that there is variance left over once <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> has been fit. In this example, each litter has multiple values and so a varying-intercept is perfectly possible. So, we conclude that both <em>theoretically</em> and <em>practically</em> we can allow a different baseline weight per-litter.</p>
+</section>
+<section id="how-to-treat-alpha-k-j">
+<h3>How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?<a class="headerlink" href="#how-to-treat-alpha-k-j" title="Link to this heading">#</a></h3>
+<p>Now, we need to provide the same consideration to <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. Remember, this is the <em>effect</em> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> <em>per-litter</em>. Unlike the random-intercepts, the decision about how to treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is less clear-cut. If our bare minimum is include an intercept per-litter, then we can still capture the importance of litter whether we also allow <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> to vary or not. So this choice is much more about our <em>reasoning</em> than it is about the need to capture <code class="docutils literal notranslate"><span class="pre">litter</span></code> as a clustering variable. For the purpose of this analysis, we will start by assuming that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> can differ per-litter and so our model remains</p>
+<div class="math notranslate nohighlight">
+\[
+E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
+\]</div>
+<p>This is again explored more in the drop-down below</p>
+<div class="info dropdown admonition">
+<p class="admonition-title">Reasoning About the Slope</p>
+<p>As with the intercept parameter, we will consider our two modelling options. If we allow the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to differ per-litter, we are assuming</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \epsilon^{(k)}_{ij}
+\]</div>
+<p>Alternatively, if we fix the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> to be the <em>same</em> across all litters, we are assuming</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu^{(k)} + \alpha_{j} + \epsilon^{(k)}_{ij}.
+\]</div>
+<p>So, our question is one of <em>reasoning</em>. Do we think that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> that is always there irrespective of genetics or rearing environment? Or, do we believe that the magnitude of the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> depends, at least to some degree, on both genetics and rearing environment?</p>
+<p>Of course, the problem here is that you could argue it <em>either way</em>. It very much depends on how strongly we believe that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> is homogeneous across litters, or how strongly we believe that there could be a gene <span class="math notranslate nohighlight">\(\times\)</span> environment interaction that change the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for each litter? Is it plausible that some mother rats may consistently have female pups that are <em>heavier</em> than male pups? Or female and male pups that are largely <em>equivalent</em> in weight? Or, is it more plausible to think that male pups will <em>always</em> be heavier than female pups on average, irrespective of mother or rearing environment?</p>
+<p>When faced with this sort of decision, we either have to (a) pick one possibility that we believe more strongly or (b) pick the most general case and then use model comparisons to see which the data supports. If you are working alongside domain experts on the analysis, this is the sort of conversation you could have with them to pick the option that is most plausible. In the absence of this, we will take the <em>second</em> approach, which is to temporarily assume the more general case of the <code class="docutils literal notranslate"><span class="pre">sex</span></code> effect differing per-litter, but with a view to using model comparisons for the final decision on this<a class="footnote-reference brackets" href="#sextextbook-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+</div>
+<p>Once we have made this decision, we need to examine the data from a <em>practical</em> perspective, to see if it can support a different <code class="docutils literal notranslate"><span class="pre">sex</span></code> effect per-litter. In order to do so, we need <em>at least</em> two male pups and two female pups on average per-litter. If each litter only consisted of a single male and a single female, this would not be possible. Similarly, if each litter consisted of only a single sex, this would also not be possible. We can have a look at the average number of male and female pups across litters using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">colMeans</span><span class="p">(</span><span class="nf">xtabs</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Female     Male 
+5.592593 6.333333 
+</pre></div>
+</div>
+</div>
+</div>
+<p>This indicates that there should be enough variation on average per-litter to allow this. Even if there was not, we would soon find our because the model would fail to fit. However, we can at least avoid this embarrassment by trying to reason about it first. Although tempting to brute-force these decisions by examining when the model fails, this is not a good strategy because it suggests that you do not <em>understand</em> the model, nor why it is failing to fit. You should have a clear idea abut this <em>before</em> even approaching the software.</p>
+</section>
+</section>
+<section id="does-the-data-support-what-we-want">
+<h2>Does the Data Support What we Want?<a class="headerlink" href="#does-the-data-support-what-we-want" title="Link to this heading">#</a></h2>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="sextextbook-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>It is interesting to note that, in their description of this analysis, <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki?context=ubx&amp;amp;refId=4dbda113-7f59-4ba9-a710-897ef536cfee">West, Welch &amp; Galecki (2022)</a> make the decision to fix <code class="docutils literal notranslate"><span class="pre">sex</span></code> to a constant across litters, under the belief that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on weight that is not influenced by individual litters.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="4.step-one.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building the Model: Step 1</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="6.step-three.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Building the Model: Step 3</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-which-terms-are-random">Identifying Which Terms are <em>Random</em></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#does-the-data-support-what-we-want">Does the Data Support What we Want?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
