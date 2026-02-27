@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,9 +60,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.clustered-data-example';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building the Model: Step 1" href="4.step-one.html" />
+    <link rel="prev" title="Building Mixed-effects Models" href="2.building-mixed.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +115,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,10 +168,10 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Clustered Data Example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Clustered Data Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
@@ -253,7 +253,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F3.clustered-data-example.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +283,7 @@
       
       
       
-      <li><a href="_sources/README.md" target="_blank"
+      <li><a href="_sources/3.clustered-data-example.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +293,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Clustered Data Example</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -368,9 +368,12 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 </ul>
-
+</li>
+</ul>
             </nav>
         </div>
     </div>
@@ -381,7 +384,74 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>More advanced Linear Mixed-effects Models, such as random slope models and models with crossed and nested random effects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="clustered-data-example">
+<h1>Clustered Data Example<a class="headerlink" href="#clustered-data-example" title="Link to this heading">#</a></h1>
+<p>…
+This first example will necessarily be more detailed as we work through the logic of each step. Once this had been established, the examples in the remaining parts of the lesson will be more brief.</p>
+<section id="the-rat-pup-data">
+<h2>The Rat Pup Data<a class="headerlink" href="#the-rat-pup-data" title="Link to this heading">#</a></h2>
+<p>… The data are available from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a> and need to be downloaded into the current working directory before being loaded. In these examples, we have put the data in a separate <code class="docutils literal notranslate"><span class="pre">data</span></code> folder, so just be aware of this if you are copying and pasting code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&#39;data/rat_pup.dat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">24</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex litter litsize treatment
+1       1   6.60   Male      1      12   Control
+2       2   7.40   Male      1      12   Control
+3       3   7.15   Male      1      12   Control
+4       4   7.24   Male      1      12   Control
+5       5   7.10   Male      1      12   Control
+6       6   6.04   Male      1      12   Control
+7       7   6.98   Male      1      12   Control
+8       8   7.05   Male      1      12   Control
+9       9   6.95 Female      1      12   Control
+10     10   6.29 Female      1      12   Control
+11     11   6.77 Female      1      12   Control
+12     12   6.57 Female      1      12   Control
+13     13   6.37   Male      2      14   Control
+14     14   6.37   Male      2      14   Control
+15     15   6.90   Male      2      14   Control
+16     16   6.34   Male      2      14   Control
+17     17   6.50   Male      2      14   Control
+18     18   6.10   Male      2      14   Control
+19     19   6.44   Male      2      14   Control
+20     20   6.94   Male      2      14   Control
+21     21   6.41   Male      2      14   Control
+22     22   5.92 Female      2      14   Control
+23     23   6.04 Female      2      14   Control
+24     24   5.82 Female      2      14   Control
+</pre></div>
+</div>
+</div>
+</div>
+<p>These data are already in <em>long-format</em>, so all we need to do is make sure that all categorical variables are correctly defined as a <code class="docutils literal notranslate"><span class="pre">factor</span></code> using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="o">$</span><span class="n">sex</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="p">)</span>
+<span class="n">ratpup</span><span class="o">$</span><span class="n">treatment</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">treatment</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="identify-the-structure">
+<h3>1. Identify the Structure<a class="headerlink" href="#identify-the-structure" title="Link to this heading">#</a></h3>
+<p>We already discussed identifying the structure of a dataset at the beginning of this lesson. We are also organising these examples <em>by structure</em>, so this first step is somewhat redundant. However, we will keep it here for completeness.</p>
+<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. So, in this example, our units are <em>individual rat pups</em>. Our primary question is about how the treatments affect the weight of the rat pups.</p>
+<p>In the second step, we need to determine what each row of the data represents. As we can see above, each row corresponds to only a single unit measured <em>once</em>. So this is <em>not</em> repeated measures or longitudinal data, but it <em>could</em> be <em>clustered</em> data.</p>
+<p>In the final step, we need to determine if there are any clusters. If there are, we use a multilevel/LME approach. If there are not, the data are <em>cross-sectional</em> and we go back to normal linear regression. So, we look and see whether there are any variables that are <em>constant</em> across multiple units. In this example, there are several: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect the correlation between pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are simply labels that we give those units?</p>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
+<div class="tip dropdown admonition">
+<p class="admonition-title">More on Litter Size</p>
+<p>You may find <code class="docutils literal notranslate"><span class="pre">litsize</span></code> a confusing inclusion because it <em>refers</em> to litter and thus sounds like it should relate to clustering. However, this is a <em>description</em> rather than a structure. The way to think about it is if, hypothetically, litter size was a <em>rubber band</em> it would mean that all pups from litters of the same size were connected, irrespective of their mother, rearing environment or siblings. So, it is simply the total number of pups in the litter that matters biologically, rather than anything else. Thus all pups from a litter of size 8 would be connected together. Their mother, genetics and other factors <em>do not matter</em>. Consider for yourself whether this sounds plausible and thus whether you think <code class="docutils literal notranslate"><span class="pre">litsize</span></code> should be treated as a <em>rubber band</em> or a <em>sticky note</em>.</p>
+</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -392,16 +462,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -413,6 +483,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="2.building-mixed.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building Mixed-effects Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4.step-one.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Building the Model: Step 1</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -429,9 +517,12 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-pup-data">The Rat Pup Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identify-the-structure">1. Identify the Structure</a></li>
 </ul>
-
+</li>
+</ul>
   </nav></div>
 
 </div></div>

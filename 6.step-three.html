@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Building the Model: Step 3 &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,9 +60,13 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '6.step-three';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Implementing the Model in R" href="7.example-in-R.html" />
+    <link rel="prev" title="Building the Model: Step 2" href="5.step-two.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +117,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,13 +170,13 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Clustered Data Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building the Model: Step 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -253,7 +255,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F6.step-three.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +285,7 @@
       
       
       
-      <li><a href="_sources/README.md" target="_blank"
+      <li><a href="_sources/6.step-three.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +295,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -359,7 +361,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Building the Model: Step 3</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -368,9 +370,10 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -381,7 +384,123 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>More advanced Linear Mixed-effects Models, such as random slope models and models with crossed and nested random effects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-step-3">
+<h1>Building the Model: Step 3<a class="headerlink" href="#building-the-model-step-3" title="Link to this heading">#</a></h1>
+<div class="info admonition">
+<p class="admonition-title">Aim: Write the Higher-level Models</p>
+<p>The overall aim of Step 3 is to write the models that explain the terms discussed in Step 2. These models will be slightly different depending upon whether these terms are <em>fixed</em> or <em>random</em>.</p>
+</div>
+<p>In the previous step, we determined whether to allow certain terms to vary per-litter, or whether we want to treat them as global effects <em>irrespective</em> of litter. What we were actually doing here was deciding whether a term was to be treated as <em>random</em> or <em>fixed</em>. Because we decided to treat <em>both</em> <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{j}^{(k)}\)</span> as <em>varying per-litter</em>, then these are <em>both</em> random variables. For every new litter we sample, their values will change. This means that these terms must have associated probability distributions that describe their behaviour over repeated sampling. For simplicity, if we assume these distributions are normal, our model is therefore</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
+    \mu^{(k)}        &amp;\sim \mathcal{N}(\mu, \sigma^{2}_{2}) \\
+    \alpha^{(k)}_{j} &amp;\sim \mathcal{N}(\alpha_{j}, \sigma^{2}_{3})
+\end{alignat*}
+\end{split}\]</div>
+<p>So, the average weight of each litter is conceptualised as being drawn from a larger population of average weights, with some population mean weight of <span class="math notranslate nohighlight">\(\mu\)</span>. Similarly, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter is conceptualised as being drawn from a larger population of <code class="docutils literal notranslate"><span class="pre">sex</span></code> effects, with some population mean effect of <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>.</p>
+<p>Remembering that we can always write probability models in terms of expressions for the means plus random error, we can also rewrite the above as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
+    \mu^{(k)}        &amp;= \mu + \xi^{(k)} \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + \phi^{(k)}_{j}
+\end{alignat*}
+\end{split}\]</div>
+<p>So, now we have two extra error terms in the form of <span class="math notranslate nohighlight">\(\xi^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\phi^{(k)}_{j}\)</span>. The assumptions about all the error terms are then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \eta^{(k)}_{ij} &amp;\sim \mathcal{N}(0,\sigma^{2}_{\eta}) \\
+    \xi^{(k)}       &amp;\sim \mathcal{N}(0,\sigma^{2}_{\xi}) \\
+    \phi^{(k)}_{j}  &amp;\sim \mathcal{N}(0,\sigma^{2}_{\phi})
+\end{alignat*}
+\end{split}\]</div>
+<p>So we can see that what we have ended up with is a model containing <em>three</em> variances. We have partitioned the overall variance of the data into 3 components</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Var}\left(y\right) = \sigma^{2} = \sigma^{2}_{\eta} + \sigma^{2}_{\xi} + \sigma^{2}_{\phi}.
+\]</div>
+<p>Notice that we did not <em>start</em> by doing this. This is simply where we have ended-up by building the model slowly in a principled fashion. This structure has simply <em>fallen-out</em> of the decisions we have made along the way. So, our current conceptualisation is of a two-level model of the following form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{2}
+    \text{Level 1:} \\
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} &amp;\quad\small{\text{Weight of pup $i$ of sex $j$ in litter $k$}} \\
+    \quad \\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \xi^{(k)} &amp;\quad\small{\text{Average weight of litter $k$}} \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + \phi^{(k)}_{j} &amp;\quad\small{\text{Effect of sex $j$ in litter $k$}}
+\end{alignat*}
+\end{split}\]</div>
+<p>However, there is more we can now do with the two 2nd-level models.</p>
+<section id="modelling-mu-k">
+<h2>Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span><a class="headerlink" href="#modelling-mu-k" title="Link to this heading">#</a></h2>
+<p>Let us start by focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. If we treat it like any other regression model, we can decide whether there is more we can include to model the mean weight of litter, beyond just the population mean <span class="math notranslate nohighlight">\(\mu\)</span>. So, let us pretend we <em>only</em> have the model</p>
+<div class="math notranslate nohighlight">
+\[
+\mu^{(k)} = \mu + \xi^{(k)}.
+\]</div>
+<p>Is there anything else in this dataset that we think might relate to the mean weight of each litter? Well, remember in this experiment that the experimental treatment was applied to litters individually. So, an additional element that might affect the average weight in litter <span class="math notranslate nohighlight">\(k\)</span> is the treatment they were given. If we denote the effect of the treatment that has been applied <span class="math notranslate nohighlight">\(\gamma_{l}\)</span>, then our model of the mean becomes</p>
+<div class="math notranslate nohighlight">
+\[
+\mu^{(k)} = \mu + \gamma_{l} + \xi^{(k)}.
+\]</div>
+<p>If we imagine, for simplicity, that there are 4 litters where the first two are given treatment 1 and the last two are given treatment 2, this model implies</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \mu^{(1)} &amp;= \mu + \gamma_{1} + \xi^{(1)} \\
+    \mu^{(2)} &amp;= \mu + \gamma_{1} + \xi^{(2)} \\
+    \mu^{(3)} &amp;= \mu + \gamma_{2} + \xi^{(3)} \\
+    \mu^{(4)} &amp;= \mu + \gamma_{2} + \xi^{(4)} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>Sometimes, the clearest picture can come from simply expanding the indices and seeing what the model is implying.</p>
+</section>
+<section id="modelling-alpha-k-j">
+<h2>Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span><a class="headerlink" href="#modelling-alpha-k-j" title="Link to this heading">#</a></h2>
+<p>Now, let us move on to focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. Again, if we treat this like any other regression model, we can decide whether there is more we can include to model the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter, beyond the population effect <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>. So, let us pretend we <em>only</em> have the model</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha^{(k)}_{j} = \alpha_{j} + \phi^{(k)}_{j}
+\]</div>
+<p>Is there anything else in this dataset that we think might relate to the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on the average weight in this litter? Well, again, we might want to consider the treatment was applied. If the treatment works differentially in male vs female pups then there <em>could</em> be a treatment <span class="math notranslate nohighlight">\(\times\)</span> sex interaction effect. If this is of interest, we can expand this model to</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha^{(k)}_{j} = \alpha_{j} + (\alpha\gamma)_{jl} + \phi^{(k)}_{j}
+\]</div>
+<p>So this is saying that the unique effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> in litter <span class="math notranslate nohighlight">\(k\)</span> is governed by the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> (<span class="math notranslate nohighlight">\(\alpha_{j}\)</span>), plus the interaction between <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code> (<span class="math notranslate nohighlight">\((\alpha\gamma)_{jl}\)</span>). As with before, it can be helpful to expand the indices here. For each litter <span class="math notranslate nohighlight">\(k\)</span> we have an additional index for <code class="docutils literal notranslate"><span class="pre">sex</span></code> in the form of <span class="math notranslate nohighlight">\(j\)</span>. So, for 4 litters given 2 different treatments, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Litter 1 Treatment 1}
+    \begin{cases}
+        \alpha_{1}^{(1)} &amp;= \alpha_{1} + (\alpha\gamma)_{11} + \phi^{(1)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(1)} &amp;= \alpha_{2} + (\alpha\gamma)_{21} + \phi^{(1)}_{2} \quad\text{Female pups}\\
+    \end{cases} \\
+    \text{Litter 2 Treatment 1}
+    \begin{cases}
+        \alpha_{1}^{(2)} &amp;= \alpha_{1} + (\alpha\gamma)_{11} + \phi^{(2)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(2)} &amp;= \alpha_{2} + (\alpha\gamma)_{21} + \phi^{(2)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+    \text{Litter 3 Treatment 2}
+    \begin{cases}
+        \alpha_{1}^{(3)} &amp;= \alpha_{1} + (\alpha\gamma)_{12} + \phi^{(3)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(3)} &amp;= \alpha_{2} + (\alpha\gamma)_{22} + \phi^{(3)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+    \text{Litter 4 Treatment 2}
+    \begin{cases}
+        \alpha_{1}^{(4)} &amp;= \alpha_{1} + (\alpha\gamma)_{12} + \phi^{(4)}_{1} \quad\text{Male pups} \\
+        \alpha_{2}^{(4)} &amp;= \alpha_{2} + (\alpha\gamma)_{22} + \phi^{(4)}_{2} \quad\text{Female pups} \\
+    \end{cases} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>This looks complicated, but it is the simple expansion of the model above, where we replace the indices with actual numbers. You can spend some time studying this, but do not get too bogged down in it.</p>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -392,16 +511,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -413,6 +532,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="5.step-two.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building the Model: Step 2</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="7.example-in-R.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -429,9 +566,10 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
 </ul>
-
   </nav></div>
 
 </div></div>

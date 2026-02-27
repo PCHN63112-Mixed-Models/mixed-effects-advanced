@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Building the Model: Step 1 &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,9 +60,13 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.step-one';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building the Model: Step 2" href="5.step-two.html" />
+    <link rel="prev" title="Clustered Data Example" href="3.clustered-data-example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +117,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,11 +170,11 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Clustered Data Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building the Model: Step 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
 <li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
@@ -253,7 +255,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F4.step-one.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +285,7 @@
       
       
       
-      <li><a href="_sources/README.md" target="_blank"
+      <li><a href="_sources/4.step-one.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +295,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -346,9 +348,7 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -359,19 +359,11 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Building the Model: Step 1</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -381,7 +373,78 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>More advanced Linear Mixed-effects Models, such as random slope models and models with crossed and nested random effects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-step-1">
+<h1>Building the Model: Step 1<a class="headerlink" href="#building-the-model-step-1" title="Link to this heading">#</a></h1>
+<div class="info admonition">
+<p class="admonition-title">Aim: Write the Model for a Single Dependency Structure</p>
+<p>The overall aim of Step 1 is to write the model we want for only a <em>single</em> dependency structure. So, <em>one</em> cluster, or <em>one</em> subject. This needs to be at the <em>lowest</em> level of the hierarchy, so no other dependency structures should exists <em>within</em> this. For instance, if you had <em>clustered longitudinal</em> data, you would select <em>one subject</em> within <em>one cluster</em>. You would not select a cluster as a whole, because that would contain multiple subjects. We are trying to select the smallest single block of dependency that we can.</p>
+</div>
+<p>In our second step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. So, we start by writing the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
+<p>We can look at this in <code class="docutils literal notranslate"><span class="pre">R</span></code> by subsetting the data to just those values from the first litter</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">litter.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex litter litsize treatment
+1       1   6.60   Male      1      12   Control
+2       2   7.40   Male      1      12   Control
+3       3   7.15   Male      1      12   Control
+4       4   7.24   Male      1      12   Control
+5       5   7.10   Male      1      12   Control
+6       6   6.04   Male      1      12   Control
+7       7   6.98   Male      1      12   Control
+8       8   7.05   Male      1      12   Control
+9       9   6.95 Female      1      12   Control
+10     10   6.29 Female      1      12   Control
+11     11   6.77 Female      1      12   Control
+12     12   6.57 Female      1      12   Control
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter and so cannot be used as predictors. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. We could even go as far as removing these from <code class="docutils literal notranslate"><span class="pre">litter.1</span></code>. If you are working with very complex datasets, this is something you may want to do to help clarify the model you are building. However, for this example, we will leave the data as-is.</p>
+<p>Based on the above, the only useable variables we have at the level of a single litter are <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code>. Because there are no repeated measurements, <code class="docutils literal notranslate"><span class="pre">pup_id</span></code> simply indexes the rows of the data frame and is not of much use. So, based on all this, the only model we can build at the level of a single litter is one that models <code class="docutils literal notranslate"><span class="pre">weights</span></code> as a function of the <code class="docutils literal notranslate"><span class="pre">sex</span></code> of the pup. This is not wholly unreasonable, as we expect male pups to be heavier than female pups. So our starting point is the normal linear model</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ij} = \mu + \alpha_{j} + \eta_{ij},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(y_{ij}\)</span> is the value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for pup <span class="math notranslate nohighlight">\(i\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(\mu\)</span> is the average weight of all pups in this litter, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at level <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is the error. This is effectively a one-way ANOVA model of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within a single litter.</p>
+<p>We can run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code> to check that we have a model that is possible with a single litter. This is not wholly necessary, but can be a useful exercise when building these models up slowly. It is also useful because we can see the model formula for <em>one litter</em>, which will become relevant a little later on.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.1</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">lm.litter.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = weight ~ 1 + sex, data = litter.1)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9050 -0.1425  0.1150  0.2275  0.4550 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   6.6450     0.1969  33.749 1.23e-11 ***
+sexMale       0.3000     0.2411   1.244    0.242    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3938 on 10 degrees of freedom
+Multiple R-squared:  0.134,	Adjusted R-squared:  0.04743 
+F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. More importantly, we can see that this model <em>is</em> possible and is not constrained by the data.</p>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -392,16 +455,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -413,28 +476,30 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="3.clustered-data-example.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Clustered Data Example</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="5.step-two.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Building the Model: Step 2</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
             </div>
             
             
-              
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
-
-</div></div>
               
             
           </div>

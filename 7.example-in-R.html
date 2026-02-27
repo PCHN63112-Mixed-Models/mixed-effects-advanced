@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Implementing the Model in R &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -60,9 +60,13 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '7.example-in-R';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Summary" href="summary.html" />
+    <link rel="prev" title="Building the Model: Step 3" href="6.step-three.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -113,8 +117,6 @@
     <div class="bd-container__inner bd-page-width">
       
       
-      
-        
       
       <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
@@ -168,14 +170,14 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Clustered Data Example</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
 
@@ -253,7 +255,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F7.example-in-R.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -283,7 +285,7 @@
       
       
       
-      <li><a href="_sources/README.md" target="_blank"
+      <li><a href="_sources/7.example-in-R.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -293,7 +295,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -359,7 +361,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Implementing the Model in R</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -368,9 +370,11 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collapsing-to-mixed-effects-form">Collapsing to Mixed-effects Form</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-using-lme">Implementation Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
 </ul>
-
             </nav>
         </div>
     </div>
@@ -381,7 +385,116 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <p>More advanced Linear Mixed-effects Models, such as random slope models and models with crossed and nested random effects.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="implementing-the-model-in-r">
+<h1>Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#implementing-the-model-in-r" title="Link to this heading">#</a></h1>
+<p>…</p>
+<section id="collapsing-to-mixed-effects-form">
+<h2>Collapsing to Mixed-effects Form<a class="headerlink" href="#collapsing-to-mixed-effects-form" title="Link to this heading">#</a></h2>
+<p>… So, at present, our two-level model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}  \\
+    \quad \\
+    \text{Level 2:} \\
+    \mu^{(k)}        &amp;= \mu + \gamma_{l} + \xi^{(k)}  \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\gamma)_{jl} + \phi^{(k)}_{j}
+\end{alignat*}
+\end{split}\]</div>
+<p>…</p>
+<div class="math notranslate nohighlight">
+\[
+y^{(k)}_{ij} = \mu + \alpha_{j} + \gamma_{l} + (\alpha\gamma)_{jl} + \xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij}
+\]</div>
+<p>…</p>
+<div class="math notranslate nohighlight">
+\[
+y_{ijk} = \mu + \alpha_{j} + \gamma_{l} + (\alpha\gamma)_{jl} + \xi_{k} + \phi_{jk} + \eta_{ijk}
+\]</div>
+<p>Where we end up with what is essentially a two-way ANOVA model with <em>three</em> error terms.</p>
+<p>We can now collapse these levels together to give the mixed-effects specification.</p>
+</section>
+<section id="implementation-using-lme">
+<h2>Implementation Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code><a class="headerlink" href="#implementation-using-lme" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
+
+<span class="n">lme.ratpup.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="c1"># fixed-effects (mean function)</span>
+<span class="w">                    </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w">        </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w">                  </span><span class="c1"># random-effects (variance function)</span>
+<span class="w">                    </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span><span class="p">)</span><span class="w">                                   </span><span class="c1"># data (long-format)</span>
+
+<span class="nf">summary</span><span class="p">(</span><span class="n">lme.ratpup.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratpup 
+      AIC      BIC    logLik
+  438.799 476.3564 -209.3995
+
+Random effects:
+ Formula: ~1 + sex | litter
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev    Corr  
+(Intercept) 0.5019186 (Intr)
+sexMale     0.1554335 0.888 
+Residual    0.4005464       
+
+Fixed effects:  weight ~ treatment + sex + sex:treatment 
+                          Value Std.Error  DF  t-value p-value
+(Intercept)            6.200295 0.1685193 292 36.79278  0.0000
+treatmentHigh         -0.293458 0.2647520  24 -1.10843  0.2787
+treatmentLow          -0.315255 0.2376438  24 -1.32658  0.1971
+sexMale                0.441064 0.0878297 292  5.02181  0.0000
+treatmentHigh:sexMale -0.083920 0.1529263 292 -0.54876  0.5836
+treatmentLow:sexMale  -0.077938 0.1272381 292 -0.61253  0.5407
+ Correlation: 
+                      (Intr) trtmnH trtmnL sexMal trtH:M
+treatmentHigh         -0.637                            
+treatmentLow          -0.709  0.451                     
+sexMale                0.262 -0.167 -0.186              
+treatmentHigh:sexMale -0.151  0.200  0.107 -0.574       
+treatmentLow:sexMale  -0.181  0.115  0.277 -0.690  0.396
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-7.26679495 -0.48614771 -0.01516592  0.55664433  2.81749336 
+
+Number of Observations: 322
+Number of Groups: 27 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualising-the-model">
+<h2>Visualising the Model<a class="headerlink" href="#visualising-the-model" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="n">litters.to.plot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.character</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">8</span><span class="p">))</span><span class="w">                       </span><span class="c1"># select litters to plot</span>
+<span class="n">ratpup.plot</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ratpup</span><span class="p">[</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">litters.to.plot</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="c1"># subset rows by litter labels</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup.plot</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_smooth</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_grid</span><span class="p">(</span><span class="o">~</span><span class="n">litter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/fc503c041e6d873ffe1c6df023daa0f544e5ac7959b2889005fdbd28d4f84a5c.png" src="_images/fc503c041e6d873ffe1c6df023daa0f544e5ac7959b2889005fdbd28d4f84a5c.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -392,16 +505,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "r"
         },
         kernelOptions: {
-            name: "python3",
+            name: "ir",
             path: "./."
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'ir'</script>
 
                 </article>
               
@@ -413,6 +526,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="6.step-three.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Building the Model: Step 3</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="summary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -429,9 +560,11 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collapsing-to-mixed-effects-form">Collapsing to Mixed-effects Form</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-using-lme">Implementation Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
 </ul>
-
   </nav></div>
 
 </div></div>
