@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Building the Model: Step 1 &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>Building the Model I &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '4.step-one';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Building the Model: Step 2" href="5.step-two.html" />
+    <link rel="next" title="Building the Model II" href="5.step-two.html" />
     <link rel="prev" title="Example Dataset" href="3.clustered-data-example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,9 +174,9 @@
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Example Dataset</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building the Model: Step 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building the Model I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model III</a></li>
 <li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -359,7 +359,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Building the Model: Step 1</h1>
+    <h1>Building the Model I</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -373,13 +373,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-step-1">
-<h1>Building the Model: Step 1<a class="headerlink" href="#building-the-model-step-1" title="Link to this heading">#</a></h1>
-<div class="info admonition">
-<p class="admonition-title">Aim: Write the Model for a Single Dependency Structure</p>
-<p>The overall aim of Step 1 is to write the model we want for only a <em>single</em> dependency structure. So, <em>one</em> cluster, or <em>one</em> subject. This needs to be at the <em>lowest</em> level of the hierarchy, so no other dependency structures should exists <em>within</em> this. For instance, if you had <em>clustered longitudinal</em> data, you would select <em>one subject</em> within <em>one cluster</em>. You would not select a cluster as a whole, because that would contain multiple subjects. We are trying to select the smallest single block of dependency that we can.</p>
-</div>
-<p>In our second step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. So, we start by writing the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-i">
+<h1>Building the Model I<a class="headerlink" href="#building-the-model-i" title="Link to this heading">#</a></h1>
+<p>In our second step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters. Remember, these are the <em>boundaries of independence</em>. Independence lives between the levels of the cluster and dependence lives within each level of the cluster. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. So, we start by writing the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
 <p>We can look at this in <code class="docutils literal notranslate"><span class="pre">R</span></code> by subsetting the data to just those values from the first litter</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -490,7 +486,7 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Building the Model: Step 2</p>
+        <p class="prev-next-title">Building the Model II</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -172,9 +172,9 @@
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Example Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model III</a></li>
 <li class="toctree-l1"><a class="reference internal" href="7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -370,8 +370,9 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-general-steps">The General Steps</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1">Step 1:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2">Step 2:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i">Step I</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii">Step II</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii">Step III</a></li>
 </ul>
             </nav>
         </div>
@@ -403,11 +404,9 @@
 <li><p>Collapse to form the mixed-effects model</p></li>
 </ol>
 </section>
-<section id="step-1">
-<h2>Step 1:<a class="headerlink" href="#step-1" title="Link to this heading">#</a></h2>
-</section>
-<section id="step-2">
-<h2>Step 2:<a class="headerlink" href="#step-2" title="Link to this heading">#</a></h2>
+<section id="step-i">
+<h2>Step I<a class="headerlink" href="#step-i" title="Link to this heading">#</a></h2>
+<p>The overall aim of Step 1 is to write the model we want for only a <em>single</em> dependency structure. So, <em>one</em> cluster, or <em>one</em> subject. This needs to be at the <em>lowest</em> level of the hierarchy, so no other dependency structures should exists <em>within</em> this. For instance, if you had <em>clustered longitudinal</em> data, you would select <em>one subject</em> within <em>one cluster</em>. You would not select a cluster as a whole, because that would contain multiple subjects. We are trying to select the smallest single block of dependency that we can.</p>
 <div class="info admonition">
 <p class="admonition-title">Definition: Dependency Structure</p>
 <p>A set of observations that are statistically dependent because they share the same source of random variation.</p>
@@ -432,6 +431,14 @@
 </div>
 <p>A dependency structure is a bundle of observations that <em>belong together</em> in some fashion.</p>
 </div>
+</section>
+<section id="step-ii">
+<h2>Step II<a class="headerlink" href="#step-ii" title="Link to this heading">#</a></h2>
+<p>The overall aim of Step 2 is to expand the model from Step 1 to <em>multiple</em> dependency structures. For instance, <em>multiple</em> clusters or <em>multiple</em> subjects. In doing so, we characterise which of the parameters from Step 1 we imagine <em>change</em> with each new dependency structure and which of the parameters stay <em>constant</em>. This is effectively a decision about which terms are <em>random effects</em> and which are <em>fixed effects</em>.</p>
+</section>
+<section id="step-iii">
+<h2>Step III<a class="headerlink" href="#step-iii" title="Link to this heading">#</a></h2>
+<p>The overall aim of Step 3 is to write the models that explain the terms discussed in Step 2. These models will be slightly different depending upon whether these terms are <em>fixed</em> or <em>random</em>.</p>
 </section>
 </section>
 
@@ -501,8 +508,9 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-general-steps">The General Steps</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1">Step 1:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2">Step 2:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i">Step I</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii">Step II</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii">Step III</a></li>
 </ul>
   </nav></div>
 
