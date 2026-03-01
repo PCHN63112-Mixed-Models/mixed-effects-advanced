@@ -66,7 +66,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Summary" href="summary.html" />
-    <link rel="prev" title="Building the Model: Step 3" href="6.step-three.html" />
+    <link rel="prev" title="Building the Model III" href="6.step-three.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -174,9 +174,9 @@
 <li class="toctree-l1"><a class="reference internal" href="1.data-structures.html">Data Structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Example Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model: Step 1</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model: Step 2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model: Step 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4.step-one.html">Building the Model I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model III</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -402,7 +402,20 @@
     \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\gamma)_{jl} + \phi^{(k)}_{j}
 \end{alignat*}
 \end{split}\]</div>
-<p>…</p>
+<p>which we can perhaps make a bit clearer by labelling the terms explicitly</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1:} \\
+    \text{weight}^{(k)}_{ij}     &amp;= \text{mean}^{(k)} + \text{sex}^{(k)}_{j} + \eta^{(k)}_{ij}  \\
+    \quad \\
+    \text{Level 2:} \\
+    \text{mean}^{(k)}    &amp;= \text{mean} + \text{treatment}_{l} + \xi^{(k)}  \\
+    \text{sex}^{(k)}_{j} &amp;= \text{sex}_{j} + (\text{sex} \times \text{treatment})_{jl} + \phi^{(k)}_{j}
+\end{alignat*}
+\end{split}\]</div>
+<p>Remember, any term with superscript <span class="math notranslate nohighlight">\((k)\)</span> is defined <em>specifically</em> in relation to litter <span class="math notranslate nohighlight">\(k\)</span> any term <em>without</em> superscript <span class="math notranslate nohighlight">\((k)\)</span> is defined in terms of the <em>population</em> as a whole.
+…</p>
 <div class="math notranslate nohighlight">
 \[
 y^{(k)}_{ij} = \mu + \alpha_{j} + \gamma_{l} + (\alpha\gamma)_{jl} + \xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij}
@@ -532,7 +545,7 @@ Number of Groups: 27
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Building the Model: Step 3</p>
+        <p class="prev-next-title">Building the Model III</p>
       </div>
     </a>
     <a class="right-next"
