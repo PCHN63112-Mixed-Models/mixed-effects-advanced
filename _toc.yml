@@ -7,7 +7,7 @@ chapters:
 - file: 1.data-structures
 - file: 2.building-mixed
 - file: 3.clustered-data-example
-- file: 4.step-one
+- file: 4.building-model-I
 - file: 5.step-two
 - file: 6.step-three
 - file: 7.example-in-R

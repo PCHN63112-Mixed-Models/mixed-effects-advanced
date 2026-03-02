@@ -62,7 +62,7 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '4.step-one';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '4.building-model-I';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Building the Model II" href="5.step-two.html" />
@@ -255,7 +255,7 @@
       
       
       
-      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F4.step-one.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2F4.building-model-I.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -285,7 +285,7 @@
       
       
       
-      <li><a href="_sources/4.step-one.ipynb" target="_blank"
+      <li><a href="_sources/4.building-model-I.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -348,7 +348,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -364,6 +366,20 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-a-single-dependency-structure">Modelling a Single Dependency Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subsetting-the-data">Subsetting the Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-suitable-variables">Identifying Suitable Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-model">Specifying the Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-data-supports-the-model">Checking the Data Supports the Model</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -375,8 +391,14 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-i">
 <h1>Building the Model I<a class="headerlink" href="#building-the-model-i" title="Link to this heading">#</a></h1>
-<p>In our second step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters. Remember, these are the <em>boundaries of independence</em>. Independence lives between the levels of the cluster and dependence lives within each level of the cluster. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. So, we start by writing the model for <em>one cluster</em>. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
-<p>We can look at this in <code class="docutils literal notranslate"><span class="pre">R</span></code> by subsetting the data to just those values from the first litter</p>
+<p>Now that we have established the structure of our data, we can move on to modelling it. For this, we assume that all data wrangling and data exploration has taken place and we are now in a position of wanting to specify a model using <code class="docutils literal notranslate"><span class="pre">lme()</span></code>. In order to do so, we will follow the 3 general steps outlines earlier to build a multilevel model. We will then collapse this to mixed-effects form to fit using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></p>
+<section id="modelling-a-single-dependency-structure">
+<h2>Modelling a Single Dependency Structure<a class="headerlink" href="#modelling-a-single-dependency-structure" title="Link to this heading">#</a></h2>
+<p>In our first step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters themselves. These are the <em>boundaries of dependence</em>. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. For this example, this corresponds to a <em>single litter</em>. Because we have no sub-clusters within litter, we are at the finest level of dependency and can start here. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
+</section>
+<section id="subsetting-the-data">
+<h2>Subsetting the Data<a class="headerlink" href="#subsetting-the-data" title="Link to this heading">#</a></h2>
+<p>Although possible to conduct this step in a purely theoretical fashion, we can also make it more practical by using <code class="docutils literal notranslate"><span class="pre">R</span></code> to subset the data to just those values from a single litter. Because the specific litter makes no difference here, we simply select the label <code class="docutils literal notranslate"><span class="pre">litter=='1'</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
@@ -402,14 +424,50 @@
 </div>
 </div>
 </div>
-<p>As we can see, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter and so cannot be used as predictors. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. We could even go as far as removing these from <code class="docutils literal notranslate"><span class="pre">litter.1</span></code>. If you are working with very complex datasets, this is something you may want to do to help clarify the model you are building. However, for this example, we will leave the data as-is.</p>
-<p>Based on the above, the only useable variables we have at the level of a single litter are <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code>. Because there are no repeated measurements, <code class="docutils literal notranslate"><span class="pre">pup_id</span></code> simply indexes the rows of the data frame and is not of much use. So, based on all this, the only model we can build at the level of a single litter is one that models <code class="docutils literal notranslate"><span class="pre">weights</span></code> as a function of the <code class="docutils literal notranslate"><span class="pre">sex</span></code> of the pup. This is not wholly unreasonable, as we expect male pups to be heavier than female pups. So our starting point is the normal linear model</p>
+<p>Spend a little time studying the output above so you understand the nature of the data we are working with during this step.</p>
+</section>
+<section id="identifying-suitable-variables">
+<h2>Identifying Suitable Variables<a class="headerlink" href="#identifying-suitable-variables" title="Link to this heading">#</a></h2>
+<p>Based on the output above, we can see that <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter. Because of this, we cannot use them as predictors within a single litter. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. So, to make this very clear, we can <em>remove</em> them from our data for litter 1</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">litter.1</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">litter</span><span class="p">,</span><span class="o">-</span><span class="n">litsize</span><span class="p">,</span><span class="o">-</span><span class="n">treatment</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">litter.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex
+1       1   6.60   Male
+2       2   7.40   Male
+3       3   7.15   Male
+4       4   7.24   Male
+5       5   7.10   Male
+6       6   6.04   Male
+7       7   6.98   Male
+8       8   7.05   Male
+9       9   6.95 Female
+10     10   6.29 Female
+11     11   6.77 Female
+12     12   6.57 Female
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have kept <code class="docutils literal notranslate"><span class="pre">pup_id</span></code>, even though it is somewhat redundant with the row index as there may be cause to identify individual pups at some point later. This may be especially true if the rows get reordered, either intentionally or unintentionally. Either way, it is good practice to keep track of the <em>units of analysis</em>.</p>
+</section>
+<section id="specifying-the-model">
+<h2>Specifying the Model<a class="headerlink" href="#specifying-the-model" title="Link to this heading">#</a></h2>
+<p>Based on the above, the only useable variables we have at the level of a single litter are <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">sex</span></code>. So, the only model we can build at the level of a single litter is one that models <code class="docutils literal notranslate"><span class="pre">weight</span></code> as a function of the <code class="docutils literal notranslate"><span class="pre">sex</span></code> of the pup. So, our starting point is the normal linear model</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \mu + \alpha_{j} + \eta_{ij},
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(y_{ij}\)</span> is the value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for pup <span class="math notranslate nohighlight">\(i\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(\mu\)</span> is the average weight of all pups in this litter, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at level <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is the error. This is effectively a one-way ANOVA model of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within a single litter.</p>
-<p>We can run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code> to check that we have a model that is possible with a single litter. This is not wholly necessary, but can be a useful exercise when building these models up slowly. It is also useful because we can see the model formula for <em>one litter</em>, which will become relevant a little later on.</p>
+<section id="checking-the-data-supports-the-model">
+<h3>Checking the Data Supports the Model<a class="headerlink" href="#checking-the-data-supports-the-model" title="Link to this heading">#</a></h3>
+<p>We can now run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This serves two purposes. Firstly, we can see the syntax we need to model a <em>single</em> dependency structure. This will become relevant later when it comes to specifying the mixed-effects model. Secondly, we can check that the model we want is supported by the data that we have. If there are any problems at this stage, it tells us that we will need to constrain our model further as the data does not contain the degree of variation we need.</p>
+<p>We fit the model below, making the intercept parameter <em>explicit</em> in the formula. The reason for this will become clearer later, but is there to provide a more direct connection with the syntax we will need later on.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.1</span><span class="p">)</span>
@@ -439,7 +497,21 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 </div>
 </div>
 </div>
-<p>As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. More importantly, we can see that this model <em>is</em> possible and is not constrained by the data.</p>
+<p>There are no issues with fitting this model and so no requirement to constrain the model for a single litter further. As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. We plot the fit below for completeness, but this is not wholly necessary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;sex&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="o">=</span><span class="n">lm.litter.1</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span>
+<span class="w">     </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">),</span><span class="w"> </span>
+<span class="w">     </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Sex Effect (Litter 1)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/82305698a44ef13284941e45296706cf316ee64fef93713ce2d5b4f1125b7aef.png" src="_images/82305698a44ef13284941e45296706cf316ee64fef93713ce2d5b4f1125b7aef.png" />
+</div>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -496,6 +568,28 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-a-single-dependency-structure">Modelling a Single Dependency Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subsetting-the-data">Subsetting the Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-suitable-variables">Identifying Suitable Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-the-model">Specifying the Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-the-data-supports-the-model">Checking the Data Supports the Model</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
