@@ -371,6 +371,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-multiple-models-in-r">Specifying Multiple Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-which-terms-are-random">Identifying Which Terms are <em>Random</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
@@ -400,6 +401,31 @@
 y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}
 \]</div>
 <p>This indicates that <em>everything</em> in the model depends upon the specific litter. This is generally our theoretical starting-point. However, in the next step, we will determine whether everything here <em>can</em> change within each litter, given the data we have, and whether we <em>want</em> them to change with each litter. We have already gone some way towards this in the previous step by fitting the model for a single litter, but we will formalise it now.</p>
+<section id="specifying-multiple-models-in-r">
+<h2>Specifying Multiple Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#specifying-multiple-models-in-r" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.mods</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w">  </span>
+<span class="n">litters</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="p">)</span>
+<span class="n">n.litters</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">litters</span><span class="p">)</span>
+
+<span class="kr">for</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n.litters</span><span class="p">){</span>
+<span class="w">  </span><span class="n">litter.k</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="nf">as.character</span><span class="p">(</span><span class="n">litters</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+<span class="w">  </span><span class="nf">try</span><span class="p">(</span>
+<span class="w">    </span><span class="n">litter.mods</span><span class="p">[[</span><span class="n">k</span><span class="p">]]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.k</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">silent</span><span class="o">=</span><span class="kc">TRUE</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="_images/9184a1101e9554bd62753735a288b71a0e2653ce6434d5307cd9feeeb3d849a0.png" src="_images/9184a1101e9554bd62753735a288b71a0e2653ce6434d5307cd9feeeb3d849a0.png" />
+</div>
+</div>
+</section>
 <section id="identifying-which-terms-are-random">
 <h2>Identifying Which Terms are <em>Random</em><a class="headerlink" href="#identifying-which-terms-are-random" title="Link to this heading">#</a></h2>
 <p>Now that we have our model for each level of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we need to make some decisions. As indicated above, every element has the <em>potential</em> to be different for each litter. Of course, the data itself always will be, as will the errors. So our question is about how to treat those elements that form the <em>mean function</em> of each litter:</p>
@@ -557,6 +583,7 @@ y^{(k)}_{ij} = \mu^{(k)} + \alpha_{j} + \epsilon^{(k)}_{ij}.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#specifying-multiple-models-in-r">Specifying Multiple Models in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identifying-which-terms-are-random">Identifying Which Terms are <em>Random</em></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-mu-k">How to Treat <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>?</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-treat-alpha-k-j">How to Treat <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>?</a></li>
