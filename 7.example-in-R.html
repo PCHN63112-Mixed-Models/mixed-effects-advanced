@@ -374,6 +374,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collapsing-to-mixed-effects-form">Collapsing to Mixed-effects Form</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-using-lme">Implementation Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-sex-be-fixed-or-random">Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?</a></li>
 </ul>
             </nav>
         </div>
@@ -482,6 +483,45 @@ Number of Groups: 27
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.ratpup.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    (Intercept)      sexMale
+1   0.283091048  0.066250415
+2  -0.153500107 -0.033344540
+3   0.701543759  0.178278121
+4  -0.135362756 -0.031915416
+5   0.340037227  0.105202850
+6   0.390393255  0.169711123
+7  -0.158110148 -0.063206359
+8  -0.440380383 -0.124903334
+9  -0.935772451 -0.277784567
+10  0.108060557  0.011711707
+11 -0.319291431 -0.089044095
+12  1.080803194  0.297293631
+13 -0.268172395 -0.079082057
+14 -0.234212253 -0.069014833
+15 -0.004590989 -0.009742578
+16  0.030052979 -0.004193467
+17 -0.521318592 -0.150524666
+18  0.183390270  0.088278074
+19  0.110812589  0.022647114
+20 -0.057473372 -0.006617124
+21 -0.749232516 -0.202209691
+22 -0.566187590 -0.160408742
+23  0.942642618  0.266500217
+24 -0.131482487 -0.035557072
+25  0.345791183  0.093074636
+26  0.273784479  0.073033835
+27 -0.115315687 -0.034433183
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="visualising-the-model">
 <h2>Visualising the Model<a class="headerlink" href="#visualising-the-model" title="Link to this heading">#</a></h2>
@@ -502,6 +542,26 @@ Number of Groups: 27
 <div class="cell_output docutils container">
 <img alt="_images/fc503c041e6d873ffe1c6df023daa0f544e5ac7959b2889005fdbd28d4f84a5c.png" src="_images/fc503c041e6d873ffe1c6df023daa0f544e5ac7959b2889005fdbd28d4f84a5c.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="should-sex-be-fixed-or-random">
+<h2>Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?<a class="headerlink" href="#should-sex-be-fixed-or-random" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.mod.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w">       </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="n">lme.mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span><span class="w"> </span>
+
+<span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod.0</span><span class="p">,</span><span class="n">lme.mod.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          Model df      AIC      BIC    logLik   Test  L.Ratio p-value
+lme.mod.0     1  8 425.9672 456.1636 -204.9836                        
+lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </pre></div>
 </div>
 </div>
@@ -577,6 +637,7 @@ Number of Groups: 27
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collapsing-to-mixed-effects-form">Collapsing to Mixed-effects Form</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-using-lme">Implementation Using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-sex-be-fixed-or-random">Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?</a></li>
 </ul>
   </nav></div>
 
