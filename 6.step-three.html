@@ -371,8 +371,10 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-consequences-of-random-terms">The Consequences of Random Terms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-model">The Final Model</a></li>
 </ul>
             </nav>
         </div>
@@ -386,16 +388,21 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-iii">
 <h1>Building the Model III<a class="headerlink" href="#building-the-model-iii" title="Link to this heading">#</a></h1>
-<p>In the previous step, we determined whether to allow certain terms to vary per-litter, or whether we want to treat them as global effects <em>irrespective</em> of litter. What we were actually doing here was deciding whether a term was to be treated as <em>random</em> or <em>fixed</em>. Because we decided to treat <em>both</em> <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{j}^{(k)}\)</span> as <em>varying per-litter</em>, then these are <em>both</em> random variables. For every new litter we sample, their values will change. This means that these terms must have associated probability distributions that describe their behaviour over repeated sampling. For simplicity, if we assume these distributions are normal, our model is therefore</p>
+<p>In our third model building step, we need to write the models for the next level in the hierarchy. Depending upon whether we decided to treat certain terms as <em>fixed</em> or <em>random</em> will change how these higher-level models are expressed.</p>
+<section id="the-consequences-of-random-terms">
+<h2>The Consequences of Random Terms<a class="headerlink" href="#the-consequences-of-random-terms" title="Link to this heading">#</a></h2>
+<p>In the previous step, we determined whether to allow certain terms to vary per-litter, or whether we want to treat them as global effects <em>irrespective</em> of litter. What we were actually doing here was deciding whether a term was to be treated as <em>random</em> or <em>fixed</em>. Because we decided to treat <em>both</em> <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\alpha_{j}^{(k)}\)</span> as <em>varying per-litter</em>, then these are <em>both</em> random variables. For every new litter we sample, their values will change. This means that these terms must have associated probability distributions that describe their behaviour over repeated sampling.</p>
+<p>For simplicity, if we assume these distributions are normal, our model is currently</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
     y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
+    \eta^{(k)}_{ij}  &amp;\sim \mathcal{N}(0, \sigma^{2}_{1}) \\
     \mu^{(k)}        &amp;\sim \mathcal{N}(\mu, \sigma^{2}_{2}) \\
     \alpha^{(k)}_{j} &amp;\sim \mathcal{N}(\alpha_{j}, \sigma^{2}_{3})
 \end{alignat*}
 \end{split}\]</div>
-<p>So, the average weight of each litter is conceptualised as being drawn from a larger population of average weights, with some population mean weight of <span class="math notranslate nohighlight">\(\mu\)</span>. Similarly, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter is conceptualised as being drawn from a larger population of <code class="docutils literal notranslate"><span class="pre">sex</span></code> effects, with some population mean effect of <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>.</p>
+<p>The errors are always random, so this had not changed. What is now different is that we give both <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> probability distributions. So, the average weight of each litter <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> is conceptualised as being drawn from a larger population of average weights, with some population mean weight of <span class="math notranslate nohighlight">\(\mu\)</span>. Similarly, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is conceptualised as being drawn from a larger population of <code class="docutils literal notranslate"><span class="pre">sex</span></code> effects, with some population sex effect of <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>.</p>
 <p>Remembering that we can always write probability models in terms of expressions for the means plus random error, we can also rewrite the above as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -409,29 +416,29 @@
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \eta^{(k)}_{ij} &amp;\sim \mathcal{N}(0,\sigma^{2}_{\eta}) \\
-    \xi^{(k)}       &amp;\sim \mathcal{N}(0,\sigma^{2}_{\xi}) \\
-    \phi^{(k)}_{j}  &amp;\sim \mathcal{N}(0,\sigma^{2}_{\phi})
+    \eta^{(k)}_{ij} &amp;\sim \mathcal{N}(0,\sigma^{2}_{1}) \\
+    \xi^{(k)}       &amp;\sim \mathcal{N}(0,\sigma^{2}_{2}) \\
+    \phi^{(k)}_{j}  &amp;\sim \mathcal{N}(0,\sigma^{2}_{3})
 \end{alignat*}
 \end{split}\]</div>
 <p>So we can see that what we have ended up with is a model containing <em>three</em> variances. We have partitioned the overall variance of the data into 3 components</p>
 <div class="math notranslate nohighlight">
 \[
-\text{Var}\left(y\right) = \sigma^{2} = \sigma^{2}_{\eta} + \sigma^{2}_{\xi} + \sigma^{2}_{\phi}.
+\text{Var}\left(y\right) = \sigma^{2} = \sigma^{2}_{1} + \sigma^{2}_{2} + \sigma^{2}_{3}.
 \]</div>
 <p>Notice that we did not <em>start</em> by doing this. This is simply where we have ended-up by building the model slowly in a principled fashion. This structure has simply <em>fallen-out</em> of the decisions we have made along the way. So, our current conceptualisation is of a two-level model of the following form</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{2}
-    \text{Level 1:} \\
+    \text{Level 1} \\
     y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} &amp;\quad\small{\text{Weight of pup $i$ of sex $j$ in litter $k$}} \\
-    \quad \\
-    \text{Level 2:} \\
+    \text{Level 2} \\
     \mu^{(k)}        &amp;= \mu + \xi^{(k)} &amp;\quad\small{\text{Average weight of litter $k$}} \\
     \alpha^{(k)}_{j} &amp;= \alpha_{j} + \phi^{(k)}_{j} &amp;\quad\small{\text{Effect of sex $j$ in litter $k$}}
 \end{alignat*}
 \end{split}\]</div>
 <p>However, there is more we can now do with the two 2nd-level models.</p>
+</section>
 <section id="modelling-mu-k">
 <h2>Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span><a class="headerlink" href="#modelling-mu-k" title="Link to this heading">#</a></h2>
 <p>Let us start by focussing on the 2nd-level model of <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. If we treat it like any other regression model, we can decide whether there is more we can include to model the mean weight of litter, beyond just the population mean <span class="math notranslate nohighlight">\(\mu\)</span>. So, let us pretend we <em>only</em> have the model</p>
@@ -495,6 +502,35 @@
 \end{alignat*}
 \end{split}\]</div>
 <p>This looks complicated, but it is the simple expansion of the model above, where we replace the indices with actual numbers. You can spend some time studying this, but do not get too bogged down in it.</p>
+</section>
+<section id="the-final-model">
+<h2>The Final Model<a class="headerlink" href="#the-final-model" title="Link to this heading">#</a></h2>
+<div class="tip admonition">
+<p class="admonition-title">What if Sex Were Fixed?</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij} \\
+    \quad \\
+    \text{Level 2} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{l} + \xi^{(k)}     \\
+    \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jl}
+\end{alignat*}
+\end{split}\]</div>
+<p>So, we can see that the difference is actually the fact that the Level 2 model for a fixed-effect contains <em>no error term</em>. In other words, we assume this effect is <em>constant</em> and <em>does not vary by litter</em>. We could also write this by equating <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> to its fixed definition at Level 1.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{Level 1} \\
+    y^{(k)}_{ij}     &amp;= \mu^{(k)} + \alpha_{j} + (\alpha\beta)_{jl} + \eta^{(k)}_{ij} \\
+    \quad \\
+    \text{Level 2} \\
+    \mu^{(k)}        &amp;= \mu + \beta_{l} + \xi^{(k)}     \\
+\end{alignat*}
+\end{split}\]</div>
+<p>Although this muddies the water slightly in terms of thinking about Level 1 as a single litter in isolation, it does make two elements clearer. Firstly, we can see how writing a litter-specific term as equal to other effects with no error is essentially just including those terms at the 1st-level. Secondly, we can see that both the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> and the <code class="docutils literal notranslate"><span class="pre">sex:treatment</span></code> interaction are associated with the <em>within-litter</em> error term <span class="math notranslate nohighlight">\(\eta^{(k)}_{ij}\)</span>. This has a direct connection with the repeated measures ANOVA and how the errors are partitioned for testing different effects. Indeed, this model is <em>exactly</em> a repeated measures ANOVA, but with <code class="docutils literal notranslate"><span class="pre">litter</span></code> in place of <code class="docutils literal notranslate"><span class="pre">subject</span></code>.</p>
+</div>
 </section>
 </section>
 
@@ -563,8 +599,10 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-consequences-of-random-terms">The Consequences of Random Terms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-mu-k">Modelling <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelling-alpha-k-j">Modelling <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-model">The Final Model</a></li>
 </ul>
   </nav></div>
 
