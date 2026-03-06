@@ -507,7 +507,7 @@
     \alpha^{(k)}_{j} &amp;= \alpha_{j}.
 \end{alignat*}
 \end{split}\]</div>
-<p>So now, both the Level 1 error are random and the litter-specific mean weights are random, but the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> in litter <span class="math notranslate nohighlight">\(k\)</span> is simply fixed to a constant value. The consequence is that there are now only <em>two</em> variances, rather than <em>three</em>, because there is no variation associated with the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>.</p>
+<p>So now, both <span class="math notranslate nohighlight">\(\eta^{(k)}_{ij}\)</span> and <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span> are <em>random</em>, but the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> in litter <span class="math notranslate nohighlight">\(k\)</span> <span class="math notranslate nohighlight">\(\left(\alpha^{(k)}_{j}\right)\)</span> is <em>fixed</em> to a constant value. The consequence is that there are now only <em>two</em> variances, rather than <em>three</em>, because there is no variation associated with the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>.</p>
 <p>If we re-express the distributions in terms of mean + error, we now arrive at</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -528,7 +528,7 @@
     \xi^{(k)}       &amp;\sim \mathcal{N}(0,\sigma^{2}_{2}).
 \end{alignat*}
 \end{split}\]</div>
-<p>So, there are only <em>two</em> error terms now, rather than <em>three</em>. If we continue with our logic of building the Level 2 models, we can still include <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and <code class="docutils literal notranslate"><span class="pre">sex:treatment</span></code> and end up with</p>
+<p>So, there are only <em>two</em> error terms now, rather than <em>three</em>. Choosing to make something <em>fixed</em> rather than <em>random</em> is equivalent to <em>removing</em> its random error term. If we then continue with our logic of building the Level 2 models, we can still include <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and <code class="docutils literal notranslate"><span class="pre">sex:treatment</span></code> and end up with</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -540,7 +540,7 @@
     \alpha^{(k)}_{j} &amp;= \alpha_{j} + (\alpha\beta)_{jl}.
 \end{alignat*}
 \end{split}\]</div>
-<p>We can even choose to collapse the <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> effects into Level 1. This muddies the water a little in terms of which level different variables live in, but it does make it clear that there are <em>no</em> litter-specific effects of <code class="docutils literal notranslate"><span class="pre">sex</span></code> anymore and there is only a single random-effect that has a complete Level 2 model.</p>
+<p>We can even choose to collapse the <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> effects into Level 1. This makes it clear that there are <em>no</em> litter-specific effects of <code class="docutils literal notranslate"><span class="pre">sex</span></code> anymore and there is only a single random-effect that has a complete Level 2 model.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -554,9 +554,9 @@
 <p>More intuition about treating <code class="docutils literal notranslate"><span class="pre">sex</span></code> as fixed or random is given in the drop-down below.</p>
 <div class="tip dropdown admonition">
 <p class="admonition-title">More on Random vs Fixed</p>
-<p>The only difference is the absence of an error term for the model of <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. Again, because the errors are <em>where</em> the randomness lives, we are saying that (at the level of the population) the effect of sex on weight inside litter <span class="math notranslate nohighlight">\(k\)</span> is <em>always the same</em>. It never varies from litter-to-litter. If we had the whole population, we would know both <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\((\alpha\beta)_{jl}\)</span>, and the influence of <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> would be described by these single population parameters that apply equally to every litter.</p>
-<p>Contrast this with the litter mean <span class="math notranslate nohighlight">\(\mu^{(k)}\)</span>. By treating this as <em>random</em> we are saying that each litter has its own unique mean weight. These litter-specific means are not assumed to be identical. Instead, they are assumed to be draws from a distribution of possible litter means. If we observed the entire population of litters we would see a range of baseline weights, rather than a single shared value.</p>
-<p>Similarly, if we treat the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter as <em>random</em>, we are saying that the influence of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is <em>not</em> identical across litters. Instead, each litter has its own sex effect <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>, and these litter-specific effects are assumed to come from a population distribution of possible sex effects. Under this view, the differences we observe between litters are not treated as noise around a single shared effect. Instead they represent genuine between-litter variation in how strongly <code class="docutils literal notranslate"><span class="pre">sex</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>. In other words:</p>
+<p>As discussed above, the only structural difference between treating <code class="docutils literal notranslate"><span class="pre">sex</span></code> as random or fixed is the inclusion or absence of an error term for the model of <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>. This is because the errors are <em>where</em> the randomness lives. Although this seems like a simple change, it actually has quite a big effect on our assumptions about the data-generating process.</p>
+<p>When the error term is absent we are saying that (at the level of the population) the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> inside litter <span class="math notranslate nohighlight">\(k\)</span> is <em>always the same</em>. It never varies from litter-to-litter. If we had the whole population, we would know both <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\((\alpha\beta)_{jl}\)</span>, and the influence of <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> on <code class="docutils literal notranslate"><span class="pre">weight</span></code> would be described by these single population parameters that apply equally to every litter.</p>
+<p>If we treat the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within each litter as <em>random</em>, we are saying that the influence of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is <em>not</em> identical across litters. Instead, each litter has its own sex effect <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span>, and these litter-specific effects are assumed to come from a population distribution of possible sex effects. Under this view, the differences we observe between litters are not treated as noise around a single shared effect. Instead they represent genuine between-litter variation in how strongly <code class="docutils literal notranslate"><span class="pre">sex</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>. In other words:</p>
 <ul class="simple">
 <li><p>Fixed effect of sex</p>
 <ul>
@@ -569,108 +569,8 @@
 </ul>
 </li>
 </ul>
-<p>In both models the structure of the model is the same, however our assumptions about the parameters determine whether we include an additional error term. If we do include one, this captures the idea that each
-𝛼
-𝑗
-(
-𝑘
-)
-α
-j
-(k)
-​</p>
-<p>is a random draw from a population of possible
-𝛼
-𝑗
-(
-𝑘
-)
-α
-j
-(k)
-​</p>
-<p>effects with a mean given by
-𝛼
-𝑗
-+
-(
-𝛼
-𝛽
-)
-𝑗
-𝑙
-α
-j
-​</p>
-<p>+(αβ)
-jl
-​</p>
-<p>.</p>
-<p>Under this view, even if we knew the values of
-𝛼
-𝑗
-α
-j
-​</p>
-<p>and
-(
-𝛼
-𝛽
-)
-𝑗
-𝑙
-(αβ)
-jl
-​</p>
-<p>, we still could not predict each
-𝛼
-𝑗
-(
-𝑘
-)
-α
-j
-(k)
-​</p>
-<p>exactly. Instead, those parameters describe the average effect of sex across litters, and each individual litter deviates from that average. The additional error term captures this between-litter variability in the effect of sex.</p>
-<p>If we do not include an error term, this captures a different assumption. In this case each
-𝛼
-𝑗
-(
-𝑘
-)
-α
-j
-(k)
-​</p>
-<p>is completely determined by
-𝛼
-𝑗
-α
-j
-​</p>
-<p>and
-(
-𝛼
-𝛽
-)
-𝑗
-𝑙
-(αβ)
-jl
-​</p>
-<p>. If we knew those parameters exactly, we would know exactly how sex influences weight in every litter. Any differences we observe between litters would therefore arise only from sampling variation in our estimates of these parameters, not from genuine differences in the underlying biological effect.</p>
-<p>Under this assumption, the effect of sex does not vary from litter to litter. It is a single population value that applies equally to all litters. In that sense
-𝛼
-𝑗
-(
-𝑘
-)
-α
-j
-(k)
-​</p>
-<p>is not a random draw from a distribution of possible effects, but a fixed value that would be known exactly if the entire population were observed.</p>
+<p>In both models the general structure is the same, however our assumptions about the parameters determine whether we include an additional error term. If we do include one, this captures the idea that each <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is a random draw from a population of possible <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> effects with a mean given by <span class="math notranslate nohighlight">\(\alpha_{j} + (\alpha\beta)_{jl}\)</span>. Under this view, even if we knew the values of <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\((\alpha\beta)_{jl}\)</span>, we still could not predict each <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> exactly. Instead, those parameters describe the average effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> across litters, and each individual litter deviates from that average. The additional error term captures this <em>between-litter</em> variability in the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>.</p>
+<p>If we do not include an error term, this captures a different assumption. In this case each <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is completely determined by <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\((\alpha\beta)_{jl}\)</span>. If we knew those parameters exactly, we would know exactly how <code class="docutils literal notranslate"><span class="pre">sex</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code> in every litter. Any differences we observe between litters would therefore arise only from sampling variation, not from genuine differences in the underlying biological effect. Under this assumption, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> does not vary from litter to litter. It is a single population value that applies equally to all litters. In that sense <span class="math notranslate nohighlight">\(\alpha^{(k)}_{j}\)</span> is not a random draw from a distribution of possible effects, but a fixed value that would be known exactly if the entire population were observed.</p>
 </div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
