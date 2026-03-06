@@ -663,7 +663,7 @@ Number of Groups: 27
 <img alt="_images/1357ad661ea398fd7768f30df7ec4bb060031e565b7da50714233693676143e8.png" src="_images/1357ad661ea398fd7768f30df7ec4bb060031e565b7da50714233693676143e8.png" />
 </div>
 </div>
-<p>Here we can see how the size of each litter corresponds to the dimensions of its covariance block. For instance, litter 3 is very small whereas litter 7 is quite large. Within each covariance block, we can also see the patterns that correspond to the male pups, the female pups and the correlation between them.</p>
+<p>Here we can see how the size of each litter corresponds to the dimensions of its covariance block. For instance, litter 3 is very small whereas litter 7 is quite large. Within each covariance block, we can also see the patterns that correspond to the male pups, the female pups and the correlation between them. In addition, notice that the covariance structure is 0 between litters. This is why we considered litter to be the “boundary of dependency”. Everything <em>within</em> a litter is correlated, everything <em>between</em> litters is independent. In effect, <code class="docutils literal notranslate"><span class="pre">litter</span></code> is being treated the same way that <code class="docutils literal notranslate"><span class="pre">subject</span></code> would be treated under repeated measurements.</p>
 </section>
 <section id="should-sex-be-fixed-or-random">
 <h2>Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?<a class="headerlink" href="#should-sex-be-fixed-or-random" title="Link to this heading">#</a></h2>
