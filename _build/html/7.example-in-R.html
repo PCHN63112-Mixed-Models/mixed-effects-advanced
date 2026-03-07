@@ -378,7 +378,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-random-effects">Exploring the Random-effects</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-sex-be-fixed-or-random">Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?</a></li>
 </ul>
@@ -598,7 +597,7 @@ Degrees-of-freedom method: fixed
 NOTE: sex is not a high-order term in the model
 </pre></div>
 </div>
-<img alt="_images/25c5f27ffd7cb618005937240a8f2a1445a35d974f42489e5380e4e540053b74.png" src="_images/25c5f27ffd7cb618005937240a8f2a1445a35d974f42489e5380e4e540053b74.png" />
+<img alt="_images/addfeb49c62909983ec960c94afb1309bf5f0c368bf466ea9806c978ed58c323.png" src="_images/addfeb49c62909983ec960c94afb1309bf5f0c368bf466ea9806c978ed58c323.png" />
 </div>
 </div>
 </section>
@@ -646,35 +645,6 @@ NOTE: sex is not a high-order term in the model
 </div>
 <p>Recall from earlier that litter 12 had <em>no</em> male pups. Despite this, there is still a random slope of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for this litter. How is this possible? This is the process of <em>pooling</em> in action.</p>
 </section>
-</section>
-<section id="visualising-the-model">
-<h2>Visualising the Model<a class="headerlink" href="#visualising-the-model" title="Link to this heading">#</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
-
-<span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ratpup</span>
-<span class="n">dat</span><span class="o">$</span><span class="n">fit_litter</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">position_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.08</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit_litter</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litter</span><span class="p">),</span>
-<span class="w">               </span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;line&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit_litter</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litter</span><span class="p">),</span>
-<span class="w">               </span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;point&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/d48ff1333583f6defb9ee60e98655d8226418c8c6225957b03b10f8a824a2e92.png" src="_images/d48ff1333583f6defb9ee60e98655d8226418c8c6225957b03b10f8a824a2e92.png" />
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
-<span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
-</pre></div>
-</div>
-</div>
-</div>
 </section>
 <section id="the-marginal-covariance-structure">
 <h2>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h2>
@@ -740,7 +710,9 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># all litters in the fitted model</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;ggplot2&#39;</span><span class="p">)</span>
+
+<span class="c1"># all litters in the fitted model</span>
 <span class="n">litters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="p">)</span>
 
 <span class="c1"># prediction grid: both sexes for every litter</span>
@@ -765,7 +737,7 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/729a42c708031b0991089eb5d761bfe13e5d40bc8191b4f8cd1d7582b28d1f1e.png" src="_images/729a42c708031b0991089eb5d761bfe13e5d40bc8191b4f8cd1d7582b28d1f1e.png" />
+<img alt="_images/b2b9e66ed607ee9775db50e9306b33617619860b58ba0ada8107274bbae1252b.png" src="_images/b2b9e66ed607ee9775db50e9306b33617619860b58ba0ada8107274bbae1252b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -787,7 +759,7 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/aef30236706e70fd680eb3dcc68bb419a36e4fe8146e578883a262126f457354.png" src="_images/aef30236706e70fd680eb3dcc68bb419a36e4fe8146e578883a262126f457354.png" />
+<img alt="_images/1a329151acc7d2d196bc7212c3c67204fa15b2a450bcb732cede3e94c909433c.png" src="_images/1a329151acc7d2d196bc7212c3c67204fa15b2a450bcb732cede3e94c909433c.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
 <span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
 </pre></div>
@@ -877,7 +849,6 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-random-effects">Exploring the Random-effects</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualising-the-model">Visualising the Model</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-marginal-covariance-structure">The Marginal Covariance Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#should-sex-be-fixed-or-random">Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?</a></li>
 </ul>
