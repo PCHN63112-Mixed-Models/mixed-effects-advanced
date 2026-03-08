@@ -1,0 +1,4 @@
+:root {
+    --mystnb-source-bg-color: var(--pst-color-surface)!important;
+    --mystnb-stdout-bg-color: var(--pst-color-surface)!important; 
+}
