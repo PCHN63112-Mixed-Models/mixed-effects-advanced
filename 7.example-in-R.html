@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -497,7 +498,8 @@ Data Labels</label><div class="sd-tab-content docutils">
 
 <span class="n">lme.ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="c1"># fixed-effects </span>
 <span class="w">                  </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w">        </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w">                      </span><span class="c1"># random-effects</span>
-<span class="w">                  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span><span class="p">)</span><span class="w">                                   </span>
+<span class="w">                  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span>
+<span class="p">)</span><span class="w">                                   </span>
 </pre></div>
 </div>
 </div>
@@ -551,7 +553,8 @@ Number of Groups: 27
 </div>
 <section id="fixed-effects-tests">
 <h3>Fixed-effects Tests<a class="headerlink" href="#fixed-effects-tests" title="Link to this heading">#</a></h3>
-<p>Much as we saw last week, the fixed-effects tests are provided in the table alongside <span class="math notranslate nohighlight">\(t\)</span>-values and <span class="math notranslate nohighlight">\(p\)</span>-values derived from a simple implementation of effective degrees of freedom. We can see how this has partitioned the effects into those that apply between litters (24 degrees of freedom) and those that apply within each litter (292 degrees of freedom). We can also follow this up with omnibus tests using <code class="docutils literal notranslate"><span class="pre">Anova()</span></code></p>
+<p>Much as we saw last week, the fixed-effects tests are provided in the table alongside <span class="math notranslate nohighlight">\(t\)</span>-values and <span class="math notranslate nohighlight">\(p\)</span>-values derived from a simple implementation of effective degrees of freedom. We can see how this has partitioned the effects into those that apply between litters (24 degrees of freedom) and those that apply within litters (292 degrees of freedom).</p>
+<p>We can also follow this up with omnibus tests, remembering that <code class="docutils literal notranslate"><span class="pre">Anova()</span></code> uses <em>asymptotic</em> inference.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
@@ -574,14 +577,17 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
-<p>where we can see that there is no significant interaction between <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>, nor a main effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The only aspect that is suggestive of an effect on <code class="docutils literal notranslate"><span class="pre">weight</span></code> is <code class="docutils literal notranslate"><span class="pre">sex</span></code>. Because this is a factor with two levels, we do not really need to follow it up. But for the sake of completeness, the test from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> is given below, alongside a plot.</p>
+<p>We can see that there is no significant interaction between <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>, nor a main effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The only aspect that is suggestive of an effect on <code class="docutils literal notranslate"><span class="pre">weight</span></code> is <code class="docutils literal notranslate"><span class="pre">sex</span></code>. Because this is a factor with two levels, we do not really need to follow it up. But for the sake of completeness, the test from <code class="docutils literal notranslate"><span class="pre">emmeans</span></code> is given below, alongside a plot. We need to remember to give the <code class="docutils literal notranslate"><span class="pre">submodel</span></code> argument to match the Type II test. Alternatively, we could drop the <code class="docutils literal notranslate"><span class="pre">treatment:sex</span></code> effect from the model and then carry on as usual.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span>
 <span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span>
 
-<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&#39;type2&#39;</span><span class="p">)</span>
+<span class="n">emm</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">submodel</span><span class="o">=</span><span class="s">&#39;type2&#39;</span><span class="p">)</span>
+<span class="n">emm.CI</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">confint</span><span class="p">(</span><span class="n">emm</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm.CI</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
 
 <span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;sex&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
 </pre></div>
@@ -594,16 +600,34 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 
 Results are averaged over the levels of: treatment 
 Degrees-of-freedom method: fixed 
+ contrast      estimate     SE  df asymp.LCL asymp.UCL
+ Female - Male   -0.393 0.0567 Inf    -0.504    -0.282
+
+Results are averaged over the levels of: treatment 
+Degrees-of-freedom method: fixed 
+Confidence level used: 0.95 
 NOTE: sex is not a high-order term in the model
 </pre></div>
 </div>
-<img alt="_images/addfeb49c62909983ec960c94afb1309bf5f0c368bf466ea9806c978ed58c323.png" src="_images/addfeb49c62909983ec960c94afb1309bf5f0c368bf466ea9806c978ed58c323.png" />
+<img alt="_images/70847eca8133c00c8c38461ea970ffddd1b714e3503bac3e75df2b5e22cfaf57.png" src="_images/70847eca8133c00c8c38461ea970ffddd1b714e3503bac3e75df2b5e22cfaf57.png" />
 </div>
 </div>
+<p>From this we can see that male pups on average were 0.393 grams heavier than female pups, with a 95% confidence interval on the difference of <span class="math notranslate nohighlight">\([0.282 \; 0.504]\)</span>. Because 0 sits outside this interval, the lower end of the interval appears meaningful and the test is significant with <span class="math notranslate nohighlight">\(p &lt; 0.001\)</span>, we conclude that a small but consistent difference in weight between male and female pups likely exists within the population. Some caution is needed here, given that these are <em>asymptotic</em> tests and CIs. Although the number of pups is large, the number of litters remains modest and more certainty could only come from sampling more litters. That being said, the treatment appears to not influence pup weight in any detectable fashion, either as a whole or differentially in male and female pups.</p>
 </section>
 <section id="exploring-the-random-effects">
 <h3>Exploring the Random-effects<a class="headerlink" href="#exploring-the-random-effects" title="Link to this heading">#</a></h3>
-<p>Next, we have some description of the random effects that were fit using <code class="docutils literal notranslate"><span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex|litter</span></code>. We can see <em>three</em> variance estimates here, which is what we expect given our previous description of the model we are building. We can also see that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> has <em>automatically</em> estimated a correlation between the intercept and the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is done by default as a very general modelling assuming, irrespective of the context of the data. This allows for a more flexible covariance structure, as we will see further below. In the current context, this captures the idea that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> may relate to the average weight of each litter. For example, it might be that heavier litters also tend to show a larger sex difference in weight. If so, the correlation will be positive. If heavier litters tend to show a smaller sex difference, the correlation will be negative. This assumption can be switched <em>off</em> if we do not want it, but generally-speaking it allows for more flexibility as we will explore further below.</p>
+<p>Although our inferential job is now done (to the best that we can, given everything we have discussed), it is worth spending some time exploring the model outputs and trying to gain a little more intuition. Notice in the output above that we have a description of the random effects that were fit using <code class="docutils literal notranslate"><span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex|litter</span></code>. This is repeated below</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Random</span> <span class="n">effects</span><span class="p">:</span>
+ <span class="n">Formula</span><span class="p">:</span> <span class="o">~</span><span class="mi">1</span> <span class="o">+</span> <span class="n">sex</span> <span class="o">|</span> <span class="n">litter</span>
+ <span class="n">Structure</span><span class="p">:</span> <span class="n">General</span> <span class="n">positive</span><span class="o">-</span><span class="n">definite</span><span class="p">,</span> <span class="n">Log</span><span class="o">-</span><span class="n">Cholesky</span> <span class="n">parametrization</span>
+            <span class="n">StdDev</span>    <span class="n">Corr</span>  
+<span class="p">(</span><span class="n">Intercept</span><span class="p">)</span> <span class="mf">0.5019186</span> <span class="p">(</span><span class="n">Intr</span><span class="p">)</span>
+<span class="n">sexMale</span>     <span class="mf">0.1554335</span> <span class="mf">0.888</span> 
+<span class="n">Residual</span>    <span class="mf">0.4005464</span>       
+</pre></div>
+</div>
+<p>We can see <em>three</em> variance estimates here (given as <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> by taking square-roots), which is what we expect given our previous description of the model we are building. We can also see that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> has <em>automatically</em> estimated a correlation between the intercept and the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is done by default as a very general modelling assuming, irrespective of the context of the data. This allows for a more flexible covariance structure which, in the current context, captures the idea that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> may relate to the average weight of each litter. For example, it might be that heavier litters also tend to show a larger sex difference in weight. This assumption can be switched <em>off</em> if we do not want it, but we almost always want to leave it in place. We will come back to this further below.</p>
+<p>We can extract the realised values of the random effects, as shown below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)</span>
@@ -643,39 +667,119 @@ NOTE: sex is not a high-order term in the model
 </div>
 </div>
 </div>
-<p>Recall from earlier that litter 12 had <em>no</em> male pups. Despite this, there is still a random slope of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for this litter. How is this possible? This is the process of <em>pooling</em> in action.</p>
+<p>Here we can see that each of the 27 litters gets its own intercept and its own effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is parameterised as it would be in any other regression model, using dummy variables. So there is a constraint in place that makes the intercept the weight of female pups and the slope the difference between male and female pups. In addition, these are <em>not</em> mean values, they are <em>deflections</em>. So we think of them as more like <em>errors</em> or <em>deviations</em> from the population estimates. For instance, the weight of female pups in litter 1 lies 0.283 grams above the expected value of the population, with male pups in this litter sitting 0.066 grams further above. By comparison, the weight of female pups in litter 4 lies 0.135 grams <em>below</em> the expected value of the population, with male pups in this litter sitting a further 0.032 grams below this point.</p>
+<p>Another important aspect to note here is that litter 12 had <em>no</em> male pups. Despite this, there is still a random slope of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for this litter, representing the different between male and female pups.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)[</span><span class="m">12</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   (Intercept)   sexMale
+12    1.080803 0.2972936
+</pre></div>
+</div>
+</div>
+</div>
+<p>How is this possible?</p>
+<p>This is the process of <em>pooling</em> in action. On its own, this litter has no way to estimate a slope. However, the model is not working through each litter separately and fitting an individual regression model. This is a useful mental picture of what is happening, but in reality everything is fit <em>at the same time</em>. This means that the model can use information from across <em>all</em> litters as well as information from the covariance structure to <em>infer</em> what the most probable slope for that litter is, even if the data does not support it. This is one of the most powerful aspects of a mixed-effects model. When data are missing, the remaining information can be used to <em>infer</em> the missing values in a principled way. This requires no imputation on the part of the analyst, it is simply part of the framework.</p>
+<p>Of importance here is that this <em>requires</em> a non-zero correlation to be estimated between the intercept and the slope. Without any male pups, the model has to use the intercept for litter 12 <em>and</em> the overall correlation between the intercept and the slope to <em>predict</em> what the slope is likely to be. If we force this correlation to be 0, the model has nothing to work with and the estimated slope for litter 12 is shrunk to zero. In this case, the model has no power left to impute missing values. This is another reason why the assumed correlation between the random effects is so important. If we force it to 0, we get</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">mod.uncorr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w">  </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">litter</span><span class="o">=</span><span class="nf">pdDiag</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">)),</span><span class="w"> </span><span class="c1"># force correlation between random-effects to 0</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span>
+<span class="p">)</span>
+
+<span class="nf">random.effects</span><span class="p">(</span><span class="n">mod.uncorr</span><span class="p">)[</span><span class="m">12</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   (Intercept) sexMale
+12    1.119048       0
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is also worth remembering that it is the <em>variance of the distribution</em> of the random-effects that is of important. This what the <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> column in the output table is referring to. We can plot these below so we get a sense that it is the <em>width</em> of these various distributions that is of most interest.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="nf">hist</span><span class="p">(</span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Litter Intercepts&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="nf">random.effects</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Litter Slopes&#39;</span><span class="p">)</span>
+<span class="nf">hist</span><span class="p">(</span><span class="nf">residuals</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">),</span><span class="w"> </span><span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-3</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Residuals&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/d02c449e5f2058d4455e59b49759cae1cd8ac1016f2087a9e39009b68630346b.png" src="_images/d02c449e5f2058d4455e59b49759cae1cd8ac1016f2087a9e39009b68630346b.png" />
+</div>
+</div>
+<p>As we can see, the width of both the intercept and the residual distributions are similar, with the slopes much narrower. This pattern is echoed by the <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> values in the output table.</p>
 </section>
 </section>
 <section id="the-marginal-covariance-structure">
 <h2>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h2>
+<p>It is also interesting to explore the variance-covariance structure that has been fit. This is a function of the random-effects themselves, rather than being directly specified. However, if we want to think of a mixed-effects model in terms of the marginal covariance structure, we may wish to check that the implied structure is reasonable.</p>
+<p>In the code below, we extract and visualise the covariance block for litter 6</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
-<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;marginal&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span><span class="w"> </span><span class="c1"># Litter 1</span>
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;marginal&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&quot;6&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">`6`</span><span class="w"> </span><span class="c1"># Litter 6</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
 <span class="n">Matrix</span><span class="o">::</span><span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1         2         3         4         5         6         7         8         9        10        11        12
-1  0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-2  0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-3  0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-4  0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-5  0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-6  0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-7  0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.3212178 0.3212178 0.3212178 0.3212178
-8  0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.3212178 0.3212178 0.3212178 0.3212178
-9  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.4123597 0.2519223 0.2519223 0.2519223
-10 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223 0.4123597 0.2519223 0.2519223
-11 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223 0.2519223 0.4123597 0.2519223
-12 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223 0.2519223 0.2519223 0.4123597
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          1         2         3         4         5         6         7
+1 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178
+2 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178
+3 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.3212178
+4 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.3212178
+5 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.3212178
+6 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.3212178
+7 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.4123597
+8 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223
+9 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223
+          8         9
+1 0.3212178 0.3212178
+2 0.3212178 0.3212178
+3 0.3212178 0.3212178
+4 0.3212178 0.3212178
+5 0.3212178 0.3212178
+6 0.3212178 0.3212178
+7 0.2519223 0.2519223
+8 0.4123597 0.2519223
+9 0.2519223 0.4123597
 </pre></div>
 </div>
-<img alt="_images/d18a76d6bf456ff70b67756a8def8abf06788cb8263497712dbd9a80a6fde767.png" src="_images/d18a76d6bf456ff70b67756a8def8abf06788cb8263497712dbd9a80a6fde767.png" />
+<img alt="_images/1c3d51349617c4e550e75e087739059d9c055fb2d0fa6c22ee6d7126a1e0d0df.png" src="_images/1c3d51349617c4e550e75e087739059d9c055fb2d0fa6c22ee6d7126a1e0d0df.png" />
 </div>
 </div>
+<p>As we can see, this litter consisted of 9 pups. The first 6 were <em>female</em> and the final 3 were <em>male</em>. Here we can see that the covariance structure has resulted in several features:</p>
+<ul class="simple">
+<li><p>Male pups and female pups have different variances</p></li>
+<li><p>All male pups within a litter share the same covariance</p></li>
+<li><p>All female pups within a litter share the same covariance</p></li>
+<li><p>All male-female pairs within a litter share the same covariance</p></li>
+</ul>
+<p>Importantly, there are <em>three</em> different types of dependence represented here: male-male, female-female and female-male. So, all pups within a litter are correlated, but this correlation further depends upon <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is the essence of including <code class="docutils literal notranslate"><span class="pre">sex</span></code> as a random-effect, alongside the random intercept.</p>
+<p>We can expand this further by viewing the full covariance structure, using the <code class="docutils literal notranslate"><span class="pre">fullVarCov()</span></code> function defined in the previous lesson. This gives:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.Big</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fullVarCov</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)</span>
@@ -691,10 +795,11 @@ NOTE: sex is not a high-order term in the model
 </section>
 <section id="should-sex-be-fixed-or-random">
 <h2>Should <code class="docutils literal notranslate"><span class="pre">sex</span></code> be Fixed or Random?<a class="headerlink" href="#should-sex-be-fixed-or-random" title="Link to this heading">#</a></h2>
+<p>As a final topic, we will return to the topic of whether <code class="docutils literal notranslate"><span class="pre">sex</span></code> should be treated as a <em>fixed-effect</em> or a <em>random-effect</em>. Earlier we discussed how an argument could be made either way, so now we actually investigate what the data suggest about these options. Below, we fit a model <em>with</em> and <em>without</em> <code class="docutils literal notranslate"><span class="pre">sex</span></code> in the random-effects structure and compare them<a class="footnote-reference brackets" href="#lmecontrol-foot" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.mod.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w">       </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
-<span class="n">lme.mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.mod.0</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w">       </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="n">lme.mod.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span><span class="w"> </span>
 
 <span class="nf">anova</span><span class="p">(</span><span class="n">lme.mod.0</span><span class="p">,</span><span class="n">lme.mod.1</span><span class="p">)</span>
 </pre></div>
@@ -708,70 +813,90 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </div>
 </div>
+<p>As discussed previously, we tend to prefer BIC here due to its greater sensitivity to the number of parameters. The change in BIC between these models is <span class="math notranslate nohighlight">\(\Delta_{\text{BIC}} = 463.0189 - 456.1663 = 6.8526\)</span>. Given our interpretational criteria from last semester, this suggests <em>strong evidence</em> in favour of the <em>lower</em> BIC model. So, it seems the data suggest that the more parsimonious model is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;ggplot2&#39;</span><span class="p">)</span>
-
-<span class="c1"># all litters in the fitted model</span>
-<span class="n">litters</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">unique</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">litter</span><span class="p">)</span>
-
-<span class="c1"># prediction grid: both sexes for every litter</span>
-<span class="n">newdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">expand.grid</span><span class="p">(</span>
-<span class="w">  </span><span class="n">litter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litters</span><span class="p">,</span>
-<span class="w">  </span><span class="n">sex</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">levels</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="c1"># add any other predictors at chosen reference values</span>
-<span class="c1"># for example, if treatment is in the model:</span>
-<span class="n">newdat</span><span class="o">$</span><span class="n">treatment</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">levels</span><span class="p">(</span><span class="n">ratpup</span><span class="o">$</span><span class="n">treatment</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span>
-
-<span class="c1"># litter-specific predictions</span>
-<span class="n">newdat</span><span class="o">$</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newdat</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
-
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">position_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.08</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.7</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newdat</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litter</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">newdat</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit</span><span class="p">),</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="c1"># fixed-effects </span>
+<span class="w">                  </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w">        </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w">                            </span><span class="c1"># random-effects</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span>
+<span class="p">)</span><span class="w">  </span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="_images/b2b9e66ed607ee9775db50e9306b33617619860b58ba0ada8107274bbae1252b.png" src="_images/b2b9e66ed607ee9775db50e9306b33617619860b58ba0ada8107274bbae1252b.png" />
 </div>
-</div>
-<div class="cell docutils container">
+<p>We can then run through the fixed-effects inference process again to see if this has altered our conclusions.</p>
+<p>By way of visual comparison, the plots below show the litter-specific models under each assumption. Notice that <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> will complain because litter 12 is missing male pups. This can be safely ignored, but could be a useful indicator if this had not been spotted prior to this point.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">nlme</span><span class="p">)</span>
-<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
 
-<span class="n">dat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ratpup</span>
-<span class="n">dat</span><span class="o">$</span><span class="n">fit_litter</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">lme.mod.0</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">)</span>
+<span class="n">mod.1</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span><span class="w">  </span>
+<span class="n">plot.data</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ratpup</span>
+<span class="n">plot.data</span><span class="o">$</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">mod.1</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
 
-<span class="nf">ggplot</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">position_jitter</span><span class="p">(</span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.08</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit_litter</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litter</span><span class="p">),</span>
-<span class="w">               </span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;line&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fit_litter</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">litter</span><span class="p">),</span>
-<span class="w">               </span><span class="n">fun</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;point&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
-<span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="p">)</span>
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">plot.data</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="nf">position_jitter</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="m">0.08</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">=</span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">litter</span><span class="p">),</span><span class="w"> </span><span class="n">fun</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s">&quot;line&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">linewidth</span><span class="o">=</span><span class="m">0.3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">litter</span><span class="p">),</span><span class="w"> </span><span class="n">fun</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s">&quot;point&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">0.8</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Slopes as random-effects&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</details>
 <div class="cell_output docutils container">
-<img alt="_images/1a329151acc7d2d196bc7212c3c67204fa15b2a450bcb732cede3e94c909433c.png" src="_images/1a329151acc7d2d196bc7212c3c67204fa15b2a450bcb732cede3e94c909433c.png" />
+<img alt="_images/0b4f16d1841e222a31f34610a4b5f82f4e887d2fba3808c19ae4735767e519e5.png" src="_images/0b4f16d1841e222a31f34610a4b5f82f4e887d2fba3808c19ae4735767e519e5.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
 <span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
 </pre></div>
 </div>
 </div>
 </div>
-<p>So notice now that the slope for each litter is <em>identical</em> because we have not allowed it to vary. Instead, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is now <em>fixed</em>. The only random element of each litter is the <em>scaling</em>. In other words, how <em>high</em> or <em>low</em> the slope can be.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="hide above-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell source</span>
+<span class="expanded">Hide code cell source</span>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+
+<span class="n">mod.2</span><span class="w">         </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratpup</span><span class="p">)</span><span class="w">  </span>
+<span class="n">plot.data</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ratpup</span>
+<span class="n">plot.data</span><span class="o">$</span><span class="n">fit</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="n">mod.2</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">plot.data</span><span class="p">,</span><span class="w"> </span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="o">=</span><span class="n">weight</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">geom_point</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="nf">position_jitter</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="m">0.08</span><span class="p">,</span><span class="w"> </span><span class="n">height</span><span class="o">=</span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">litter</span><span class="p">),</span><span class="w"> </span><span class="n">fun</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s">&quot;line&quot;</span><span class="p">,</span><span class="w">  </span><span class="n">linewidth</span><span class="o">=</span><span class="m">0.3</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">stat_summary</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">fit</span><span class="p">,</span><span class="w"> </span><span class="n">group</span><span class="o">=</span><span class="n">litter</span><span class="p">),</span><span class="w"> </span><span class="n">fun</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">geom</span><span class="o">=</span><span class="s">&quot;point&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="m">0.8</span><span class="p">)</span><span class="w"> </span><span class="o">+</span>
+<span class="w">  </span><span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="w"> </span><span class="n">litter</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span>
+<span class="w">  </span><span class="nf">labs</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Slopes as fixed-effects&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<img alt="_images/7fb1e527089001d4440a00bec15b43e0e53ba9a74468357c75d58d1d26acb456.png" src="_images/7fb1e527089001d4440a00bec15b43e0e53ba9a74468357c75d58d1d26acb456.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
+<span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
+</pre></div>
+</div>
+</div>
+</div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="finalerror-foot" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Although we can write the model sum in any order, you can always tell which term is the final and most fine-grained error term because it will have identical indices to the data. The model is ultimately of the form <span class="math notranslate nohighlight">\(y_{ij}^{(k)} = (\text{other terms)} + \eta_{ij}^{(k)}\)</span>. So the data and the final error live as a pair because the final error <em>is</em> the data, but with all the model predictions removed.</p>
+</aside>
+<aside class="footnote brackets" id="lmecontrol-foot" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>We have had to adjust some of the computing elements of these models, otherwise they fail to converge. When this happens, especially when we know there is nothing wrong with the model form, we usually try and adjust either the optimisation algorithm being used, or the number of iterations. In this example, we change the optimisation algorithm, as the default in <code class="docutils literal notranslate"><span class="pre">lme()</span></code> can be a bit flaky. If this did not work, we would usually attempt to increase the number of iterations instead.</p>
 </aside>
 </aside>
 </section>
