@@ -8,7 +8,7 @@ chapters:
 - file: 2.building-mixed
 - file: 3.clustered-data-example
 - file: 4.building-model-I
-- file: 5.step-two
-- file: 6.step-three
+- file: 5.building-model-II
+- file: 6.building-model-III
 - file: 7.example-in-R
 - file: summary

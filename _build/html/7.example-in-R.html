@@ -67,7 +67,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Summary" href="summary.html" />
-    <link rel="prev" title="Building the Model III" href="6.step-three.html" />
+    <link rel="prev" title="Building the Model III" href="6.building-model-III.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -176,8 +176,8 @@
 <li class="toctree-l1"><a class="reference internal" href="2.building-mixed.html">Building Mixed-effects Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3.clustered-data-example.html">Example Dataset</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4.building-model-I.html">Building the Model I</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5.step-two.html">Building the Model II</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6.step-three.html">Building the Model III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.building-model-II.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.building-model-III.html">Building the Model III</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="summary.html">Summary</a></li>
 </ul>
@@ -667,7 +667,11 @@ NOTE: sex is not a high-order term in the model
 </div>
 </div>
 </div>
-<p>Here we can see that each of the 27 litters gets its own intercept and its own effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is parameterised as it would be in any other regression model, using dummy variables. So there is a constraint in place that makes the intercept the weight of female pups and the slope the difference between male and female pups. In addition, these are <em>not</em> mean values, they are <em>deflections</em>. So we think of them as more like <em>errors</em> or <em>deviations</em> from the population estimates. For instance, the weight of female pups in litter 1 lies 0.283 grams above the expected value of the population, with male pups in this litter sitting 0.066 grams further above. By comparison, the weight of female pups in litter 4 lies 0.135 grams <em>below</em> the expected value of the population, with male pups in this litter sitting a further 0.032 grams below this point.</p>
+<p>Here we can see that each of the 27 litters gets its own intercept and its own effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is parameterised as it would be in any other regression model, using dummy variables. So there is a constraint in place that makes the intercept the weight of female pups and the slope the difference between male and female pups. In addition, these are <em>not</em> mean values, they are <em>deflections</em>. So we think of them as more like <em>errors</em> or <em>deviations</em> from the population estimates. For instance, the weight of female pups in litter 1 lies 0.283 grams above the expected value of the population. In this litter, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is 0.066 grams larger than the population effect. By comparison, the weight of female pups in litter 4 lies 0.135 grams <em>below</em> the expected value of the population. In this litter, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is 0.032 grams smaller than the population effect. This is important because these are <em>not</em> negative slopes, these are deflections from a population slope. The fixed-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> is 0.44, so a slope would only become negative if its litter-specific effect were larger than -0.44. This is not true of any of the effects above and so all litters have a <em>positive</em> slope indicating male pups are always heavier than female pups.</p>
+<div class="admonition-sex-effect-in-litter-3 admonition">
+<p class="admonition-title">Sex Effect in Litter 3</p>
+<p>A good demonstration of the power of a mixed-effects model is to focus on Litter 3. Earlier, we plotted individual litters based on fitting separate normal linear models. When we did this the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> in litter 3 was <em>negative</em>, indicating heavier female pups than male pups. By comparison, the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for litter 3 in the mixed-effects model is <em>positive</em>, despite what the data implies. Why? Because the mixed-effects model is performing <em>regularisation</em>. By pooling data across litters, the model can see that all other litters have <em>positive</em> effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. As such, using all this information, it is less likely that litter 3 truly does have a negative effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. So the estimate for this litter is pulled towards the average and is forced to be <em>positive</em>. This makes the fit within this single litter poorer, but across <em>all</em> litters the fit is much better. The solution has been <em>regularised</em>. By using all the information available, it has been constrained to something more sensible, even if this goes against the data. Again, this is carefully tuned <em>bias</em> to make the model more sensible overall.</p>
+</div>
 <p>Another important aspect to note here is that litter 12 had <em>no</em> male pups. Despite this, there is still a random slope of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for this litter, representing the different between male and female pups.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -956,7 +960,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="6.step-three.html"
+       href="6.building-model-III.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
