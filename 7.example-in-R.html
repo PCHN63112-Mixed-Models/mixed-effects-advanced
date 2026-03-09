@@ -609,7 +609,7 @@ Confidence level used: 0.95
 NOTE: sex is not a high-order term in the model
 </pre></div>
 </div>
-<img alt="_images/70847eca8133c00c8c38461ea970ffddd1b714e3503bac3e75df2b5e22cfaf57.png" src="_images/70847eca8133c00c8c38461ea970ffddd1b714e3503bac3e75df2b5e22cfaf57.png" />
+<img alt="_images/e0f5c8121224d22d3c6f106782e54038bb5793d81c914a41a026b6f29cb9f726.png" src="_images/e0f5c8121224d22d3c6f106782e54038bb5793d81c914a41a026b6f29cb9f726.png" />
 </div>
 </div>
 <p>From this we can see that male pups on average were 0.393 grams heavier than female pups, with a 95% confidence interval on the difference of <span class="math notranslate nohighlight">\([0.282 \; 0.504]\)</span>. Because 0 sits outside this interval, the lower end of the interval appears meaningful and the test is significant with <span class="math notranslate nohighlight">\(p &lt; 0.001\)</span>, we conclude that a small but consistent difference in weight between male and female pups likely exists within the population. Some caution is needed here, given that these are <em>asymptotic</em> tests and CIs. Although the number of pups is large, the number of litters remains modest and more certainty could only come from sampling more litters. That being said, the treatment appears to not influence pup weight in any detectable fashion, either as a whole or differentially in male and female pups.</p>
@@ -729,49 +729,57 @@ NOTE: sex is not a high-order term in the model
 <img alt="_images/d02c449e5f2058d4455e59b49759cae1cd8ac1016f2087a9e39009b68630346b.png" src="_images/d02c449e5f2058d4455e59b49759cae1cd8ac1016f2087a9e39009b68630346b.png" />
 </div>
 </div>
-<p>As we can see, the width of both the intercept and the residual distributions are similar, with the slopes much narrower. This pattern is echoed by the <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> values in the output table.</p>
+<p>As we can see, the width of both the intercept and the residual distributions are similar, with the slopes much narrower. This pattern is echoed by the <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> values in the output table and could be cause for wondering whether <code class="docutils literal notranslate"><span class="pre">sex</span></code> needs to be random in this model, given that the variance it explains is much smaller than either the intercepts or the residuals. We will come back to this further below.</p>
 </section>
 </section>
 <section id="the-marginal-covariance-structure">
 <h2>The Marginal Covariance Structure<a class="headerlink" href="#the-marginal-covariance-structure" title="Link to this heading">#</a></h2>
-<p>It is also interesting to explore the variance-covariance structure that has been fit. This is a function of the random-effects themselves, rather than being directly specified. However, if we want to think of a mixed-effects model in terms of the marginal covariance structure, we may wish to check that the implied structure is reasonable.</p>
-<p>In the code below, we extract and visualise the covariance block for litter 6</p>
+<p>It is also interesting to explore the variance-covariance structure that has been fit. This is a function of the random effects themselves, rather than being directly specified. However, if we want to think of a mixed-effects model in similar terms to a GLS model, we may wish to check that the implied structure is reasonable.</p>
+<p>In the code below, we extract and visualise the covariance block for litter 15</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
-<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;marginal&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&quot;6&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">`6`</span><span class="w"> </span><span class="c1"># Litter 6</span>
+<span class="n">Sigma</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;marginal&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&quot;15&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">`15`</span><span class="w"> </span><span class="c1"># Litter 15</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
 <span class="n">Matrix</span><span class="o">::</span><span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          1         2         3         4         5         6         7
-1 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178
-2 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.3212178
-3 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.3212178
-4 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.3212178
-5 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.3212178
-6 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.3212178
-7 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.4123597
-8 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223
-9 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.2519223
-          8         9
-1 0.3212178 0.3212178
-2 0.3212178 0.3212178
-3 0.3212178 0.3212178
-4 0.3212178 0.3212178
-5 0.3212178 0.3212178
-6 0.3212178 0.3212178
-7 0.2519223 0.2519223
-8 0.4123597 0.2519223
-9 0.2519223 0.4123597
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1         2         3         4         5         6         7
+1  0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730
+2  0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730
+3  0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730 0.4146730
+4  0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730 0.4146730
+5  0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730 0.4146730
+6  0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104 0.4146730
+7  0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.4146730 0.5751104
+8  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+9  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+10 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+11 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+12 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+13 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+           8         9        10        11        12        13
+1  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+2  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+3  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+4  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+5  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+6  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+7  0.3212178 0.3212178 0.3212178 0.3212178 0.3212178 0.3212178
+8  0.4123597 0.2519223 0.2519223 0.2519223 0.2519223 0.2519223
+9  0.2519223 0.4123597 0.2519223 0.2519223 0.2519223 0.2519223
+10 0.2519223 0.2519223 0.4123597 0.2519223 0.2519223 0.2519223
+11 0.2519223 0.2519223 0.2519223 0.4123597 0.2519223 0.2519223
+12 0.2519223 0.2519223 0.2519223 0.2519223 0.4123597 0.2519223
+13 0.2519223 0.2519223 0.2519223 0.2519223 0.2519223 0.4123597
 </pre></div>
 </div>
-<img alt="_images/1c3d51349617c4e550e75e087739059d9c055fb2d0fa6c22ee6d7126a1e0d0df.png" src="_images/1c3d51349617c4e550e75e087739059d9c055fb2d0fa6c22ee6d7126a1e0d0df.png" />
+<img alt="_images/459c3db517fe17ffe67e76443240a45c643afa8c237766dac78208a0ae6aa1ea.png" src="_images/459c3db517fe17ffe67e76443240a45c643afa8c237766dac78208a0ae6aa1ea.png" />
 </div>
 </div>
-<p>As we can see, this litter consisted of 9 pups. The first 6 were <em>female</em> and the final 3 were <em>male</em>. Here we can see that the covariance structure has resulted in several features:</p>
+<p>As we can see, this litter consisted of 13 pups. The first 7 were <em>female</em> and the final 6 were <em>male</em>. Here we can see that the covariance structure has resulted in several features:</p>
 <ul class="simple">
 <li><p>Male pups and female pups have different variances</p></li>
 <li><p>All male pups within a litter share the same covariance</p></li>
@@ -819,12 +827,27 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="c1"># fixed-effects </span>
 <span class="w">                  </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w">        </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">litter</span><span class="p">,</span><span class="w">                            </span><span class="c1"># random-effects</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratpup</span>
-<span class="p">)</span><span class="w">  </span>
+<span class="p">)</span>
+
+<span class="nf">Anova</span><span class="p">(</span><span class="n">lme.ratpup</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: weight
+                Chisq Df Pr(&gt;Chisq)    
+treatment      2.5028  2     0.2861    
+sex           56.8378  1  4.733e-14 ***
+treatment:sex  0.9707  2     0.6155    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
 </div>
-<p>We can then run through the fixed-effects inference process again to see if this has altered our conclusions.</p>
+<p>which does not change our conclusions in any substantive way.</p>
 <p>By way of visual comparison, the plots below show the litter-specific models under each assumption. Notice that <code class="docutils literal notranslate"><span class="pre">ggplot2</span></code> will complain because litter 12 is missing male pups. This can be safely ignored, but could be a useful indicator if this had not been spotted prior to this point.</p>
 <div class="cell tag_hide-input docutils container">
 <details class="hide above-input">
@@ -850,7 +873,7 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="_images/0b4f16d1841e222a31f34610a4b5f82f4e887d2fba3808c19ae4735767e519e5.png" src="_images/0b4f16d1841e222a31f34610a4b5f82f4e887d2fba3808c19ae4735767e519e5.png" />
+<img alt="_images/5a6b258e7a02f9662e57ab297461e7fc7403e730605184d67b6823903018dbdc.png" src="_images/5a6b258e7a02f9662e57ab297461e7fc7403e730605184d67b6823903018dbdc.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
 <span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
 </pre></div>
@@ -881,7 +904,7 @@ lme.mod.1     2 10 425.2734 463.0189 -202.6367 1 vs 2 4.693801  0.0957
 </div>
 </details>
 <div class="cell_output docutils container">
-<img alt="_images/7fb1e527089001d4440a00bec15b43e0e53ba9a74468357c75d58d1d26acb456.png" src="_images/7fb1e527089001d4440a00bec15b43e0e53ba9a74468357c75d58d1d26acb456.png" />
+<img alt="_images/2a3522bd2c1c1fc9174e5dc9a5ae7cc61241a4f0e3364fa53c5511bd75cdfc48.png" src="_images/2a3522bd2c1c1fc9174e5dc9a5ae7cc61241a4f0e3364fa53c5511bd75cdfc48.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>`geom_line()`: Each group consists of only one observation.
 <span class=" -Color -Color-Cyan">ℹ</span> Do you need to adjust the <span class=" -Color -Color-Green">group</span> aesthetic?
 </pre></div>
