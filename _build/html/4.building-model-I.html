@@ -466,8 +466,8 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij},
 <p>where <span class="math notranslate nohighlight">\(y_{ij}\)</span> is the value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for pup <span class="math notranslate nohighlight">\(i\)</span> of <code class="docutils literal notranslate"><span class="pre">sex</span></code> <span class="math notranslate nohighlight">\(j\)</span>, <span class="math notranslate nohighlight">\(\mu\)</span> is the average weight of all pups in this litter, <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> is the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at level <span class="math notranslate nohighlight">\(j\)</span> and <span class="math notranslate nohighlight">\(\eta_{ij}\)</span> is the error. This is effectively a one-way ANOVA model of <code class="docutils literal notranslate"><span class="pre">sex</span></code> within a single litter.</p>
 <section id="checking-the-data-supports-the-model">
 <h3>Checking the Data Supports the Model<a class="headerlink" href="#checking-the-data-supports-the-model" title="Link to this heading">#</a></h3>
-<p>We can now run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This serves two purposes. Firstly, we can see the syntax we need to model a <em>single</em> dependency structure. This will become relevant later when it comes to specifying the mixed-effects model. Secondly, we can check that the model we want is supported by the data that we have. If there are any problems at this stage, it tells us that we will need to constrain our model further as the data does not contain the degree of variation we need.</p>
-<p>We fit the model below, making the intercept parameter <em>explicit</em> in the formula. The reason for this will become clearer later, but is there to provide a more direct connection with the syntax we will need later on.</p>
+<p>We can now run this model in <code class="docutils literal notranslate"><span class="pre">R</span></code>. This serves two purposes. Firstly, we can see the syntax we need to model a <em>single</em> dependency structure. This will become relevant later when it comes to specifying the mixed-effects model. Secondly, we can check that the model we want is supported by the data that we have. If there are any problems at this stage, it tells us that we will need to constrain our model further as the data does not contain the degree of variation we need. This will be dealt with more formally at a later step (as the model fitting her is somewhat <em>optional</em>). However, it can be useful to know this at this stage.</p>
+<p>We fit the model using the code below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lm.litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">weight</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">litter.1</span><span class="p">)</span>
@@ -497,12 +497,13 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 </div>
 </div>
 </div>
-<p>There are no issues with fitting this model and so no requirement to constrain the model for a single litter further. As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. We plot the fit below for completeness, but this is not wholly necessary.</p>
+<p>There are no issues with fitting this model and so no requirement to constrain the model for a single litter further. As expected, <code class="docutils literal notranslate"><span class="pre">R</span></code> has implemented the estimability constraint that <span class="math notranslate nohighlight">\(\alpha_{1} = 0\)</span>, so <span class="math notranslate nohighlight">\(\hat{\mu}\)</span> is now the average value of <code class="docutils literal notranslate"><span class="pre">weight</span></code> for female pups and <span class="math notranslate nohighlight">\(\hat{\alpha}_{2}\)</span> is the mean difference between male and female pups. As we can see, in this litter <span class="math notranslate nohighlight">\(\hat{\alpha}_{2} = 0.3\)</span>, so there is a small increase in <code class="docutils literal notranslate"><span class="pre">weight</span></code> for male pups over female pups. We plot the fit below for completeness.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;sex&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mod</span><span class="o">=</span><span class="n">lm.litter.1</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span>
 <span class="w">     </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">),</span><span class="w"> </span>
-<span class="w">     </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Sex Effect (Litter 1)&#39;</span><span class="p">)</span>
+<span class="w">     </span><span class="n">main</span><span class="o">=</span><span class="s">&#39;Sex Effect (Litter 1)&#39;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -510,6 +511,15 @@ F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 <img alt="_images/2df72060a0cf50a5b001d1af4041c6edbdc32482ee035608231ec5ee61d5d883.png" src="_images/2df72060a0cf50a5b001d1af4041c6edbdc32482ee035608231ec5ee61d5d883.png" />
 </div>
 </div>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have complete Step I in our model building process. After reading this section, you should have a good sense of :</p>
+<ul class="simple">
+<li><p>The concept of modelling only a single dependency structure and how this can be made more explicit by subsetting the data in <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p></li>
+<li><p>The idea that we can identify suitable variables for this singular structure by removing anything with a <em>constant value</em>.</p></li>
+<li><p>The idea that we can check the suitability of this model by explicitly fitting it in <code class="docutils literal notranslate"><span class="pre">R</span></code>. Although no wholly necessary, this can highlight any potential issues <em>early</em>.</p></li>
+</ul>
+</aside>
 </section>
 </section>
 </section>
