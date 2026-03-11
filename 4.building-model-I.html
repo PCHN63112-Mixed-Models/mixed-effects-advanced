@@ -399,7 +399,7 @@
 </section>
 <section id="subsetting-the-data">
 <h2>Subsetting the Data<a class="headerlink" href="#subsetting-the-data" title="Link to this heading">#</a></h2>
-<p>Although possible to conduct this step in a purely theoretical fashion, we can also make it more practical by using <code class="docutils literal notranslate"><span class="pre">R</span></code> to subset the data to just those values from a single litter. For this example, we simply select the label <code class="docutils literal notranslate"><span class="pre">litter=='1'</span></code>. In practice, we should examine multiple litters to make sure we have no accidentally selected an unusual example. For instance, selecting <code class="docutils literal notranslate"><span class="pre">litter==12</span></code> would be a poor start in this dataset (as we will see later).</p>
+<p>Although possible to conduct this step in a purely theoretical fashion, we can also make it more practical by using <code class="docutils literal notranslate"><span class="pre">R</span></code> to subset the data to just those values from a single litter. For this example, we simply select the label <code class="docutils literal notranslate"><span class="pre">litter=='1'</span></code>. In practice, we should examine multiple litters to make sure we have not accidentally selected an unusual case. For instance, selecting <code class="docutils literal notranslate"><span class="pre">litter==12</span></code> would be a poor start in this dataset (as we will see later).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
@@ -426,14 +426,10 @@
 </div>
 </div>
 <p>Spend a little time studying the output above so you understand the nature of the data we are working with during this step.</p>
-<div class="admonition-examining-multiple-subsets admonition">
-<p class="admonition-title">Examining Multiple Subsets</p>
-<p>A practical point here is that it may be necessary to examine <em>multiple</em> subsets before continuing. In the example above, we can see that litter 1 contains 8 male pups and 4 female pups. This is perfectly fine, but imagine if litter 1 contained <em>all</em> males or <em>all</em> female pups. We may get a biased view of the possible models we could fit to a single litter simply by chance. Instead, it may be worth examining <em>several</em> litters to check whether <code class="docutils literal notranslate"><span class="pre">sex</span></code> is indeed constant within litters, or whether it does vary within <em>some</em> litters, just not necessarily <em>all</em>.</p>
-</div>
 </section>
 <section id="identifying-suitable-variables">
 <h2>Identifying Suitable Variables<a class="headerlink" href="#identifying-suitable-variables" title="Link to this heading">#</a></h2>
-<p>Based on the output above, we can see that <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter. Because of this, we cannot use them as predictors within a single litter. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. So, to make this very clear, we can <em>remove</em> them from our data for litter 1</p>
+<p>Based on the output above, we can see that <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>constant</em> at the level of a single litter. Because of this, we cannot use them as predictors within a single litter. This make sense because these either index the data as a whole (<code class="docutils literal notranslate"><span class="pre">litter</span></code>) or are manipulated <em>across</em> litters (<code class="docutils literal notranslate"><span class="pre">litsize</span></code>,<code class="docutils literal notranslate"><span class="pre">treatment</span></code>). So, if we only have <em>one</em> litter, these are irrelevant. To make this very clear, we can <em>remove</em> them from our data for litter 1</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">litter.1</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">litter</span><span class="p">,</span><span class="o">-</span><span class="n">litsize</span><span class="p">,</span><span class="o">-</span><span class="n">treatment</span><span class="p">))</span>
@@ -442,14 +438,23 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    pup_id weight    sex
-148    148   6.89 Female
-149    149   7.73 Female
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex
+1       1   6.60   Male
+2       2   7.40   Male
+3       3   7.15   Male
+4       4   7.24   Male
+5       5   7.10   Male
+6       6   6.04   Male
+7       7   6.98   Male
+8       8   7.05   Male
+9       9   6.95 Female
+10     10   6.29 Female
+11     11   6.77 Female
+12     12   6.57 Female
 </pre></div>
 </div>
 </div>
 </div>
-<p>We have kept <code class="docutils literal notranslate"><span class="pre">pup_id</span></code>, even though it is somewhat redundant with the row index as there may be cause to identify individual pups at some point later. This may be especially true if the rows get reordered, either intentionally or unintentionally. Either way, it is good practice to keep track of the <em>units of analysis</em>.</p>
 </section>
 <section id="specifying-the-model">
 <h2>Specifying the Model<a class="headerlink" href="#specifying-the-model" title="Link to this heading">#</a></h2>
@@ -471,19 +476,23 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="ow">in</span> <span class="err">`</span><span class="n">contrasts</span><span class="o">&lt;-</span><span class="err">`</span><span class="p">:</span>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = weight ~ 1 + sex, data = litter.1)
 
-<span class="o">!</span><span class="w"> </span>contrasts<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>applied<span class="w"> </span>only<span class="w"> </span>to<span class="w"> </span>factors<span class="w"> </span>with<span class="w"> </span><span class="m">2</span><span class="w"> </span>or<span class="w"> </span>more<span class="w"> </span>levels
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-0.9050 -0.1425  0.1150  0.2275  0.4550 
 
-    <span class="err">▆</span>
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   6.6450     0.1969  33.749 1.23e-11 ***
+sexMale       0.3000     0.2411   1.244    0.242    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-<span class="g g-Whitespace"> </span><span class="mi">1</span><span class="o">.</span> <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">lm</span><span class="p">(</span><span class="n">weight</span> <span class="o">~</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">sex</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">litter</span><span class="mf">.1</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">2</span><span class="o">.</span>   <span class="err">├─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">mt</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">contrasts</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">3</span><span class="o">.</span>   <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">mt</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">contrasts</span><span class="p">)</span>
-
-<span class="g g-Whitespace"> </span><span class="mi">4</span><span class="o">.</span>     <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="err">`</span><span class="n">contrasts</span><span class="o">&lt;-</span><span class="err">`</span><span class="p">(</span><span class="err">`</span><span class="o">*</span><span class="n">tmp</span><span class="o">*</span><span class="err">`</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">contr</span><span class="o">.</span><span class="n">funs</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">isOF</span><span class="p">[</span><span class="n">nn</span><span class="p">]])</span>
+Residual standard error: 0.3938 on 10 degrees of freedom
+Multiple R-squared:  0.134,	Adjusted R-squared:  0.04743 
+F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
 </pre></div>
 </div>
 </div>
@@ -498,7 +507,7 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij},
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/82305698a44ef13284941e45296706cf316ee64fef93713ce2d5b4f1125b7aef.png" src="_images/82305698a44ef13284941e45296706cf316ee64fef93713ce2d5b4f1125b7aef.png" />
+<img alt="_images/2df72060a0cf50a5b001d1af4041c6edbdc32482ee035608231ec5ee61d5d883.png" src="_images/2df72060a0cf50a5b001d1af4041c6edbdc32482ee035608231ec5ee61d5d883.png" />
 </div>
 </div>
 </section>
