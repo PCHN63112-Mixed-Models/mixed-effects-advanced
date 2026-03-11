@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Building the Model II &#8212; More Advanced Uses of Mixed-effects Models</title>
   
@@ -16,34 +16,31 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
@@ -54,7 +51,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -70,7 +67,6 @@
     <link rel="prev" title="Building the Model I" href="4.building-model-I.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -86,8 +82,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -95,6 +102,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -102,8 +110,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -119,8 +127,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -150,17 +157,21 @@
     
     
     <img src="_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
-    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="More Advanced Uses of Mixed-effects Models - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -188,14 +199,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -339,16 +345,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -400,7 +414,7 @@
 <p>In our second model building step, we need to take the single model we specified in the previous step and expand it to allow for <em>multiple</em> dependency structures. In context, this means generalising our model of a <em>single</em> litter to a model of <em>multiple</em> litters. In doing so, we aim to decide which parameters we allow to vary from litter-to-litter and which parameters we want to stay fixed across all litters.</p>
 <section id="the-multiple-litters-model">
 <h2>The Multiple Litters Model<a class="headerlink" href="#the-multiple-litters-model" title="Link to this heading">#</a></h2>
-<p>If we start with out model from the previous step</p>
+<p>If we start with our model from the previous step</p>
 <div class="math notranslate nohighlight">
 \[
 y_{ij} = \mu + \alpha_{j} + \eta_{ij}
@@ -410,11 +424,11 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij}
 \[
 y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}
 \]</div>
-<p>This indicates that <em>everything</em> in the model depends upon the specific litter. Each litter has its own individual measures of weight <span class="math notranslate nohighlight">\(\left(y_{ij}\right)\)</span>, mean weight <span class="math notranslate nohighlight">\(\left(\mu\right)\)</span>, effect of sex <span class="math notranslate nohighlight">\(\left(\alpha_{j}\right)\)</span> and errors <span class="math notranslate nohighlight">\(\left(\eta_{ij}\right)\)</span>. This is generally our theoretical starting-point.</p>
+<p>This indicates that <em>everything</em> in the model depends upon the specific litter. Each litter has its own individual measures of weight <span class="math notranslate nohighlight">\(\left(y_{ij}\right)\)</span>, mean weight <span class="math notranslate nohighlight">\(\left(\mu\right)\)</span>, effect of sex <span class="math notranslate nohighlight">\(\left(\alpha_{j}\right)\)</span> and errors <span class="math notranslate nohighlight">\(\left(\eta_{ij}\right)\)</span>. This is generally our starting-point, but we will decide below whether to keep things this way or not.</p>
 </section>
 <section id="specifying-multiple-models-in-r">
 <h2>Specifying Multiple Models in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#specifying-multiple-models-in-r" title="Link to this heading">#</a></h2>
-<p>We can get a clearer picture of expanding our model to multiple litters using <code class="docutils literal notranslate"><span class="pre">R</span></code>. Like the illustrations in the previous step this is not wholly necessary, but can be a useful device for gaining intuition. In doing so, we conceptualise <span class="math notranslate nohighlight">\((k)\)</span> as the index of a loop over litters. In the code below, we show this by building a list of single-litter models by iteratively subsetting the data and fitting a model. The only catch is that some letters contain only a single level of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, which will cause the model to fail. To get around this, we use the <code class="docutils literal notranslate"><span class="pre">try()</span></code> function, which will attempt to fit the model but will not cause the code to crash if there is an error.</p>
+<p>We can get a clearer picture of expanding our model to multiple litters using <code class="docutils literal notranslate"><span class="pre">R</span></code>. Like the illustrations in the previous step this is not wholly necessary, but can be a useful device for gaining intuition. In doing so, we conceptualise <span class="math notranslate nohighlight">\((k)\)</span> as the index of a loop over litters. In the code below, we show this by building a list of models by iteratively subsetting the data based on individual litters. The only catch is that some letters contain only a single level of <code class="docutils literal notranslate"><span class="pre">sex</span></code>, which will cause the model to fail. To get around this, we use the <code class="docutils literal notranslate"><span class="pre">try()</span></code> function, which will attempt to fit the model but will not cause the code to crash if there is an error. We include <code class="docutils literal notranslate"><span class="pre">silent=TRUE</span></code> so that no errors are printed if a model does fail.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.mods</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w">  </span>
@@ -432,7 +446,7 @@ y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}
 </div>
 </div>
 </div>
-<p>We can now visualise each of these individual models to provide a sense of what generalising the model above across litters means.</p>
+<p>We can now visualise each of these individual models to provide a sense of what generalising our model across litters means.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
 <img alt="_images/9184a1101e9554bd62753735a288b71a0e2653ce6434d5307cd9feeeb3d849a0.png" src="_images/9184a1101e9554bd62753735a288b71a0e2653ce6434d5307cd9feeeb3d849a0.png" />
@@ -447,7 +461,8 @@ y^{(k)}_{ij} = \mu^{(k)} + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}
 \[
 E\left(y^{(k)}_{ij}\right) = \mu^{(k)} + \alpha^{(k)}_{j}
 \]</div>
-<p>For each of these term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> across all litters? In making this decision, we are trying to capture <em>why</em> the <code class="docutils literal notranslate"><span class="pre">litter</span></code> variable matters. What influence does <code class="docutils literal notranslate"><span class="pre">litter</span></code> have on the weight of the pups within it? Any element that <em>changes</em> from litter-to-litter captures why <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>, whereas any element that is the <em>same</em> suggests that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is irrelevant. So, we are asking whether <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code> by causing the average weight of all pups to shift up or down <span class="math notranslate nohighlight">\(\left(\mu\right)\)</span> and whether <code class="docutils literal notranslate"><span class="pre">litter</span></code> also influences <code class="docutils literal notranslate"><span class="pre">weight</span></code> by changing the difference between male and female pups <span class="math notranslate nohighlight">\(\left(\alpha_{j}\right)\)</span>.</p>
+<p>For each of these term, we have a <em>choice</em>. Do we imagine that this effect changes with each litter, or do we want to treat it as a <em>global</em> effect that is assumed to be the <em>same</em> across all litters?</p>
+<p>In making this decision, we are trying to capture <em>why</em> the <code class="docutils literal notranslate"><span class="pre">litter</span></code> variable matters. What influence does <code class="docutils literal notranslate"><span class="pre">litter</span></code> have on the weight of the pups within it? Any element that <em>changes</em> from litter-to-litter captures why <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code>, whereas any element that is the <em>same</em> suggests that <code class="docutils literal notranslate"><span class="pre">litter</span></code> is irrelevant. So, we are asking whether <code class="docutils literal notranslate"><span class="pre">litter</span></code> influences <code class="docutils literal notranslate"><span class="pre">weight</span></code> by causing the average weight of all pups to shift up or down <span class="math notranslate nohighlight">\(\left(\mu\right)\)</span> and whether <code class="docutils literal notranslate"><span class="pre">litter</span></code> also influences <code class="docutils literal notranslate"><span class="pre">weight</span></code> by changing the difference between male and female pups <span class="math notranslate nohighlight">\(\left(\alpha_{j}\right)\)</span>.</p>
 <div class="tip admonition">
 <p class="admonition-title">Reasoning About the Problem</p>
 <p>As will hopefully become clear, there is no <em>absolute truth</em> here. These decisions have to be made by reasoning about the problem and considering what the model is saying, given the choices we make. Although we can use model comparisons to see which choice is most compatible with the data, we also need to start from a position of justifying our choices. If you are working alongside domain experts on the analysis, this is the sort of conversation you can have to pick the options that are most plausible. So there is no shortcut to engaging your brain and thinking about the problem in front of you. This can be difficult, but is part of the reality of analysing data.</p>
@@ -471,7 +486,8 @@ y^{(k)}_{ij} = \mu + \alpha^{(k)}_{j} + \eta^{(k)}_{ij}.
 <li><p>Over time, the average weight of all litters from the same mother will converge on their own <em>unique</em> value that will be different from another mother. In other words, the mother and rearing environment <em>does</em> matter. For instance, mother rat A always produces litters that are heavier on average than mother rat B. Any discrepancy in our measurements is then a mixture of sampling variation <em>and</em> the effect of a specific mother and rearing environment.</p></li>
 </ol>
 <p>This is precisely the choice between treating the mean weight per-litter as a <em>constant</em> across litters or as unique <em>per-litter</em>. Our question is which of these descriptions of reality is more plausible?</p>
-<p>For this example, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will be heavier or lighter than others. This goes beyond just random sampling noise and becomes a systematic source of variation that directly relates to the different litters. Mother rats themselves will be different weights and sizes which will place constraints on the average weight and size of their pups. Indeed, this was the whole reason for characterising <code class="docutils literal notranslate"><span class="pre">litter</span></code> as a clustering variable in the first place. We can see this in the plots from earlier where each litter had a different <em>scaling</em> on the <span class="math notranslate nohighlight">\(y\)</span>-axis. This is precisely the aspect that a random intercept will capture. So, in this instance, we will argue that it makes most sense to allow <span class="math notranslate nohighlight">\(\mu\)</span> to differ per-litter. Irrespective of whether we are dealing with <em>clusters</em> or <em>subjects</em>, it is <em>almost always</em> sensible to start with this form of <em>random-intercepts</em> model.</p>
+<p>For this example, it is probably not sensible to constrain all litters to the same expected weight. Depending upon different genetic factors and birthing conditions, some litters will be heavier or lighter than others. This goes beyond just random sampling noise and becomes a systematic source of variation that directly relates to the different litters. Mother rats themselves will be different weights and sizes which will place constraints on the average weight and size of their pups. Indeed, this was the whole reason for characterising <code class="docutils literal notranslate"><span class="pre">litter</span></code> as a clustering variable in the first place. We can see this in the plots from earlier where each litter had a different <em>scaling</em> on the <span class="math notranslate nohighlight">\(y\)</span>-axis. This is precisely the aspect that a random intercept will capture. So, in this instance, we will argue that it makes most sense to allow <span class="math notranslate nohighlight">\(\mu\)</span> to differ per-litter.</p>
+<p>In general, irrespective of whether we are dealing with <em>clusters</em> or <em>subjects</em>, it is <em>almost always</em> sensible to start with this assumption, which is known very generally as a <em>random-intercepts</em> model.</p>
 </section>
 <section id="should-the-slope-be-random">
 <h3>Should the Slope be Random?<a class="headerlink" href="#should-the-slope-be-random" title="Link to this heading">#</a></h3>
@@ -560,10 +576,17 @@ litter Female Male
 </section>
 <section id="missing-data">
 <h3>Missing Data<a class="headerlink" href="#missing-data" title="Link to this heading">#</a></h3>
-<p>Another important clarification is that the above decisions were made in relation to the <em>average</em> data per-litter. This is important. We do not require this to be true of <em>all</em> litters. Indeed, we can still fit a random intercept model, even if some litters only contain a single data point. Similarly, we can fit a random slope model, even if some litters contain no male pups or no female pups. Remember, multilevel/mixed-effects models allow for this via pooling and shrinkage. So if a particular litter does not have the data to support an effect on its own, its estimate will be <em>shrunk</em> towards the average. For example, we saw above that litter 12 had <em>no</em> male pups. Although this prevented an effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> being fit to that data in isolation, when estimated as a whole with all the other litters, the multilevel model will <em>create</em> an effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for that litter. This will be derived by pooling information across litters and shrinking the estimate towards the average effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is what allows these types of models to be so powerful when data is missing. We will see this demonstrated when we examine the model fit to these data in <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p>
+<p>Another important clarification is that the above decisions were made in relation to the <em>average</em> data per-litter. This is important. We do not require this to be true of <em>all</em> litters. Indeed, we can still fit a random intercept model, even if some litters only contain a single data point. Similarly, we can fit a random slope model, even if some litters contain no male pups or no female pups. Remember, multilevel/mixed-effects models allow for this via pooling and shrinkage. So if a particular litter does not have the data to support an effect on its own, its estimate will be <em>shrunk</em> towards the average. For example, we saw above that litter 12 had <em>no</em> male pups. Although this prevented an effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> being fit to that data in isolation, when estimated as a whole with all the other litters, the multilevel model will <em>create</em> an effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> for that litter. This will be derived by pooling information across litters . This is what allows these types of models to be so powerful when data is missing. We will see this demonstrated when we examine the model fit in <code class="docutils literal notranslate"><span class="pre">R</span></code> a little later.</p>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have complete Step II in our model building process. After reading this section, you should have a good sense of :</p>
+<ul class="simple">
+<li><p>The concept of</p></li>
+</ul>
+</aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="sextextbook-foot" role="note">
+<aside class="footnote brackets" id="sextextbook-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>It is interesting to note that, in their description of this analysis, <a class="reference external" href="https://www.taylorfrancis.com/books/mono/10.1201/9781003181064/linear-mixed-models-brady-west-kathleen-welch-andrzej-galecki?context=ubx&amp;amp;refId=4dbda113-7f59-4ba9-a710-897ef536cfee">West, Welch &amp; Galecki (2022)</a> make the decision to fix <code class="docutils literal notranslate"><span class="pre">sex</span></code> to a constant across litters, under the belief that there is a universal effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> on weight that is not influenced by individual litters. Rather than jumping straight to that decision, we have kept things more general and will examine whether this assumption is justified later by using model comparisons. This highlights that there is no <em>universal truth</em> here in terms of building these models and that different analysts may take different approaches and make different decisions along the way.</p>
 </aside>
@@ -627,8 +650,7 @@ litter Female Male
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -697,8 +719,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
