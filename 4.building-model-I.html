@@ -392,14 +392,14 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="building-the-model-i">
 <h1>Building the Model I<a class="headerlink" href="#building-the-model-i" title="Link to this heading">#</a></h1>
-<p>Now that we have established the structure of our data, we can move on to modelling it. For this, we assume that all data wrangling and data exploration has taken place and we are now in a position of wanting to specify a model using <code class="docutils literal notranslate"><span class="pre">lme()</span></code>. In order to do so, we will follow the 3 general steps outlines earlier to build a multilevel model. We will then collapse this to mixed-effects form to fit using <code class="docutils literal notranslate"><span class="pre">lme()</span></code></p>
+<p>Now that we have established the structure of our data, we can move on to modelling it. For this, we assume that all data wrangling and data exploration has taken place and we are now in a position of wanting to specify a model using <code class="docutils literal notranslate"><span class="pre">lme()</span></code>. In order to do so, we will follow the 3 general steps outlines earlier to build a multilevel model. We will then collapse this to mixed-effects form to fit using <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
 <section id="modelling-a-single-dependency-structure">
 <h2>Modelling a Single Dependency Structure<a class="headerlink" href="#modelling-a-single-dependency-structure" title="Link to this heading">#</a></h2>
-<p>In our first step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters themselves. These are the <em>boundaries of dependence</em>. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. For this example, this corresponds to a <em>single litter</em>. Because we have no sub-clusters within litter, we are at the finest level of dependency and can start here. In doing so, we start by imagining that our data was only collected from a single litter of pups.</p>
+<p>In our first step, we start by building a model for a <em>single</em> dependency structure. With clustered data, the entities that create dependencies are the clusters themselves. These are the <em>boundaries of dependence</em>. As such, a <em>single dependency structure</em> can be taken to mean a <em>single cluster</em>. For this example, this corresponds to a <em>single litter</em>. Because we have no sub-clusters within litter, we are at the finest level of dependency and can start here. In doing so, we start by imagining that our data was only collected from a single litter of pups and then examine what form of model could be fit.</p>
 </section>
 <section id="subsetting-the-data">
 <h2>Subsetting the Data<a class="headerlink" href="#subsetting-the-data" title="Link to this heading">#</a></h2>
-<p>Although possible to conduct this step in a purely theoretical fashion, we can also make it more practical by using <code class="docutils literal notranslate"><span class="pre">R</span></code> to subset the data to just those values from a single litter. Because the specific litter makes no difference here, we simply select the label <code class="docutils literal notranslate"><span class="pre">litter=='1'</span></code>.</p>
+<p>Although possible to conduct this step in a purely theoretical fashion, we can also make it more practical by using <code class="docutils literal notranslate"><span class="pre">R</span></code> to subset the data to just those values from a single litter. For this example, we simply select the label <code class="docutils literal notranslate"><span class="pre">litter=='1'</span></code>. In practice, we should examine multiple litters to make sure we have no accidentally selected an unusual example. For instance, selecting <code class="docutils literal notranslate"><span class="pre">litter==12</span></code> would be a poor start in this dataset (as we will see later).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">litter.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">ratpup</span><span class="p">,</span><span class="w"> </span><span class="n">litter</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
@@ -442,19 +442,9 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   pup_id weight    sex
-1       1   6.60   Male
-2       2   7.40   Male
-3       3   7.15   Male
-4       4   7.24   Male
-5       5   7.10   Male
-6       6   6.04   Male
-7       7   6.98   Male
-8       8   7.05   Male
-9       9   6.95 Female
-10     10   6.29 Female
-11     11   6.77 Female
-12     12   6.57 Female
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    pup_id weight    sex
+148    148   6.89 Female
+149    149   7.73 Female
 </pre></div>
 </div>
 </div>
@@ -481,23 +471,19 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij},
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
-lm(formula = weight ~ 1 + sex, data = litter.1)
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Error</span> <span class="ow">in</span> <span class="err">`</span><span class="n">contrasts</span><span class="o">&lt;-</span><span class="err">`</span><span class="p">:</span>
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--0.9050 -0.1425  0.1150  0.2275  0.4550 
+<span class="o">!</span><span class="w"> </span>contrasts<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>applied<span class="w"> </span>only<span class="w"> </span>to<span class="w"> </span>factors<span class="w"> </span>with<span class="w"> </span><span class="m">2</span><span class="w"> </span>or<span class="w"> </span>more<span class="w"> </span>levels
 
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   6.6450     0.1969  33.749 1.23e-11 ***
-sexMale       0.3000     0.2411   1.244    0.242    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+    <span class="err">▆</span>
 
-Residual standard error: 0.3938 on 10 degrees of freedom
-Multiple R-squared:  0.134,	Adjusted R-squared:  0.04743 
-F-statistic: 1.548 on 1 and 10 DF,  p-value: 0.2418
+<span class="g g-Whitespace"> </span><span class="mi">1</span><span class="o">.</span> <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">lm</span><span class="p">(</span><span class="n">weight</span> <span class="o">~</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">sex</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">litter</span><span class="mf">.1</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">2</span><span class="o">.</span>   <span class="err">├─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">mt</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">contrasts</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">3</span><span class="o">.</span>   <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="n">model</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">mt</span><span class="p">,</span> <span class="n">mf</span><span class="p">,</span> <span class="n">contrasts</span><span class="p">)</span>
+
+<span class="g g-Whitespace"> </span><span class="mi">4</span><span class="o">.</span>     <span class="err">└─</span><span class="n">stats</span><span class="p">::</span><span class="err">`</span><span class="n">contrasts</span><span class="o">&lt;-</span><span class="err">`</span><span class="p">(</span><span class="err">`</span><span class="o">*</span><span class="n">tmp</span><span class="o">*</span><span class="err">`</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">contr</span><span class="o">.</span><span class="n">funs</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">isOF</span><span class="p">[</span><span class="n">nn</span><span class="p">]])</span>
 </pre></div>
 </div>
 </div>
