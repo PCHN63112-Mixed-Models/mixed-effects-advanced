@@ -401,15 +401,15 @@
 <p>For this example, we will be using data on the birth weight of litters of rat pups. Of course, in the realm of psychology, you may never find yourself working with baby rats. However, it is useful to see many different examples from different fields so you get a sense of how these methods can be applied <em>generically</em>. Otherwise, it is quite easy to get stuck conceptualising these approaches in terms of <code class="docutils literal notranslate"><span class="pre">subjects</span></code> and nothing else.</p>
 <section id="data-description">
 <h3>Data Description<a class="headerlink" href="#data-description" title="Link to this heading">#</a></h3>
-<p>The data consists of the birth weight of rat pups from mothers who were assigned to one of three different treatments. These were either a <em>high</em>-dose, a <em>low</em>-dose, or a <em>control</em> that received no treatment. Initially, 10 female rats were assigned to each treatment, but three of the rats in the high-dose treatment died. This means that both the low-dose treatments and control treatment consist of 10 litters, but the high-dose only consists of 7 litters. This makes the data <em>unbalanced</em> in terms of litters-per-treatment. In addition, each litter varied in the number of pups, with the lowest being 2 pups and the highest being 18 pups. So the data are also unbalanced in terms of pups-per-litter. The experimental question concern the effect of the treatments on the birth weights of the pups, as well as whether this effect relates to additional factors such as the sex of the pups and the size of the litter.</p>
+<p>The data consists of the birth weight of rat pups from mothers who were assigned to one of three different treatments. These were either a <em>high</em>-dose, a <em>low</em>-dose, or a <em>control</em> that received no treatment. Initially, 10 female rats were assigned to each treatment, but three of the rats in the high-dose treatment died. This means that both the low-dose treatments and control treatment consist of 10 litters, but the high-dose only consists of 7 litters. This makes the data <em>unbalanced</em> in terms of litters-per-treatment. In addition, each litter varied in the number of pups, with the lowest being 2 pups and the highest being 18 pups. So the data are also unbalanced in terms of pups-per-litter. The experimental question concern the effect of the treatments on the birth weights of the pups, as well as whether this effect relates to additional factors such as the sex of the pups.</p>
 </section>
 <section id="downloading-and-wrangling-the-data">
 <h3>Downloading and Wrangling the Data<a class="headerlink" href="#downloading-and-wrangling-the-data" title="Link to this heading">#</a></h3>
-<p>The data are available for download from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a>. Unfortunately, the website does not allow direct downloading of the data through <code class="docutils literal notranslate"><span class="pre">R</span></code>, so you will need to visit the site and download it directly into the current working directory. Below, we read the data into <code class="docutils literal notranslate"><span class="pre">R</span></code> using <code class="docutils literal notranslate"><span class="pre">read.table()</span></code> and then print the first 24 rows.</p>
+<p>The data are available for download from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter3.html">here</a>. Unfortunately, the website does not allow direct downloading of the data through <code class="docutils literal notranslate"><span class="pre">R</span></code>, so you will need to visit the site and download it directly into the current working directory. Below, we read the data into <code class="docutils literal notranslate"><span class="pre">R</span></code> using <code class="docutils literal notranslate"><span class="pre">read.table()</span></code> and then print the first 26 rows (corresponding to the first 2 litters).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratpup</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&#39;rat_pup.dat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-<span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">24</span><span class="p">,]</span>
+<span class="n">ratpup</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">26</span><span class="p">,]</span>
 </pre></div>
 </div>
 </div>
@@ -439,6 +439,8 @@
 22     22   5.92 Female      2      14   Control
 23     23   6.04 Female      2      14   Control
 24     24   5.82 Female      2      14   Control
+25     25   6.04 Female      2      14   Control
+26     26   5.96 Female      2      14   Control
 </pre></div>
 </div>
 </div>
@@ -453,7 +455,7 @@
 </div>
 </div>
 </div>
-<p>Finally, we can briefly summarise the data and check it has the expected form.</p>
+<p>Finally, we can briefly summarise the data and check that everything is as expected.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">ratpup</span><span class="p">)</span>
@@ -485,10 +487,10 @@
 </section>
 <section id="identifying-the-structure">
 <h2>Identifying the Structure<a class="headerlink" href="#identifying-the-structure" title="Link to this heading">#</a></h2>
-<p>As a first step, we need to determine what <em>structure</em> we are dealing with, as this provides us with the first clues around how to start modelling these data. We ran through the process of doing this earlier, so this is simply an exercise in <em>applying</em> those steps. If you want, you could try and do this yourself first and see if you come to the same conclusion.</p>
+<p>As a first step, we need to determine what <em>structure</em> we are dealing with. We ran through the process of doing this earlier, so this is simply an exercise in <em>applying</em> those steps. We include discussion of each step below for completeness.</p>
 <section id="identify-the-units-of-analysis">
 <h3>1. Identify the Units of Analysis<a class="headerlink" href="#identify-the-units-of-analysis" title="Link to this heading">#</a></h3>
-<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to make inferences on. Based on the experimental question, we are interested in the birth weight of rat pups. So, in this example, our units are the <em>individual rat pups</em>. The primary question is about how the treatments affect the weight of the pups and so this is a fairly simple conclusion. This was also highlighted in the table of data structures from earlier, but hopefully it now makes sense <em>why</em> this is the case.</p>
+<p>To begin, we need to identify our <em>unit of analysis</em>. This is the element of the data that we are trying to <em>predict</em> or <em>model</em>. Based on the experimental question, we are interested in the birth weight of <em>rat pups</em>. So, in this example, our units are the <em>individual rat pups</em>. The primary question is about how the treatments affect the weight of the pups themselves.</p>
 </section>
 <section id="identify-the-rows-of-the-data">
 <h3>2. Identify the Rows of the Data<a class="headerlink" href="#identify-the-rows-of-the-data" title="Link to this heading">#</a></h3>
@@ -511,12 +513,11 @@
 </div>
 </div>
 </div>
-<p>As we can see, each row corresponds to only a <em>single unit</em> measured <em>once</em>. The birth weight of each pup was not taken multiple times, so this is <em>not</em> repeated measures. The weight was also not measured repeatedly across several hours/days/weeks and so this is <em>not</em> longitudinal data. However, this could still be <em>clustered</em> data. If there are <em>no</em> clusters, then we go back to the normal linear model as there is no obvious correlation structure. However, if there <em>are</em> clusters then we continue with multilevel/mixed-effects approaches.</p>
+<p>As we can see, each row corresponds to a <em>single unit</em> measured <em>once</em>. The birth weight of each pup was not taken multiple times, so these are <em>not</em> repeated measurements or longitudinal. So, these data are either <em>clustered</em> or there is <em>no dependency structure</em> and we go back to the normal linear model.</p>
 </section>
 <section id="identify-clusters">
 <h3>3. Identify Clusters<a class="headerlink" href="#identify-clusters" title="Link to this heading">#</a></h3>
-<p>In the final step, we need to determine if there are any clusters. At this point in our reasoning there <em>may</em> or may <em>not</em> be, and there may also be <em>several</em> nested clusters. Although we can do this purely by reasoning about the data, we can also do it more mechanistically by examining which variables are <em>constant</em> across multiple units.</p>
-<p>Looking again at the first few rows of data</p>
+<p>In the final step, we need to determine if there are any clusters. At this point in our reasoning there <em>may</em> or may <em>not</em> be, and there may also be <em>several</em> nested clusters. Looking again at the first few rows of data</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">ratpup</span><span class="p">)</span>
@@ -535,21 +536,21 @@
 </div>
 </div>
 </div>
-<p>we can see several variables that are constant across different values of <code class="docutils literal notranslate"><span class="pre">pup_id</span></code>: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect how correlated the measures of <code class="docutils literal notranslate"><span class="pre">weight</span></code> are between different pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, what elements of the data tie all those shared units together and which are simply labels that we give those units?</p>
-<p>We can also think back to the difference between something each unit <em>has</em> versus something each unit is <em>in</em>. Each rat pup <em>has</em> a sex, treatment and litter size, but is <em>in</em> a single litter. So, in this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
-<p>Here, we are trying to reason about whether some shared environment existed when the data were sampled that <em>could</em> make certain observations more similar than others. Clustering is all about how the data were collected. If we think about what elements were <em>independently selected</em>, the answer is that the <em>individual mother rats</em> were selected independently. These mother rats define the different litters. So the litters themselves are a random selection from all possible litters and the litters themselves are independent of each other. So, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself defines the <em>boundary of independence</em>. Anything that lives <em>within</em> a litter may be correlated but anything that lives <em>across</em> litters should be independent.</p>
+<p>we can see several variables that are constant across different pups: <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litter</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. The important question is whether any of these represent a <em>shared latent influence</em> that could affect how correlated the measures of <code class="docutils literal notranslate"><span class="pre">weight</span></code> are between different pups? If we think back to our <em>sticky notes</em> vs <em>rubber bands</em> metaphor, do any of these elements tie units together or are they simply labels that have been given those units?</p>
+<p>We can also think back to the difference between something each unit <em>HAS</em> versus something each unit is <em>IN</em>. Each rat pup <em>HAS</em> a sex, treatment and litter size, but is <em>IN</em> a single litter. So, in this example, <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">litsize</span></code> and <code class="docutils literal notranslate"><span class="pre">treatment</span></code> are all <em>sticky notes</em>. They are <em>labels</em> given to each individual unit. They describe a <em>characteristic</em> of the pup or a <em>characteristic</em> of their environment, but they do not tie them together. By comparison, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself is a <em>rubber band</em>. All pups from the same litter are tied together by the biological reality of sharing a mother, genes, siblings and rearing environment. So, our conclusion here, is that <code class="docutils literal notranslate"><span class="pre">litter</span></code> <em>is</em> a clustering variable. All pups from the same <code class="docutils literal notranslate"><span class="pre">litter</span></code> are therefore expected to be correlated to some degree.</p>
+<p>Remember, we are trying to reason about whether some shared environment existed when the data were sampled that <em>could</em> make certain observations more similar than others. Clustering is all about how the data were collected. If we think about what elements were <em>independently selected</em>, the answer is that the <em>individual mother rats</em> were selected independently. These mother rats define the different litters. So the litters themselves are a random selection from all possible litters and the litters themselves are independent of each other. So, <code class="docutils literal notranslate"><span class="pre">litter</span></code> itself defines a <em>boundary of dependence</em>. Anything that lives <em>within</em> a litter may be correlated but anything that lives <em>across</em> litters should be independent.</p>
+<p>Beyond litter, there are no higher-level clusters and so we conclude that we only have a <em>two-level</em> clustered dataset. However, for the purpose of illustration, we <em>could</em> imagine a similar experiment where each mother rat gave birth to <em>multiple</em> litters. In that situation, we would have measures of pup weights clustered within litters, but would also have litters clustered within mothers. This would then be an example of a <em>three-level</em> clustered dataset.</p>
 </section>
 </section>
 <section id="structure-to-hierarchy">
 <h2>Structure to Hierarchy<a class="headerlink" href="#structure-to-hierarchy" title="Link to this heading">#</a></h2>
-<p>Now that we have determined that we have a dataset with a single clustering variable of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we can start thinking hierarchically about the data. This will provide the framework for building our multilevel model. Eventually, we will collapse this to mixed-effects form to make it suitable for <code class="docutils literal notranslate"><span class="pre">lme()</span></code>.</p>
-<p>If we look back on our definitions of the levels from earlier in the lesson, we had:</p>
+<p>Now that we have determined that we have a dataset with a single clustering variable of <code class="docutils literal notranslate"><span class="pre">litter</span></code>, we can start thinking hierarchically about the data. This will provide the framework for building our multilevel model. If we look back on our definitions of the levels from earlier in the lesson, we had:</p>
 <ul class="simple">
 <li><p><strong>Level 1</strong> represents observations at the <em>most detailed</em> level of the dataset. For <em>clustered</em> data, this represents the <em>units</em> of analysis.</p></li>
 <li><p><strong>Level 2</strong> represents the next level in the hierarchy. For <em>clustered</em> data, this will be the <em>clusters of units</em>.</p></li>
 <li><p><strong>Level 3</strong> represents the next level in the hierarchy, above Level 2. For <em>clustered</em> data, this will represent <em>clusters of clusters</em>.</p></li>
 </ul>
-<p>So this tells us that, for this example, Level 1 represents the weight of <em>individual rat pups</em>. This is commensurate with the rows of the dataset identified earlier. Level 2 then represents the <em>litters</em> of rat pups, as these define the clusters of units. Level 3 does not exist for these data as we have no <em>clusters of clusters</em><a class="footnote-reference brackets" href="#level-foot" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>So this tells us that, for this example, Level 1 represents the weight of <em>individual rat pups</em>. This is commensurate with the rows of the dataset identified earlier. Level 2 then represents the <em>litters</em> of rat pups, as these define the clusters of units. Level 3 does not exist for these data as we have no <em>clusters of clusters</em>.</p>
 <p>Our final conclusion is therefore that we have a 2-level clustered dataset as follows</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -573,12 +574,21 @@
 </tbody>
 </table>
 </div>
-<hr class="footnotes docutils" />
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="level-foot" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
-<p>For the purpose of illustration, we <em>could</em> imagine a similar experiment where each mother rat gave birth to <em>multiple</em> litters. In that situation, we would have measures of pup weights at Level 1, litters of pups at Level 2 and mothers of litters at Level 3. So the litters would be further clustered inside each mother rat.</p>
-</aside>
+<aside class="topic">
+<p class="topic-title">What do you now know?</p>
+<p>In this section, we have discussed the example dataset we will be using for the model-building example. After reading this section, you should have a good sense of :</p>
+<ul class="simple">
+<li><p>The structure of the dataset, as well as the core experimental question.</p></li>
+<li><p>The idea that mixed-effects models still apply equally, even though we are dealing with <em>rats</em> instead of <em>humans</em>.</p></li>
+<li><p>How the process of structure-identification lead to the conclusions that:</p>
+<ul>
+<li><p>The <em>unit of analysis</em> is <em>rat pup</em></p></li>
+<li><p>The data are <em>clustered</em>, with <em>pups</em> inside <em>litters</em></p></li>
+</ul>
+</li>
+<li><p>How this structure can be translated into multilevel form, with Level 1 equaling the <em>individual pup</em> and Level 2 equaling each <em>litter</em>.</p></li>
+<li><p>What a <em>three-level</em> version of these data would look like.</p></li>
+</ul>
 </aside>
 </section>
 </section>
