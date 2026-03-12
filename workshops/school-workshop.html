@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PCHN63… Workshop: Three-level Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/test.css?v=90b7ad94" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workshops/school-workshop';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="More Advanced Uses of Mixed-effects Models - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1.data-structures.html">Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.building-mixed.html">Building Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.clustered-data-example.html">Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4.building-model-I.html">Building the Model I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5.building-model-II.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../6.building-model-III.html">Building the Model III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2Fworkshops/school-workshop.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/workshops/school-workshop.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>PCHN63… Workshop: Three-level Clustered Data Example</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pchn63-workshop-three-level-clustered-data-example">
+<h1>PCHN63… Workshop: Three-level Clustered Data Example<a class="headerlink" href="#pchn63-workshop-three-level-clustered-data-example" title="Link to this heading">#</a></h1>
+<section id="the-classroom-data">
+<h2>The Classroom Data<a class="headerlink" href="#the-classroom-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&#39;classroom.csv&#39;</span><span class="p">)</span>
+<span class="n">classroom</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep
+1    1        1      448       32  0.46     1.00       NA    0.082     2.00
+2    0        1      460      109 -0.27     1.00       NA    0.082     2.00
+3    1        1      511       56 -0.03     1.00       NA    0.082     2.00
+4    0        1      449       83 -0.38     2.00    -0.11    0.082     3.25
+5    0        1      425       53 -0.03     2.00    -0.11    0.082     3.25
+6    1        1      450       65  0.76     2.00    -0.11    0.082     3.25
+7    0        1      452       51 -0.03     2.00    -0.11    0.082     3.25
+8    0        1      443       66  0.20     2.00    -0.11    0.082     3.25
+9    1        1      422       88  0.64     2.00    -0.11    0.082     3.25
+10   0        1      480       -7  0.13     2.00    -0.11    0.082     3.25
+11   0        1      502       60  0.83     2.00    -0.11    0.082     3.25
+12   1        1      502       -2  0.06     1.00    -1.25    0.082     2.50
+13   0        0      430      101  0.30     1.00    -1.25    0.082     2.50
+14   0        0      526       30 -0.27     2.00    -0.72    0.082     2.33
+15   0        0      504       65  0.74     2.00    -0.72    0.082     2.33
+16   1        0      527       29  0.31     2.00    -0.72    0.082     2.33
+17   1        0      462      152  1.10     2.00    -0.72    0.082     2.33
+18   0        0      483       50  0.52    12.54       NA    0.082     2.30
+19   1        1      516       60 -1.15    12.54       NA    0.082     2.30
+20   0        1      476       74  0.00    12.54       NA    0.082     2.30
+21   0        1      453       91  0.39    12.54       NA    0.082     2.30
+22   0        0      494       68 -0.06    20.00     0.45    0.086     3.83
+23   0        0      416       94 -0.26    20.00     0.45    0.086     3.83
+24   0        0      456      120  0.64    20.00     0.45    0.086     3.83
+25   1        0      445       58 -0.37    20.00     0.45    0.086     3.83
+26   0        0      446      123  0.54     5.00     0.99    0.086     2.25
+27   1        0      479       88  2.21     5.00     0.99    0.086     2.25
+28   0        1      474       60 -0.43    19.00     1.61    0.086     3.00
+29   0        0      453      152  0.41    19.00     1.61    0.086     3.00
+30   0        0      494       96  0.06    19.00     1.61    0.086     3.00
+31   1        0      529       57 -0.09    19.00     1.61    0.086     3.00
+32   0        1      461      115  1.58    19.00     1.61    0.086     3.00
+33   0        0      482       58  0.12     8.00     1.14    0.086     2.17
+34   0        0      475       51 -0.35     8.00     1.14    0.086     2.17
+35   0        0      464      104  0.90     8.00     1.14    0.086     2.17
+36   1        1      496       65 -1.03    27.00    -1.05    0.365     2.00
+37   1        1      443       64 -0.80    27.00    -1.05    0.365     2.00
+38   0        1      455       59  1.04    27.00    -1.05    0.365     2.00
+39   0        1      447       70 -0.30    27.00    -1.05    0.365     2.00
+40   1        1      501       63  0.90    12.00       NA    0.365     2.00
+41   0        1      434     -110 -0.37    12.00       NA    0.365     2.00
+42   1        1      462       73 -0.03     3.00     0.22    0.511     3.75
+43   0        1      444      100 -0.03     3.00     0.22    0.511     3.75
+44   1        1      472       -9 -1.39     3.00     0.22    0.511     3.75
+45   1        1      450       67 -1.25     3.00     0.22    0.511     3.75
+46   0        1      463       58 -0.28     3.00     0.22    0.511     3.75
+47   1        1      381       72  0.41     3.00     0.22    0.511     3.75
+48   1        1      447       88  0.01     1.00    -0.86    0.044     1.75
+49   0        0      504      115 -0.31     1.00    -0.86    0.044     1.75
+50   0        1      483       62 -1.43    24.00    -0.73    0.044     4.00
+51   1        0      459       42 -0.73    24.00    -0.73    0.044     4.00
+52   0        0      472       88  1.31    24.00    -0.73    0.044     4.00
+53   1        0      475       71  0.09    24.00    -0.73    0.044     4.00
+54   0        1      468       74  0.35    24.00    -0.73    0.044     4.00
+55   0        0      467       67 -0.02    24.00    -0.73    0.044     4.00
+56   1        1      418       74  0.79    19.00    -0.98    0.044     2.50
+57   1        1      415       87 -0.69    19.00    -0.98    0.044     2.50
+58   0        1      444       83 -0.44    19.00    -0.98    0.044     2.50
+59   0        1      433       93  0.29    19.00    -0.98    0.044     2.50
+60   0        0      427       56 -1.30    13.00     1.53    0.148     2.33
+61   1        0      428       40 -0.32    13.00     1.53    0.148     2.33
+62   1        0      429       69  0.57    13.00     1.53    0.148     2.33
+63   1        0      497       75 -0.03     7.00       NA    0.148     2.50
+64   1        1      422       57  0.94     7.00       NA    0.148     2.50
+65   1        1      487       23 -1.02     7.00       NA    0.148     2.50
+66   0        1      435       53 -0.88     7.00       NA    0.148     2.50
+67   1        0      411      114 -0.78     8.00     1.10    0.148     2.33
+68   1        0      396       56 -0.98     8.00     1.10    0.148     2.33
+69   0        0      462       55  1.41    13.00    -0.79    0.148     3.33
+70   1        0      463       28 -0.35    13.00    -0.79    0.148     3.33
+71   0        1      444       61 -1.15    13.00    -0.79    0.148     3.33
+72   1        0      451       59 -0.46    13.00    -0.79    0.148     3.33
+73   1        0      437       57 -0.21    13.00    -0.79    0.148     3.33
+74   0        1      484       85  0.62     6.00    -0.14    0.085     2.00
+75   0        1      488       28  0.18     6.00    -0.14    0.085     2.00
+76   1        1      475      166 -0.14     6.00    -0.14    0.085     2.00
+77   0        1      544       61  1.11     6.00    -0.14    0.085     2.00
+78   1        1      467       47 -0.79     6.00    -0.14    0.085     2.00
+79   1        1      509       62  0.86     6.00    -0.07    0.085     2.00
+80   1        1      489       35 -0.11     6.00    -0.07    0.085     2.00
+81   1        1      448       52  0.15     6.00    -0.07    0.085     2.00
+82   0        1      516       70  0.28     6.00    -0.07    0.085     2.00
+83   0        1      489       11 -1.37    22.00     0.28    0.085     1.50
+   classid schoolid childid
+1      160        1       1
+2      160        1       2
+3      160        1       3
+4      217        1       4
+5      217        1       5
+6      217        1       6
+7      217        1       7
+8      217        1       8
+9      217        1       9
+10     217        1      10
+11     217        1      11
+12     197        2      12
+13     197        2      13
+14     211        2      14
+15     211        2      15
+16     211        2      16
+17     211        2      17
+18     307        2      18
+19     307        2      19
+20     307        2      20
+21     307        2      21
+22      11        3      22
+23      11        3      23
+24      11        3      24
+25      11        3      25
+26     137        3      26
+27     137        3      27
+28     145        3      28
+29     145        3      29
+30     145        3      30
+31     145        3      31
+32     145        3      32
+33     228        3      33
+34     228        3      34
+35     228        3      35
+36      48        4      36
+37      48        4      37
+38      48        4      38
+39      48        4      39
+40     179        4      40
+41     179        4      41
+42     299        5      42
+43     299        5      43
+44     299        5      44
+45     299        5      45
+46     299        5      46
+47     299        5      47
+48     254        6      48
+49     254        6      49
+50     286        6      50
+51     286        6      51
+52     286        6      52
+53     286        6      53
+54     286        6      54
+55     286        6      55
+56     291        6      56
+57     291        6      57
+58     291        6      58
+59     291        6      59
+60      89        7      60
+61      89        7      61
+62      89        7      62
+63     107        7      63
+64     107        7      64
+65     107        7      65
+66     107        7      66
+67     162        7      67
+68     162        7      68
+69     280        7      69
+70     280        7      70
+71     280        7      71
+72     280        7      72
+73     280        7      73
+74     147        8      74
+75     147        8      75
+76     147        8      76
+77     147        8      77
+78     147        8      78
+79     265        8      79
+80     265        8      80
+81     265        8      81
+82     265        8      82
+83     279        8      83
+ [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 1107 rows ]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./workshops"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

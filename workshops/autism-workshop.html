@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PCHN63… Workshop: Longitudinal Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/test.css?v=90b7ad94" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'workshops/autism-workshop';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../0.intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="More Advanced Uses of Mixed-effects Models - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../0.intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../1.data-structures.html">Data Structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.building-mixed.html">Building Mixed-effects Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.clustered-data-example.html">Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4.building-model-I.html">Building the Model I</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5.building-model-II.html">Building the Model II</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../6.building-model-III.html">Building the Model III</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../7.example-in-R.html">Implementing the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../summary.html">Summary</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/PCHN63112-Mixed-Models/mixed-effects-advanced/issues/new?title=Issue%20on%20page%20%2Fworkshops/autism-workshop.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/workshops/autism-workshop.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>PCHN63… Workshop: Longitudinal Data Example</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autism-data">The Autism Data</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pchn63-workshop-longitudinal-data-example">
+<h1>PCHN63… Workshop: Longitudinal Data Example<a class="headerlink" href="#pchn63-workshop-longitudinal-data-example" title="Link to this heading">#</a></h1>
+<section id="the-autism-data">
+<h2>The Autism Data<a class="headerlink" href="#the-autism-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&#39;autism.csv&#39;</span><span class="p">)</span>
+<span class="n">autism</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    age vsae sicdegp childid
+1     2    6       3       1
+2     3    7       3       1
+3     5   18       3       1
+4     9   25       3       1
+5    13   27       3       1
+6     2   17       3       3
+7     3   18       3       3
+8     5   12       3       3
+9     9   18       3       3
+10   13   24       3       3
+11    2   12       3       4
+12    3   14       3       4
+13    5   38       3       4
+14    9  114       3       4
+15    2   17       3      19
+16    3   27       3      19
+17    9   75       3      19
+18   13  107       3      19
+19    2   11       3      21
+20    3   21       3      21
+21    9   50       3      21
+22   13   69       3      21
+23    2    8       3      27
+24    3   17       3      27
+25    5   24       3      27
+26    9   31       3      27
+27   13   29       3      27
+28    2   11       3      36
+29    3   17       3      36
+30    9   15       3      36
+31    2   10       3      42
+32    3   27       3      42
+33    9   77       3      42
+34   13  124       3      42
+35    2   13       3      46
+36    3   26       3      46
+37    5   71       3      46
+38    9   31       3      46
+39   13   77       3      46
+40    2   19       3      48
+41    3   22       3      48
+42    5   26       3      48
+43    9   52       3      48
+44    2    9       3      49
+45    3   26       3      49
+46    5   77       3      49
+47    9   81       3      49
+48   13  153       3      49
+49    2   10       3      51
+50    3   20       3      51
+51    5   21       3      51
+52    3   16       3      60
+53    9   34       3      60
+54   13   66       3      60
+55    2   16       3      61
+56    5   33       3      61
+57    2   10       3      62
+58    3   19       3      62
+59    5   25       3      62
+60    9   67       3      62
+61   13   88       3      62
+62    2   11       3      78
+63    3   12       3      78
+64    5   15       3      78
+65    2   12       3      95
+66    3   18       3      95
+67    5   38       3      95
+68    9   73       3      95
+69   13  104       3      95
+70    2   14       3      97
+71    3   11       3      97
+72    5   25       3      97
+73    9   67       3      97
+74   13   50       3      97
+75    2   15       3     100
+76    3   24       3     100
+77    5   37       3     100
+78    9  135       3     100
+79    2   17       3     105
+80    5   65       3     105
+81    9  171       3     105
+82    2   10       3     106
+83    3   39       3     106
+84    9   63       3     106
+85   13  107       3     106
+86    2   15       3     115
+87    3   24       3     115
+88    9   71       3     115
+89   13  135       3     115
+90    2   20       3     122
+91    3   21       3     122
+92    5   34       3     122
+93    9   65       3     122
+94   13   81       3     122
+95    2    9       3     123
+96    3   13       3     123
+97    9   27       3     123
+98   13   66       3     123
+99    2   13       3     131
+100   3   31       3     131
+101   5   22       3     131
+102   9   50       3     131
+103  13   71       3     131
+104   2   12       3     133
+105   3   18       3     133
+106   5   22       3     133
+107   2    9       3     136
+108   3   33       3     136
+109   9  116       3     136
+110  13  192       3     136
+111   2   12       3     141
+112   3   15       3     141
+113   5   26       3     141
+114   9   53       3     141
+115  13   72       3     141
+116   2   18       3     151
+117   3   20       3     151
+118   5   33       3     151
+119   9  101       3     151
+120  13  165       3     151
+121   2   15       3     154
+122   3   20       3     154
+123   5   36       3     154
+124   2   13       3     158
+125   3   24       3     158
+126   5   37       3     158
+127   9   57       3     158
+128   2   12       3     174
+129   3   20       3     174
+130   5   39       3     174
+131   9   90       3     174
+132   2   15       3     180
+133   3   63       3     180
+134   9   68       3     180
+135  13  165       3     180
+136   2   11       3     182
+137   3   19       3     182
+138   9   26       3     182
+139  13   39       3     182
+140   2   15       3     183
+141   3   22       3     183
+142   5   35       3     183
+143   9   65       3     183
+144  13   62       3     183
+145   2    8       3     190
+146   3   22       3     190
+147   5   35       3     190
+148   9   69       3     190
+149  13  130       3     190
+150   2    8       3     195
+151   3   19       3     195
+152   9   59       3     195
+153   2    8       3     198
+154   3   14       3     198
+155   9   34       3     198
+156  13   55       3     198
+157   2   12       3     201
+158   3   14       3     201
+159   5   38       3     201
+160   9   93       3     201
+161   2    8       3     207
+162   3   14       3     207
+163   9   22       3     207
+164  13   48       3     207
+165   2   15       3     211
+166   2   12       2       9
+167   3   21       2       9
+168   9   66       2       9
+169  13   68       2       9
+170   2    7       2      12
+171   3   10       2      12
+172   5    8       2      12
+173   2   12       2      14
+174   3   19       2      14
+175   5   14       2      14
+176   9   28       2      14
+177  13   68       2      14
+178   2   13       2      15
+179   3    8       2      15
+180   5   29       2      15
+181   9   24       2      15
+182  13   44       2      15
+183   2    7       2      16
+184   3    6       2      16
+185   9   39       2      16
+186  13   24       2      16
+187   2    5       2      17
+188   3   10       2      17
+189   5   29       2      17
+190   9   32       2      17
+191  13   67       2      17
+192   2   10       2      18
+193   3    6       2      18
+194   2   11       2      24
+195   3   13       2      24
+196   5   20       2      24
+197   9   33       2      24
+198   2    3       2      28
+199   3   10       2      28
+200   5   17       2      28
+201  13   42       2      28
+202   2   10       2      30
+203   3   15       2      30
+204   9   40       2      30
+205  13  101       2      30
+206   2    7       2      33
+207   3   10       2      33
+208   5   12       2      33
+209   9   15       2      33
+210  13   10       2      33
+211   2    7       2      35
+212   3   10       2      35
+213   2    6       2      37
+214  13   15       2      37
+215   2    7       2      39
+216   3   12       2      39
+217   5    9       2      39
+218   9    6       2      39
+219   2    8       2      40
+220   3   22       2      40
+221   5   24       2      40
+222   9   54       2      40
+223  13   54       2      40
+224   2   17       2      44
+225   3   18       2      44
+226   9   21       2      44
+227   2    8       2      47
+228   3    9       2      47
+229   5   19       2      47
+230   2    7       2      55
+231   3    9       2      55
+232   5   13       2      55
+233   9   29       2      55
+234  13   36       2      55
+235   2   10       2      58
+236   3   19       2      58
+237   9   53       2      58
+238  13   95       2      58
+239   2    6       2      63
+240   3    7       2      63
+241   5   14       2      63
+242   9   32       2      63
+243   2    7       2      64
+244   3   14       2      64
+245   5    9       2      64
+246  13   40       2      64
+247   2    6       2      65
+248   3   10       2      65
+249   5   11       2      65
+250   9   15       2      65
+ [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 362 rows ]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./workshops"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autism-data">The Autism Data</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Dr Martyn McFarquhar
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
