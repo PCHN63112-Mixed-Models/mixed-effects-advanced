@@ -6,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>PCHN63… Workshop: Three-level Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>PCHN63112 Workshop: Three-level Clustered Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -16,31 +16,34 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/test.css?v=90b7ad94" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -51,18 +54,21 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'workshops/school-workshop';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -78,19 +84,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -98,7 +93,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -106,8 +100,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -125,7 +119,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -155,21 +150,17 @@
     
     
     <img src="../_static/logo.png" class="logo__image only-light" alt="More Advanced Uses of Mixed-effects Models - Home"/>
-    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="More Advanced Uses of Mixed-effects Models - Home"/>`);</script>
+    <img src="../_static/logo.png" class="logo__image only-dark pst-js-only" alt="More Advanced Uses of Mixed-effects Models - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -197,9 +188,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -343,24 +339,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -374,7 +362,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>PCHN63… Workshop: Three-level Clustered Data Example</h1>
+    <h1>PCHN63112 Workshop: Three-level Clustered Data Example</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -384,7 +372,16 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -396,102 +393,33 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="pchn63-workshop-three-level-clustered-data-example">
-<h1>PCHN63… Workshop: Three-level Clustered Data Example<a class="headerlink" href="#pchn63-workshop-three-level-clustered-data-example" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-three-level-clustered-data-example">
+<h1>PCHN63112 Workshop: Three-level Clustered Data Example<a class="headerlink" href="#pchn63112-workshop-three-level-clustered-data-example" title="Link to this heading">#</a></h1>
+<p>In this example,we will examine building a mixed-effects model for clustered data that contains three levels of variation. This will demonstrate how the multilevel framework extends beyond two levels, as well as how this can be integrated into a mixed-effects model.</p>
 <section id="the-classroom-data">
 <h2>The Classroom Data<a class="headerlink" href="#the-classroom-data" title="Link to this heading">#</a></h2>
+<p>The data we will use concern measurements of improvement in maths ability in a selection of students from different classrooms across different schools. In total, these data contains measurements from 1,190 students from 312 classrooms from 107 schools. Importantly, these data were measured from first-graders in the USA (ages 6-7). As such, all students stay within the <em>same</em> classroom with the <em>same</em> teacher for the whole year. A wide variety of additional variables were captured describing the local area of the school, the teacher’s experience and maths knowledge, and the student’s demographic details.</p>
+<p>The data can be downloaded from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter4.html">here</a>. Once downloaded to the current working directory, the code below will read the data into <code class="docutils literal notranslate"><span class="pre">R</span></code> and then print values for the first two classrooms from the first school</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&#39;classroom.csv&#39;</span><span class="p">)</span>
-<span class="n">classroom</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">classroom</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">11</span><span class="p">,])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep
-1    1        1      448       32  0.46     1.00       NA    0.082     2.00
-2    0        1      460      109 -0.27     1.00       NA    0.082     2.00
-3    1        1      511       56 -0.03     1.00       NA    0.082     2.00
-4    0        1      449       83 -0.38     2.00    -0.11    0.082     3.25
-5    0        1      425       53 -0.03     2.00    -0.11    0.082     3.25
-6    1        1      450       65  0.76     2.00    -0.11    0.082     3.25
-7    0        1      452       51 -0.03     2.00    -0.11    0.082     3.25
-8    0        1      443       66  0.20     2.00    -0.11    0.082     3.25
-9    1        1      422       88  0.64     2.00    -0.11    0.082     3.25
-10   0        1      480       -7  0.13     2.00    -0.11    0.082     3.25
-11   0        1      502       60  0.83     2.00    -0.11    0.082     3.25
-12   1        1      502       -2  0.06     1.00    -1.25    0.082     2.50
-13   0        0      430      101  0.30     1.00    -1.25    0.082     2.50
-14   0        0      526       30 -0.27     2.00    -0.72    0.082     2.33
-15   0        0      504       65  0.74     2.00    -0.72    0.082     2.33
-16   1        0      527       29  0.31     2.00    -0.72    0.082     2.33
-17   1        0      462      152  1.10     2.00    -0.72    0.082     2.33
-18   0        0      483       50  0.52    12.54       NA    0.082     2.30
-19   1        1      516       60 -1.15    12.54       NA    0.082     2.30
-20   0        1      476       74  0.00    12.54       NA    0.082     2.30
-21   0        1      453       91  0.39    12.54       NA    0.082     2.30
-22   0        0      494       68 -0.06    20.00     0.45    0.086     3.83
-23   0        0      416       94 -0.26    20.00     0.45    0.086     3.83
-24   0        0      456      120  0.64    20.00     0.45    0.086     3.83
-25   1        0      445       58 -0.37    20.00     0.45    0.086     3.83
-26   0        0      446      123  0.54     5.00     0.99    0.086     2.25
-27   1        0      479       88  2.21     5.00     0.99    0.086     2.25
-28   0        1      474       60 -0.43    19.00     1.61    0.086     3.00
-29   0        0      453      152  0.41    19.00     1.61    0.086     3.00
-30   0        0      494       96  0.06    19.00     1.61    0.086     3.00
-31   1        0      529       57 -0.09    19.00     1.61    0.086     3.00
-32   0        1      461      115  1.58    19.00     1.61    0.086     3.00
-33   0        0      482       58  0.12     8.00     1.14    0.086     2.17
-34   0        0      475       51 -0.35     8.00     1.14    0.086     2.17
-35   0        0      464      104  0.90     8.00     1.14    0.086     2.17
-36   1        1      496       65 -1.03    27.00    -1.05    0.365     2.00
-37   1        1      443       64 -0.80    27.00    -1.05    0.365     2.00
-38   0        1      455       59  1.04    27.00    -1.05    0.365     2.00
-39   0        1      447       70 -0.30    27.00    -1.05    0.365     2.00
-40   1        1      501       63  0.90    12.00       NA    0.365     2.00
-41   0        1      434     -110 -0.37    12.00       NA    0.365     2.00
-42   1        1      462       73 -0.03     3.00     0.22    0.511     3.75
-43   0        1      444      100 -0.03     3.00     0.22    0.511     3.75
-44   1        1      472       -9 -1.39     3.00     0.22    0.511     3.75
-45   1        1      450       67 -1.25     3.00     0.22    0.511     3.75
-46   0        1      463       58 -0.28     3.00     0.22    0.511     3.75
-47   1        1      381       72  0.41     3.00     0.22    0.511     3.75
-48   1        1      447       88  0.01     1.00    -0.86    0.044     1.75
-49   0        0      504      115 -0.31     1.00    -0.86    0.044     1.75
-50   0        1      483       62 -1.43    24.00    -0.73    0.044     4.00
-51   1        0      459       42 -0.73    24.00    -0.73    0.044     4.00
-52   0        0      472       88  1.31    24.00    -0.73    0.044     4.00
-53   1        0      475       71  0.09    24.00    -0.73    0.044     4.00
-54   0        1      468       74  0.35    24.00    -0.73    0.044     4.00
-55   0        0      467       67 -0.02    24.00    -0.73    0.044     4.00
-56   1        1      418       74  0.79    19.00    -0.98    0.044     2.50
-57   1        1      415       87 -0.69    19.00    -0.98    0.044     2.50
-58   0        1      444       83 -0.44    19.00    -0.98    0.044     2.50
-59   0        1      433       93  0.29    19.00    -0.98    0.044     2.50
-60   0        0      427       56 -1.30    13.00     1.53    0.148     2.33
-61   1        0      428       40 -0.32    13.00     1.53    0.148     2.33
-62   1        0      429       69  0.57    13.00     1.53    0.148     2.33
-63   1        0      497       75 -0.03     7.00       NA    0.148     2.50
-64   1        1      422       57  0.94     7.00       NA    0.148     2.50
-65   1        1      487       23 -1.02     7.00       NA    0.148     2.50
-66   0        1      435       53 -0.88     7.00       NA    0.148     2.50
-67   1        0      411      114 -0.78     8.00     1.10    0.148     2.33
-68   1        0      396       56 -0.98     8.00     1.10    0.148     2.33
-69   0        0      462       55  1.41    13.00    -0.79    0.148     3.33
-70   1        0      463       28 -0.35    13.00    -0.79    0.148     3.33
-71   0        1      444       61 -1.15    13.00    -0.79    0.148     3.33
-72   1        0      451       59 -0.46    13.00    -0.79    0.148     3.33
-73   1        0      437       57 -0.21    13.00    -0.79    0.148     3.33
-74   0        1      484       85  0.62     6.00    -0.14    0.085     2.00
-75   0        1      488       28  0.18     6.00    -0.14    0.085     2.00
-76   1        1      475      166 -0.14     6.00    -0.14    0.085     2.00
-77   0        1      544       61  1.11     6.00    -0.14    0.085     2.00
-78   1        1      467       47 -0.79     6.00    -0.14    0.085     2.00
-79   1        1      509       62  0.86     6.00    -0.07    0.085     2.00
-80   1        1      489       35 -0.11     6.00    -0.07    0.085     2.00
-81   1        1      448       52  0.15     6.00    -0.07    0.085     2.00
-82   0        1      516       70  0.28     6.00    -0.07    0.085     2.00
-83   0        1      489       11 -1.37    22.00     0.28    0.085     1.50
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep
+1    1        1      448       32  0.46        1       NA    0.082     2.00
+2    0        1      460      109 -0.27        1       NA    0.082     2.00
+3    1        1      511       56 -0.03        1       NA    0.082     2.00
+4    0        1      449       83 -0.38        2    -0.11    0.082     3.25
+5    0        1      425       53 -0.03        2    -0.11    0.082     3.25
+6    1        1      450       65  0.76        2    -0.11    0.082     3.25
+7    0        1      452       51 -0.03        2    -0.11    0.082     3.25
+8    0        1      443       66  0.20        2    -0.11    0.082     3.25
+9    1        1      422       88  0.64        2    -0.11    0.082     3.25
+10   0        1      480       -7  0.13        2    -0.11    0.082     3.25
+11   0        1      502       60  0.83        2    -0.11    0.082     3.25
    classid schoolid childid
 1      160        1       1
 2      160        1       2
@@ -504,83 +432,255 @@ document.write(`
 9      217        1       9
 10     217        1      10
 11     217        1      11
-12     197        2      12
-13     197        2      13
-14     211        2      14
-15     211        2      15
-16     211        2      16
-17     211        2      17
-18     307        2      18
-19     307        2      19
-20     307        2      20
-21     307        2      21
-22      11        3      22
-23      11        3      23
-24      11        3      24
-25      11        3      25
-26     137        3      26
-27     137        3      27
-28     145        3      28
-29     145        3      29
-30     145        3      30
-31     145        3      31
-32     145        3      32
-33     228        3      33
-34     228        3      34
-35     228        3      35
-36      48        4      36
-37      48        4      37
-38      48        4      38
-39      48        4      39
-40     179        4      40
-41     179        4      41
-42     299        5      42
-43     299        5      43
-44     299        5      44
-45     299        5      45
-46     299        5      46
-47     299        5      47
-48     254        6      48
-49     254        6      49
-50     286        6      50
-51     286        6      51
-52     286        6      52
-53     286        6      53
-54     286        6      54
-55     286        6      55
-56     291        6      56
-57     291        6      57
-58     291        6      58
-59     291        6      59
-60      89        7      60
-61      89        7      61
-62      89        7      62
-63     107        7      63
-64     107        7      64
-65     107        7      65
-66     107        7      66
-67     162        7      67
-68     162        7      68
-69     280        7      69
-70     280        7      70
-71     280        7      71
-72     280        7      72
-73     280        7      73
-74     147        8      74
-75     147        8      75
-76     147        8      76
-77     147        8      77
-78     147        8      78
-79     265        8      79
-80     265        8      80
-81     265        8      81
-82     265        8      82
-83     279        8      83
- [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 1107 rows ]
 </pre></div>
 </div>
 </div>
 </div>
+<p>There are quite a few variables here, so we split them into those that relate to each <em>school</em> as a whole, each <em>classroom</em> as a whole and each <em>pupil</em> as a whole.</p>
+<ul class="simple">
+<li><p>School</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">schoolid</span></code>: the unique index of each <em>school</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">housepov</span></code>: proportion of households in the local area below the poverty line</p></li>
+</ul>
+</li>
+<li><p>Classroom</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">classid</span></code>: the unique index of each <em>classroom</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yearstea</span></code>: the teacher’s years of experience</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mathprep</span></code>: the amount of training in mathematics education the teacher has undertaken</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mathknow</span></code>: the amount of mathematics knowledge the teacher has</p></li>
+</ul>
+</li>
+<li><p>Student</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">childid</span></code>: the unique index of each <em>student</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mathgain</span></code>: <strong>the student’s gain in maths achievement over the year</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sex</span></code>: the student’s sex</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mathkind</span></code>: the student’s maths score in the previous (kindergarten) year</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">minority</span></code>: whether the student is from an ethnic minority background</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ses</span></code>: the student’s socioeconomic status</p></li>
+</ul>
+</li>
+</ul>
+<p>Some of these variables are indices to keep things organised and to allow us to define different levels of the data: <code class="docutils literal notranslate"><span class="pre">schoolid</span></code>, <code class="docutils literal notranslate"><span class="pre">classid</span></code>, <code class="docutils literal notranslate"><span class="pre">childid</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">mathgain</span></code>, highlighted in <strong>bold</strong>, indicative of how much the student has improved over the year spent in one particular classroom. This leaves <em>eight</em> potential predictor variables that could explain why some students improve more than others.</p>
+<p>As these data are already long-formatted, we just need to convert the relevant variables to factors. We also choose to relabel both <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code> to make their meaning clearer</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="p">)</span>
+<span class="n">classroom</span><span class="o">$</span><span class="n">schoolid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">schoolid</span><span class="p">)</span>
+<span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span>
+<span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="p">)</span>
+
+<span class="nf">levels</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;boy&#39;</span><span class="p">,</span><span class="s">&#39;girl&#39;</span><span class="p">)</span>
+<span class="nf">levels</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;nonminority&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;minority&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now briefly summarise all the variables. At this stage, we would usually produce some plots and do further data checking and wrangling, but we will leave this step to one side to keep the example shorter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">classroom</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex             minority      mathkind        mathgain      
+ boy :588   nonminority:384   Min.   :290.0   Min.   :-110.00  
+ girl:602   minority   :806   1st Qu.:439.2   1st Qu.:  35.00  
+                              Median :466.0   Median :  56.00  
+                              Mean   :466.7   Mean   :  57.57  
+                              3rd Qu.:495.0   3rd Qu.:  77.00  
+                              Max.   :629.0   Max.   : 253.00  
+                                                               
+      ses              yearstea        mathknow          housepov     
+ Min.   :-1.61000   Min.   : 0.00   Min.   :-2.5000   Min.   :0.0120  
+ 1st Qu.:-0.49000   1st Qu.: 4.00   1st Qu.:-0.7200   1st Qu.:0.0850  
+ Median :-0.03000   Median :10.00   Median :-0.1300   Median :0.1270  
+ Mean   :-0.01298   Mean   :12.21   Mean   : 0.0312   Mean   :0.1782  
+ 3rd Qu.: 0.39750   3rd Qu.:20.00   3rd Qu.: 0.8500   3rd Qu.:0.2550  
+ Max.   : 3.21000   Max.   :40.00   Max.   : 2.6100   Max.   :0.5640  
+                                    NA&#39;s   :109                       
+    mathprep        classid        schoolid       childid      
+ Min.   :1.000   26     :  10   11     :  31   Min.   :   1.0  
+ 1st Qu.:2.000   42     :  10   12     :  27   1st Qu.: 298.2  
+ Median :2.300   13     :   9   71     :  27   Median : 595.5  
+ Mean   :2.612   189    :   9   76     :  27   Mean   : 595.5  
+ 3rd Qu.:3.000   205    :   9   77     :  24   3rd Qu.: 892.8  
+ Max.   :6.000   253    :   9   31     :  22   Max.   :1190.0  
+                 (Other):1134   (Other):1032                   
+</pre></div>
+</div>
+</div>
+</div>
+<p>Some elements of note from these summaries:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sex</span></code> is balanced, so there is unlikely to be a bias here in terms of sex-related differences in attainment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">minority</span></code> indicates that the majority of the sample are from ethnic minority backgrounds (<span class="math notranslate nohighlight">\(806/(806+384) \times 100 = 67.73\%\)</span>).</p></li>
+<li><p>Some children have <em>negative</em> <code class="docutils literal notranslate"><span class="pre">mathgain</span></code> scores, indicating that they got <em>worse</em> over the year.</p></li>
+<li><p>There is a wide variation in <code class="docutils literal notranslate"><span class="pre">yearstea</span></code>, with some teachers having 40 years of experience and others having 0 years of teaching.</p></li>
+<li><p>There is also wide variation in <code class="docutils literal notranslate"><span class="pre">housepov</span></code>, with some school in area with very little poverty (1% of local houses) and some schools in areas with high poverty (56% of local houses).</p></li>
+<li><p>There are missing values in <code class="docutils literal notranslate"><span class="pre">mathknow</span></code>, as some teachers were not measured.</p></li>
+</ul>
+<section id="model-notation">
+<h3>Model Notation<a class="headerlink" href="#model-notation" title="Link to this heading">#</a></h3>
+<p>As these data are a mixture of <em>categorical</em> and <em>continuous</em> variables, a more general regression framework will be needed when writing this model. In what follows, we will use <em>descriptive labels</em> rather than greek letter for categorical variables (e.g. <span class="math notranslate nohighlight">\(\text{sex}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>) and will introduce <span class="math notranslate nohighlight">\(\beta\)</span>-coefficients for continuous variables (e.g. <span class="math notranslate nohighlight">\(\beta_{1} \times \text{mathknow}_{i}\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which terms are categorical and which are continuous. In reality, the whole model is fit as a regression with dummy variables in place of the categorical predictors. However, it can be less clear to write the model this way, even if this is the reality of how it is fit.</p>
+</section>
+</section>
+<section id="data-structure">
+<h2>Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h2>
+<p>Although we already know what structure these data have, we will run through the logic for completeness.</p>
+<p>Firstly, we need to determine our <em>unit of analysis</em>. In this example, our model is trying to explain improvements in maths scores in <em>students</em>. The entities that our model is describing are the <em>students</em> themselves, so these are our units of analysis.</p>
+<p>Secondly, we determine what each <em>row</em> of the long-formatted data represents in relation to the units of analysis. Examining the first few rows</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="n">classroom</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
+1 girl minority      448       32  0.46        1       NA    0.082     2.00     160        1       1
+2  boy minority      460      109 -0.27        1       NA    0.082     2.00     160        1       2
+3 girl minority      511       56 -0.03        1       NA    0.082     2.00     160        1       3
+4  boy minority      449       83 -0.38        2    -0.11    0.082     3.25     217        1       4
+5  boy minority      425       53 -0.03        2    -0.11    0.082     3.25     217        1       5
+6 girl minority      450       65  0.76        2    -0.11    0.082     3.25     217        1       6
+</pre></div>
+</div>
+</div>
+</div>
+<p>we can see that each row corresponds to a single unit (<em>student</em>) measured <em>once</em>. So these are neither repeated measurements or longitudinal data.</p>
+<p>Finally, we need to determine whether there are any <em>clustering</em> variables that represent a higher-order dependency structure in these data. From what we can see above, there are several variables that are <em>constant</em> across multiple students: <code class="docutils literal notranslate"><span class="pre">yearstea</span></code>, <code class="docutils literal notranslate"><span class="pre">mathknow</span></code>, <code class="docutils literal notranslate"><span class="pre">housepov</span></code>, <code class="docutils literal notranslate"><span class="pre">mathprep</span></code>, <code class="docutils literal notranslate"><span class="pre">classid</span></code> and <code class="docutils literal notranslate"><span class="pre">schoolid</span></code>. Of those, only <code class="docutils literal notranslate"><span class="pre">classid</span></code> and <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> are categorical and so are the only candidates for either <em>grouping variables</em> or <em>clustering variables</em>.</p>
+<p>In terms of thinking about clustering variables as representative of a <em>shared environment</em>, both <code class="docutils literal notranslate"><span class="pre">classid</span></code> and <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> fit the description. These are both elements that each student is <em>IN</em> rather than something each student <em>HAS</em>. Students within a classroom may be correlated by virtue of sharing a teacher, sharing the same corpus of classmates and sharing the same teaching environment. Similarly, classrooms within a school may be correlated by virtue of sharing the same physical location, the same school budget and the same senior members of staff. The different schools represent the top boundary of dependence, because different schools will be independent of each other. Within a school, each classroom will have a degree of independence, as these are separate entities. However, they will also share a degree of dependence due to being within the same school. So this is a separate boundary of dependence. We imagine these as smaller covariance blocks within a larger covariance block.</p>
+<p>Based on this, we can construct the following table of the <em>levels</em> of these data, using the guidance in the lesson</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Data Type</strong></p></th>
+<th class="head"><p><strong>Clustered</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Dataset</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">classroom</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Level 1</strong></p></td>
+<td><p><em>Student</em></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Level 2</strong></p></td>
+<td><p>Classroom</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Level 3</strong></p></td>
+<td><p>School</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We could also imagine a more complex version of these data, where each student was measured at multiple points within a year. This would then be <em>longitudinal</em> clustered data with <em>four</em> levels. We would have the longitudinal measurements at Level 1, student at Level 2, classroom at Level 3 and school at Level 4. This would lead to quite a complex dependency structure that would be very difficult to reason about and build using a method like GLS. However, the mixed-effects framework allows us to build this carefully in layers, without every having to touch the covariance structure.</p>
+</section>
+<section id="model-building">
+<h2>Model Building<a class="headerlink" href="#model-building" title="Link to this heading">#</a></h2>
+<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and ready for modelling.</p>
+<section id="step-i-a-single-dependency-structure">
+<h3>Step I: A Single Dependency Structure<a class="headerlink" href="#step-i-a-single-dependency-structure" title="Link to this heading">#</a></h3>
+<p>We start by isolating a single dependency structure. This needs to be at the <em>lowest</em> level, with no further dependency structures within. In this example, this is a single <em>classroom</em>. We choose <code class="docutils literal notranslate"><span class="pre">classid</span> <span class="pre">==</span> <span class="pre">'6'</span></code> for this purpose, after examining several candidates. This was chosen because it contains a reasonable number of measurements (5 students), has no missing data and has representation of <em>both</em> levels of <code class="docutils literal notranslate"><span class="pre">minority</span></code>. During this exploration, it was notable that many classrooms are <em>constant</em> in terms of <code class="docutils literal notranslate"><span class="pre">minority</span></code>, which will be important to bear in mind when building the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">classroom</span><span class="p">,</span><span class="w"> </span><span class="n">classid</span><span class="o">==</span><span class="s">&#39;6&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">classroom.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex    minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
+251  boy    minority      431       36 -0.32        8    -0.12    0.187     3.75       6       21     251
+252  boy    minority      454       23 -0.03        8    -0.12    0.187     3.75       6       21     252
+253  boy nonminority      452       34  0.28        8    -0.12    0.187     3.75       6       21     253
+254 girl    minority      448       44  0.31        8    -0.12    0.187     3.75       6       21     254
+255 girl nonminority      405       60  0.33        8    -0.12    0.187     3.75       6       21     255
+</pre></div>
+</div>
+</div>
+</div>
+<p>In terms of the variables suitable for an individual model of a single classroom, we note that many of the variables above are <em>constant</em> because they are defined either at the level of a classroom as a whole, or the school as a whole. As such, they are not suitable for modelling the individual students. We remove these below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">classroom</span><span class="p">,</span><span class="w"> </span><span class="n">classid</span><span class="o">==</span><span class="s">&#39;6&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">yearstea</span><span class="p">,</span><span class="o">-</span><span class="n">mathknow</span><span class="p">,</span><span class="o">-</span><span class="n">housepov</span><span class="p">,</span><span class="o">-</span><span class="n">mathprep</span><span class="p">,</span><span class="o">-</span><span class="n">classid</span><span class="p">,</span><span class="o">-</span><span class="n">schoolid</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">classroom.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex    minority mathkind mathgain   ses childid
+251  boy    minority      431       36 -0.32     251
+252  boy    minority      454       23 -0.03     252
+253  boy nonminority      452       34  0.28     253
+254 girl    minority      448       44  0.31     254
+255 girl nonminority      405       60  0.33     255
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on this, our basic model for a single classroom is</p>
+<div class="math notranslate nohighlight">
+\[
+\text{mathgain}_{ijk} = \text{mean} + \text{sex}_{j} + \text{minority}_{k} + (\beta_{1} \times \text{mathkind}_{i}) + (\beta_{2} \times \text{ses}_{i}) + \eta_{ijk}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes the student, <span class="math notranslate nohighlight">\(j\)</span> indexes <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <span class="math notranslate nohighlight">\(k\)</span> indexes <code class="docutils literal notranslate"><span class="pre">minority</span></code>. Both <span class="math notranslate nohighlight">\(\text{sex}_{j}\)</span> and <span class="math notranslate nohighlight">\(\text{minority}_{k}\)</span> are indicative of categorical effects, whereas <span class="math notranslate nohighlight">\(\text{mathkind}_{i}\)</span> and <span class="math notranslate nohighlight">\(\text{ses}_{i}\)</span> are indicative of continuous predictors with associated regression slopes <span class="math notranslate nohighlight">\(\beta_{1}\)</span> and <span class="math notranslate nohighlight">\(\beta_{2}\)</span>.</p>
+<p>If we attempt top fit this model, it will not work because we have <em>five</em> parameters and only <em>five</em> datapoints. There will be no variance left over and the fit will be perfect. We might think this is just a problem with the particular classroom we selected. However, the data are quite limited for most of the classrooms in this dataset. To see this, we use the code below to select 20 random classrooms and then plot them as panels with <code class="docutils literal notranslate"><span class="pre">sex</span></code> on the <span class="math notranslate nohighlight">\(x\)</span>-axis and different symbols used to indicate the levels of <code class="docutils literal notranslate"><span class="pre">minority</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span>
+
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<span class="n">keep.IDs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="p">),</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">      </span><span class="c1"># select 20 random class IDs</span>
+
+<span class="nf">xyplot</span><span class="p">(</span><span class="n">mathkind</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">classid</span><span class="p">,</span><span class="w">                       </span><span class="c1"># x-axis=sex, panels=classroom</span>
+<span class="w">  </span><span class="n">groups</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">minority</span><span class="p">,</span><span class="w">                                 </span><span class="c1"># minority different symbols</span>
+<span class="w">  </span><span class="n">data</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">classroom</span><span class="p">,</span><span class="w"> </span><span class="n">classid</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">keep.IDs</span><span class="p">),</span><span class="w"> </span><span class="c1"># only random class IDs</span>
+<span class="w">  </span><span class="n">type</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;p&quot;</span><span class="p">,</span><span class="w">                                      </span><span class="c1"># points (not joined)</span>
+<span class="w">  </span><span class="n">auto.key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w">                                     </span><span class="c1"># add key</span>
+<span class="w">  </span><span class="n">jitter.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w">                                     </span><span class="c1"># jitter points for visibility</span>
+<span class="w">  </span><span class="n">par.settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<span class="w">    </span><span class="n">superpose.symbol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span>
+<span class="w">      </span><span class="n">pch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">17</span><span class="p">,</span><span class="m">4</span><span class="p">)</span><span class="w">                                    </span><span class="c1"># symbols to triangle and cross</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4e9c526242012297ee36b0e8ab665369a1c4403709440a0c5c73e2346a6d48e6.png" src="../_images/4e9c526242012297ee36b0e8ab665369a1c4403709440a0c5c73e2346a6d48e6.png" />
+</div>
+</div>
+<p>As we can see, some classrooms have much more data than others. However, in many of those cases there is only a single level of <code class="docutils literal notranslate"><span class="pre">minority</span></code> represented. Some classrooms only have a single student who was measured, whereas in others multiple students were measured but only of one <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This suggests already that data will need be to pooled across classrooms in order to estimate the effects of <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>, precluding their inclusion as random per-classroom. We are jumping ahead slightly here, but this is all good information gathering to inform our later decisions.</p>
+</section>
+<section id="step-ii-expand-to-multiple-structures">
+<h3>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h3>
+<p>In our second step, we expand the model above to <em>multiple</em> classrooms. We index these using the notation of <span class="math notranslate nohighlight">\((c)\)</span>, to indicate which terms <em>belong</em> to a particular <em>classroom</em>. We start with the most general case of allowing every term to vary by-classroom, giving us</p>
+<div class="math notranslate nohighlight">
+\[
+\text{mathgain}^{(c)}_{ijk} = \text{mean}^{(c)} + \text{sex}^{(c)}_{j} + \text{minority}^{(c)}_{k} + \left(\beta_{1}^{(c)} \times \text{mathkind}_{i}\right) + \left(\beta_{2}^{(c)} \times \text{ses}_{i}\right) + \eta^{(c)}_{ijk}
+\]</div>
+<p>We can now reason more carefully about all these terms.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1} \\
+    \text{mathgain}^{(c)}_{ijk} &amp;= \text{mean}^{(c)} + \text{sex}^{(c)}_{j} + \text{minority}^{(c)}_{k} + \eta^{(c)}_{ijk} \\ \quad \\
+\text{Level 2} \\
+    \text{mean}^{(c)}         &amp;= \text{mean}^{(s)} + \xi^{(c)} \\
+    \text{sex}^{(c)}_{j}      &amp;=  \text{sex}^{(s)}_{j} + \xi_{j}^{(c)}\\ 
+    \text{minority}^{(c)}_{k} &amp;= \text{minority}^{(s)}_{k} + \xi_{k}^{(c)} \\ \quad \\
+\text{Level 3} \\
+    \text{mean}^{(s)}         &amp;= \text{mean} + \xi^{(s)} \\
+    \text{sex}^{(s)}_{j}      &amp;=  \text{sex}_{j} + \xi_{j}^{(s)} \\ 
+    \text{minority}^{(s)}_{k} &amp;= \text{minority}_{k} + \xi_{k}^{(s)} \\ 
+\end{alignat*}
+\end{split}\]</div>
+</section>
 </section>
 </section>
 
@@ -621,7 +721,8 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -630,7 +731,16 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
@@ -679,8 +789,8 @@ By Dr Martyn McFarquhar
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>
