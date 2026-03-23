@@ -721,7 +721,7 @@ Number of Groups: 5
 6 2871.2716 2871.2716 2871.2716  9850.765  9850.765 18255.821
 </pre></div>
 </div>
-<img alt="../_images/18e036f768b57e7c2e838c9fe2edcad13053b9570cfbde3183aa9fdb588a6b93.png" src="../_images/18e036f768b57e7c2e838c9fe2edcad13053b9570cfbde3183aa9fdb588a6b93.png" />
+<img alt="../_images/1a1bac0121029a6b921ac38960d5a602d276eb2989fe2d2bc0ff7d72e7c7ceea.png" src="../_images/1a1bac0121029a6b921ac38960d5a602d276eb2989fe2d2bc0ff7d72e7c7ceea.png" />
 </div>
 </div>
 <p>In general, we can see that the measurements from an individual rat are all considered correlated. This structure is then further split into a block for the saline treatment (rows/columns 1-3) and a block for the carbachol treatment (rows/columns 4-6). All measurements within each level of treatment are considered equally-correlated, but these are allowed to differ for saline-saline, carbachol-carbachol and saline-carbachol pairs. Finally, the difference in shading between saline and carbachol implies that the variance of the saline treatment is <em>much lower</em> than the variance of the carbachol treatment.</p>
@@ -759,7 +759,7 @@ Number of Groups: 5
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/cf7a413992ca27512011f2ae6d72799d105e9e93e2330c1ce9465afafefbaa13.png" src="../_images/cf7a413992ca27512011f2ae6d72799d105e9e93e2330c1ce9465afafefbaa13.png" />
+<img alt="../_images/2a9571ed70dad687b4f469615753c231d413fb4c8092df0c60b445a47a5119f3.png" src="../_images/2a9571ed70dad687b4f469615753c231d413fb4c8092df0c60b445a47a5119f3.png" />
 </div>
 </div>
 <p>Notice that the pattern across the brain regions within each panel is very similar across the rats. For instance, under carbachol, notice that the v-shape is largely the <em>same</em> for each rat. This suggest that the differences in measurement between these regions does not differ on a per-rat basis. The slight differences we see could simply be sampling error. There is not enough variation here to suggest that this is something that differs fundamentally from rat-to-rat. As such, this suggests that <code class="docutils literal notranslate"><span class="pre">region</span></code> can defensibly be treated as a <em>fixed-effect</em>.</p>
@@ -813,10 +813,12 @@ Number of Groups: 5
   Data: ratbrain 
   Log-restricted-likelihood: -124.5952
   Fixed: activate ~ 1 + treatment * region 
-                 (Intercept)           treatmentCarbachol                     regionLS 
-                     428.506                       98.204                     -190.762 
-                   regionVDB  treatmentCarbachol:regionLS treatmentCarbachol:regionVDB 
-                    -216.212                       99.322                      261.822 
+                 (Intercept)           treatmentCarbachol 
+                     428.506                       98.204 
+                    regionLS                    regionVDB 
+                    -190.762                     -216.212 
+ treatmentCarbachol:regionLS treatmentCarbachol:regionVDB 
+                      99.322                      261.822 
 
 Random effects:
  Formula: ~1 + treatment | animal
@@ -851,7 +853,7 @@ Number of Groups: 5
 6 3575.472 3575.472 3575.472 12237.973 12237.973 12776.875
 </pre></div>
 </div>
-<img alt="../_images/dc0dde26d632932b667a5cd2e120ca3fefbdc7ce0ee984ba1374fef70e847238.png" src="../_images/dc0dde26d632932b667a5cd2e120ca3fefbdc7ce0ee984ba1374fef70e847238.png" />
+<img alt="../_images/43eff7a3e0289fa4cbb17599744140bc1c8ac0ec272453d8d8f9f0e605311a5c.png" src="../_images/43eff7a3e0289fa4cbb17599744140bc1c8ac0ec272453d8d8f9f0e605311a5c.png" />
 </div>
 </div>
 <p>We can see that the block associated with the carbachol treatment is <em>very dark</em> because the variance in this treatment is <em>much higher</em> relative to the saline treatment. We can see this in the plot from earlier where the lines were very spread out under carbachol and much closer together under saline.</p>
@@ -963,7 +965,7 @@ ratbrain.lme.full 12 326.1652
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/db7a7a2ef9b1899967391d8c6808d485e0b0616e7fbec3b57bd1d0bea283e84c.png" src="../_images/db7a7a2ef9b1899967391d8c6808d485e0b0616e7fbec3b57bd1d0bea283e84c.png" />
+<img alt="../_images/ed72b3e45172fe6ffdf8616becba30e90053c70d5c60dfa920944998dcdf9cea.png" src="../_images/ed72b3e45172fe6ffdf8616becba30e90053c70d5c60dfa920944998dcdf9cea.png" />
 </div>
 </div>
 <p>There is nothing here of immediate concern. There are no signs of missing variance structures and no signs of any outliers. The only element that is particularly difficult to assess is the normality of the random effects. However, this is never going to be reliable with only 5 dependency structures. So, unfortunately, we cannot really say either way whether this assumption is valid. We just need to press on, but should be acutely aware of how small the sample is at the level of individual rats when it comes to inference.</p>
@@ -979,22 +981,6 @@ ratbrain.lme.full 12 326.1652
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
-
-Response: activate
-                   Chisq Df Pr(&gt;Chisq)    
-treatment         35.495  1  2.558e-09 ***
-region           187.414  2  &lt; 2.2e-16 ***
-treatment:region 162.092  2  &lt; 2.2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-</pre></div>
-</div>
-</div>
 </div>
 <p>where there is a strong suggestion of a 2-way interaction. Even though this is asymptotic, the <span class="math notranslate nohighlight">\(p\)</span>-value is so small that it seems unlikely this could be a function of small-sample bias alone. As such, we choose to continue by plotting this effect</p>
 <div class="cell docutils container">
@@ -1004,15 +990,6 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Use the command
-    lattice::trellis.par.set(effectsTheme())
-  to customize lattice options for effects plots.
-See ?effectsTheme for details.
-</pre></div>
-</div>
-<img alt="../_images/ecbd2a3b304ade85083b385ab014b87a54a752c591cade9c197a9bdf43dbf2cb.png" src="../_images/ecbd2a3b304ade85083b385ab014b87a54a752c591cade9c197a9bdf43dbf2cb.png" />
-</div>
 </div>
 <p>So it appears as if the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> is much larger in the VDB than the other two regions. Both LS and BST are similar, with the effect in BST slightly more subtle than in LS. As a final step, we run some comparisons using <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code>.</p>
 <div class="cell docutils container">
@@ -1020,32 +997,6 @@ See ?effectsTheme for details.
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span>
 <span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to emmeans.
-Caution: You lose important information if you filter this package&#39;s results.
-See &#39;? untidy&#39;
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
-package ‘emmeans’ was built under R version 4.5.2 
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>region = BST:
- contrast           estimate   SE  df z.ratio p.value
- Saline - Carbachol    -98.2 38.6 Inf  -2.544  0.0110
-
-region = LS:
- contrast           estimate   SE  df z.ratio p.value
- Saline - Carbachol   -197.5 38.6 Inf  -5.117 &lt;0.0001
-
-region = VDB:
- contrast           estimate   SE  df z.ratio p.value
- Saline - Carbachol   -360.0 38.6 Inf  -9.328 &lt;0.0001
-
-Degrees-of-freedom method: fixed 
 </pre></div>
 </div>
 </div>
