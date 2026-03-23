@@ -1010,7 +1010,7 @@ Number of Groups:
 </section>
 <section id="alternative-models">
 <h2>Alternative Models<a class="headerlink" href="#alternative-models" title="Link to this heading">#</a></h2>
-<p>As an example, if you very strongly felt that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we would have a model with an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. We could test this inclusion in the following way. Here, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, where we can pass in a model and then just indicate the arguments that we want to change, with everything else staying the same. This is helpful when we have a lot of options we have set, but only want to change one small thing.</p>
+<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all fixed-effects and have reasoned that many of the alternative random effects structures are either not sensible or not possible. However, this would now be an opportunity to test this on the actual data. For example, if we felt very strongly that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we could perform a comparison with a model containing an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. This would encode the idea that there is a difference in attainment between boys and girls, but that this differs across different schools. We do not think this is really the case, but for the purpose of illustration we could test it in the following way. Here, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, where we can pass in a model and then just indicate the arguments that we want to change. This is helpful when we have a lot of options we have set, but only want to change one small thing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
@@ -1022,7 +1022,9 @@ Number of Groups:
 <span class="w">                </span><span class="n">method</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
 <span class="p">)</span>
 
-<span class="n">lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">schoolid</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">))</span>
+<span class="n">lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                         </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">)</span><span class="w"> </span><span class="c1"># sex included</span>
+<span class="p">)</span>
 
 <span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="n">lme.full</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
@@ -1041,14 +1043,14 @@ lme.full 14 10426.98
 </div>
 </div>
 </div>
-<p>which suggests very strong evidence in favour of the lower BIC model, which is the one <em>without</em> a random effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is not wholly surprising because we didn’t really entertain this in the first place. However, this does demonstrate how you could use model comparisons to help make these decisions.</p>
+<p>This suggests <em>very strong evidence</em> in favour of the lower BIC model, which is the one <em>without</em> a random effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is not wholly surprising because we didn’t <em>really</em> entertain this idea in the first place. However, this does demonstrate how you can use model comparisons to help make these decisions.</p>
 <section id="simplifying-the-random-effects">
 <h3>Simplifying the Random-effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
-<p>At this stage, we would usually entertain the idea of simplifying any random effects, based on the data. However, for this example, the random effects structure cannot get any simpler. The only thing we could do is drop either <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> or <code class="docutils literal notranslate"><span class="pre">classid</span></code> entirely. However, we want to keep these as we want to embed the idea of both school and classroom representing random samples from a larger population. Otherwise, our inference is restricted to only the classes we have samples, only the schools we have sampled, or both. So, for this example, we leave everything how it is.</p>
+<p>At this stage, we would also entertain the idea of simplifying the random effects. However, for this example, the random effects structure cannot get any simpler. The only thing we could do is drop either <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> or <code class="docutils literal notranslate"><span class="pre">classid</span></code> entirely. However, we want to keep these as we want to embed the idea of both school and classroom representing random samples from a larger population. Otherwise, our inference is restricted to only the classes we have sampled, only the schools we have sampled, or both. So, for this example, we leave everything how it is.</p>
 </section>
 <section id="additional-variance-structures">
 <h3>Additional Variance Structures<a class="headerlink" href="#additional-variance-structures" title="Link to this heading">#</a></h3>
-<p>So, we need to work slightly blind here. However, we can see from earlier that the current random-effects structure does not allow variances to differ between classrooms or between schools. Although we <em>might</em> think to add this in to a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> structure, we have issues with this dataset. In terms of both classrooom</p>
+<p>As a final step before inference, we also need to consider whether any additional variance structures are warranted. Although we cannot <em>see</em> the covariance structure for this model, we have inferred that it does not allow variances to differ between classrooms or between schools. Although we <em>might</em> think to add this in to a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> structure, we have issues with this dataset. In terms of both classrooom</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="p">)</span>
@@ -1116,35 +1118,8 @@ lme.full 14 10426.98
 </div>
 </div>
 </div>
-<p>we can see that there are <em>many</em> separate values. Realistically, it is not going to be possible for the model to estimate 312 different variances for each classroom, or 107 different variances for the different schools. Even if we were to try it, some classrooms and some schools do not have enough data to support this. Realistically, we may need around 10 or more observations for every school and every classroom in order to reliably estimate separate variances. This is just not realistic in this example. If you try this, the estimation will fail.</p>
-<p>So, do we have any other options?</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> boy girl 
- 588  602 
-</pre></div>
-</div>
-</div>
-</div>
-<p>So this is now perfectly feasible as we have 588 values to use to estimate the variance of <code class="docutils literal notranslate"><span class="pre">boy</span></code> and 602 values to use to estimate the variance of <code class="docutils literal notranslate"><span class="pre">girl</span></code>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nonminority    minority 
-        384         806 
-</pre></div>
-</div>
-</div>
-</div>
+<p>we can see that there are <em>many</em> separate values. Realistically, it is not going to be possible for the model to estimate 312 different variances for each classroom, or 107 different variances for the different schools. Even if we were to try it, some classrooms and some schools do not have enough data to support this. Some classrooms only have a single observation, with some schools only having 2 observations. This is just not enough to realistically estimate variance parameters. If you try this, the estimation will fail.</p>
+<p>So, do we have any other options? Well, there are two other factors in the data that <em>might</em> be homogeneous in terms of variance: <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. It is not unrealistic that boys and girls or children from minority and non-minority backgrounds may have different degrees of variation in their attainment scores. Furthermore, if we look at the amount of data for each factor we have</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="p">,</span><span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="p">)</span>
@@ -1160,7 +1135,8 @@ lme.full 14 10426.98
 </div>
 </div>
 </div>
-<p>Again, this looks feasible because the smallest cell still contains 186 values to estimate the variance of non-minority girls.</p>
+<p>So, even if we want to model the variance of <em>both</em>, there are only 4 variance parameters, each supported by hundreds of observations. This is therefore much more feasible than individual classrooms or schools.</p>
+<p>The code below compares model with different variances for <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">minority</span></code> and both <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. Again, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function as a convenient way of changing the options.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
@@ -1192,7 +1168,35 @@ lme.full.3 14 10426.29
 </div>
 </div>
 </div>
-<p>So, based on all this, our final model is</p>
+<p>In terms of comparisons, the model with no additional variance structure and the models with either <code class="docutils literal notranslate"><span class="pre">sex</span></code> or <code class="docutils literal notranslate"><span class="pre">minority</span></code> show changes in BIC of</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5.721084
+[1] 5.831384
+</pre></div>
+</div>
+</div>
+</div>
+<p>Both suggesting <em>positive evidence</em> in favour of the lower BIC model. In terms of comparison with the model containing <em>both</em> additional variance terms, we have</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 11.3156
+</pre></div>
+</div>
+</div>
+</div>
+<p>which is now <em>very strong evidence</em> favouring the lower BIC model. So, in all cases, it seems that the model <em>without</em> the additional variance parameters is the better fit to the data. So, based on all this, our final model is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
@@ -1210,6 +1214,7 @@ lme.full.3 14 10426.29
 </section>
 <section id="checking-assumptions">
 <h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
+<p>To check the assumptions, we have placed the definition of the function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into a separate <code class="docutils literal notranslate"><span class="pre">R</span></code> script called <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code> in the current working directory. Calling <code class="docutils literal notranslate"><span class="pre">source()</span></code> on this script will bring it into scope so we can use it. This results in the following plots.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span>
@@ -1226,15 +1231,68 @@ In plot.lme(classroom.lme) :
 </div>
 </div>
 </div>
-<p>We can see that there are potentially quite a lot of outliers, if we use the standardised residulas cut-off of 3 standard deviations.</p>
+<p>Notice that this will print a warning when it is not possible to visualise the marginal covariance structure.</p>
+<p>In terms of these plots, the distributional assumptions of the random effects appear very well-met. The distributional assumptions of the residuals less so, due to some slightly heavier tails than expected. This is no doubt due to some outliers, as can be seen on the Residual vs Fitted plot, where there are quite a few points above the standardised cut-off of 3 standard deviations. We can look at these points using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">res</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">res.norm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">asList</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="n">idx</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">res.norm</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+<span class="n">mod.data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nlme</span><span class="o">::</span><span class="nf">getData</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<span class="n">outliers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mod.data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      sex    minority mathkind mathgain   ses yearstea mathknow housepov
+76   girl    minority      475      166 -0.14        6    -0.14    0.085
+312  girl nonminority      542      138  2.27        9     0.43    0.050
+462   boy    minority      448      -51 -0.72        1    -1.09    0.279
+539   boy    minority      290      253 -0.40       25     1.57    0.257
+585   boy    minority      488      142 -0.28       27     0.47    0.101
+664  girl nonminority      629      -84  2.33       13     0.89    0.170
+665  girl nonminority      501      179  2.00       13     0.89    0.170
+754   boy    minority      368      218 -1.14        6    -0.30    0.430
+812   boy nonminority      510      147 -0.47        2    -0.19    0.367
+981  girl nonminority      547      133  0.28       16    -0.27    0.107
+985   boy    minority      431      -28  0.56        2     0.00    0.537
+1146  boy    minority      376       11  0.62       34    -1.28    0.126
+     mathprep classid schoolid childid
+76       2.00     147        8      76
+312      3.00     104       27     312
+462      1.50       9       40     462
+539      3.17      82       47     539
+585      2.00      14       53     585
+664      2.74      22       62     664
+665      2.74      22       62     665
+754      3.25     152       70     754
+812      2.50      42       75     812
+981      2.00     196       85     981
+985      2.50     132       86     985
+1146     2.00      44      102    1146
 </pre></div>
 </div>
 </div>
 </div>
-<p>The issue with these types of data are always considering <em>why</em> certain points are outliers? … In addition, we have <em>a lot</em> of data here, …</p>
+<p>A few details about this process. Firstly, we want the residuals associated with the original measurements, not the residuals at the level of classrooms or schools. This is what the <code class="docutils literal notranslate"><span class="pre">level=1</span></code> and <code class="docutils literal notranslate"><span class="pre">asList=FALSE</span></code> options are doing. We can then find the indices (row numbers) associated with those points with normalised residuals greater than 3. However, remember that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> <em>removed</em> some data due to us passing the <code class="docutils literal notranslate"><span class="pre">na.omit</span></code> option. As such, the indices of the residuals will now no longer match the raw data. To solve this, we ask <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to give us the data it used for the fitting, not the raw data. This what <code class="docutils literal notranslate"><span class="pre">nlme::getData()</span></code> does. This then allows us to successfully identify the correct points.</p>
+<p>In terms of what to do with the outliers, the difficulties in these types of data are always the reasons <em>why</em> a certain point is flagged as an outlier. If it corresponds to a measurement error of some kind, then removal may be justified. Otherwise, it is difficult to argue for removal when the point represents genuine data. As an example, if we look at the value the model predicts for the first child labelled an outlier</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">predict</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">outliers</span><span class="p">[</span><span class="m">1</span><span class="p">,])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   147/8 
+67.40124 
+attr(,&quot;label&quot;)
+[1] &quot;Predicted values&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that they are predicted to gain <code class="docutils literal notranslate"><span class="pre">67.40</span></code> points in maths. However, this actual student gained <code class="docutils literal notranslate"><span class="pre">166</span></code> points, which is way more than the model expected. As such, they have a high residual value. But, crucially, do we think we should remove a student from the sample for <em>doing well</em>? Are high achievers automatically incorrect values and should be removed because our model does not predict them? Arguably, the answer is <em>no</em> …</p>
+<p>Considering that we have a lot of variables here, we should also check for multicollinearity.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
@@ -1290,7 +1348,13 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/90375e2c2c36c75877b61d079e5b4bf1acbee8c8d534c156cee0a2fb5f683bde.png" src="../_images/90375e2c2c36c75877b61d079e5b4bf1acbee8c8d534c156cee0a2fb5f683bde.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Use the command
+    lattice::trellis.par.set(effectsTheme())
+  to customize lattice options for effects plots.
+See ?effectsTheme for details.
+</pre></div>
+</div>
+<img alt="../_images/7dbe50b079c6ed220b5cb076604e340775da21779d19c595a3659711711a8fed.png" src="../_images/7dbe50b079c6ed220b5cb076604e340775da21779d19c595a3659711711a8fed.png" />
 </div>
 </div>
 </section>
