@@ -372,6 +372,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-brain-data">The Rat Brain Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
@@ -407,6 +408,35 @@
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-repeated-measures-with-replication-example">
 <h1>PCHN63112 Workshop: Repeated Measures with Replication Example<a class="headerlink" href="#pchn63112-workshop-repeated-measures-with-replication-example" title="Link to this heading">#</a></h1>
 <p>In this example, we will examine building a mixed-effects model for repeated measurements when replications of the repeats are available. This will provide the opportunity for a more general covariance structure than we have seen in some of the previous repeated measurement examples.</p>
+<section id="loading-packages">
+<h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
+<p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># plotting functions</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span><span class="w">    </span><span class="c1"># covariance extraction and visualisation</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># mixed-effects modelling</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span><span class="w">       </span><span class="c1"># Asymptotic ANOVA tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Follow-up tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Effects plots from the model</span>
+<span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># custom plot.lme() function for making assumptions plots</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+Welcome to emmeans.
+Caution: You lose important information if you filter this package&#39;s results.
+See &#39;? untidy&#39;
+Use the command
+    lattice::trellis.par.set(effectsTheme())
+  to customize lattice options for effects plots.
+See ?effectsTheme for details.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="the-rat-brain-data">
 <h2>The Rat Brain Data<a class="headerlink" href="#the-rat-brain-data" title="Link to this heading">#</a></h2>
 <p>The data we will use concern measurements of nucleotide activation from the brains of five male adult rats. These measurements were taken using autoradiography after treatment with the drug carbachol and after treatment with saline. Three brain regions were chosen for measurement: the <em>bed nucleus of the stria terminalis</em> (BST), the <em>lateral septum</em> (LS) and the <em>diagonal band of Broca</em> (VDB). The outcome variable represents the mean optical density measured in each brain region and interest primarily lies in the effect of carbachol on nucleotide activation.</p>
@@ -666,9 +696,7 @@ y_{ij} = \mu + \alpha_{j} + \eta_{ij}
 <p>Our model is therefore</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span>
-
-<span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
@@ -703,9 +731,7 @@ Number of Groups: 5
 <p>Notice that we had to change the optimiser here because the default failed to converge. Also notice that the random-effects structure has led to the estimation of <em>three</em> variances. One for the <code class="docutils literal notranslate"><span class="pre">animal</span></code> mean, one for the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and one for the residuals. We can see the implications of this for the covariance structure using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span>
-
-<span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;R111097&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`R111097`</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;R111097&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`R111097`</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">Sigma.1</span><span class="p">)</span>
 <span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma.1</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
 </pre></div>
@@ -747,9 +773,7 @@ Number of Groups: 5
 <p>We can reason about whether this is sensible assumption, but we can also look at the data and see what it suggests. This is a more general <em>data-driven</em> approach that can be used to make decisions about <em>all</em> the random effects. This is an alternative to simply trying to reason about each term.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span>
-
-<span class="nf">xyplot</span><span class="p">(</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
 <span class="w">  </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">region</span><span class="o">|</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=region, panel=treatment</span>
 <span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">animal</span><span class="p">,</span><span class="w">             </span><span class="c1"># separate lines per-animal</span>
 <span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span><span class="w">           </span><span class="c1"># data</span>
@@ -956,11 +980,10 @@ ratbrain.lme.full 12 326.1652
 </section>
 <section id="checking-assumptions">
 <h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
-<p>To check the assumptions, we have placed the definition of the function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into a separate <code class="docutils literal notranslate"><span class="pre">R</span></code> script called <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code> in the current working directory. Calling <code class="docutils literal notranslate"><span class="pre">source()</span></code> on this script will bring it into scope so we can use it. This results in the following plots.</p>
+<p>To check the assumptions, we will use the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code>, which we brought into scope at the beginning of the analysis. This results in the following plots.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span>
-<span class="nf">plot.lme</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;R111097&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;R111097&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -976,8 +999,20 @@ ratbrain.lme.full 12 326.1652
 <p>We start with the ANOVA table</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
-<span class="nf">Anova</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: activate
+                   Chisq Df Pr(&gt;Chisq)    
+treatment         35.495  1  2.558e-09 ***
+region           187.414  2  &lt; 2.2e-16 ***
+treatment:region 162.092  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
@@ -985,18 +1020,36 @@ ratbrain.lme.full 12 326.1652
 <p>where there is a strong suggestion of a 2-way interaction. Even though this is asymptotic, the <span class="math notranslate nohighlight">\(p\)</span>-value is so small that it seems unlikely this could be a function of small-sample bias alone. As such, we choose to continue by plotting this effect</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span>
-<span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;treatment:region&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">x.var</span><span class="o">=</span><span class="s">&#39;treatment&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;treatment:region&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">x.var</span><span class="o">=</span><span class="s">&#39;treatment&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/807fb3c81a252c7d857d851b26582c66ca1b5127772c2007ca0f3d5fc59f571a.png" src="../_images/807fb3c81a252c7d857d851b26582c66ca1b5127772c2007ca0f3d5fc59f571a.png" />
 </div>
 </div>
 <p>So it appears as if the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> is much larger in the VDB than the other two regions. Both LS and BST are similar, with the effect in BST slightly more subtle than in LS. As a final step, we run some comparisons using <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span>
-<span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emmeans</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>region = BST:
+ contrast           estimate   SE  df z.ratio p.value
+ Saline - Carbachol    -98.2 38.6 Inf  -2.544  0.0110
+
+region = LS:
+ contrast           estimate   SE  df z.ratio p.value
+ Saline - Carbachol   -197.5 38.6 Inf  -5.117  &lt;.0001
+
+region = VDB:
+ contrast           estimate   SE  df z.ratio p.value
+ Saline - Carbachol   -360.0 38.6 Inf  -9.328  &lt;.0001
+
+Degrees-of-freedom method: fixed 
 </pre></div>
 </div>
 </div>
@@ -1052,6 +1105,7 @@ ratbrain.lme.full 12 326.1652
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-brain-data">The Rat Brain Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
