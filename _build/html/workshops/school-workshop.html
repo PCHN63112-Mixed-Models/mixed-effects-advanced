@@ -372,6 +372,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
 </ul>
@@ -408,7 +409,31 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-three-level-clustered-data-example">
 <h1>PCHN63112 Workshop: Three-level Clustered Data Example<a class="headerlink" href="#pchn63112-workshop-three-level-clustered-data-example" title="Link to this heading">#</a></h1>
-<p>In this example,we will examine building a mixed-effects model for clustered data that contains three levels of variation. This will demonstrate how the multilevel framework extends beyond two levels, as well as how this can be integrated into a mixed-effects model.</p>
+<p>In this example,we will examine building a mixed-effects model for clustered data that contains three levels of variation. This will demonstrate how the multilevel framework extends beyond two levels, as well as how this can be integrated into a mixed-effects model. This is also a much larger example, with many variables available. This will lead to a more complex expression for the model, but one which is a simple generalisation of other examples we have seen.</p>
+<section id="loading-packages">
+<h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
+<p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># plotting functions</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># mixed-effects modelling</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span><span class="w">       </span><span class="c1"># Asymptotic ANOVA tests and VIF</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Effects plots from the model</span>
+<span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># custom plot.lme() function for making assumptions plots</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+Use the command
+    lattice::trellis.par.set(effectsTheme())
+  to customize lattice options for effects plots.
+See ?effectsTheme for details.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section id="the-classroom-data">
 <h2>The Classroom Data<a class="headerlink" href="#the-classroom-data" title="Link to this heading">#</a></h2>
 <p>The data we will use concern measurements of improvement in maths ability in a selection of students from different classrooms across different schools. In total, these data contains measurements from 1,190 students from 312 classrooms from 107 schools. Importantly, these data were measured from first-graders in the USA (ages 6-7). As such, all students stay within the <em>same</em> classroom with the <em>same</em> teacher for the whole year. A wide variety of additional variables were captured describing the local area of the school, the teacher’s experience and maths knowledge, and the student’s demographic details.</p>
@@ -695,9 +720,7 @@ F-statistic: 3.017 on 4 and 2 DF,  p-value: 0.2641
 <p>However, notice that there are only 2 residual degrees of freedom left, because we have fit 5 parameters to 7 datapoints. If we had fewer students in this class, the model would fail to fit. Unfortunately, the data are quite limited for most of the classrooms in this dataset. To see this, we use the code below to select 20 random classrooms and then plot them as panels with <code class="docutils literal notranslate"><span class="pre">sex</span></code> on the <span class="math notranslate nohighlight">\(x\)</span>-axis and different symbols used to indicate the levels of <code class="docutils literal notranslate"><span class="pre">minority</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span>
-
-<span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
 <span class="n">keep.IDs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="p">),</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">      </span><span class="c1"># select 20 random class IDs</span>
 
 <span class="nf">xyplot</span><span class="p">(</span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">classid</span><span class="p">,</span><span class="w">                       </span><span class="c1"># x-axis=sex, panels=classroom</span>
@@ -937,13 +960,10 @@ F-statistic: 3.017 on 4 and 2 DF,  p-value: 0.2641
 \end{alignat*}
 \end{split}\]</div>
 <p>implying that we need both <code class="docutils literal notranslate"><span class="pre">1|schoolid</span></code> and <code class="docutils literal notranslate"><span class="pre">1|classid</span></code> in the model.</p>
-<p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the clustering variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|classid</span></code> and <code class="docutils literal notranslate"><span class="pre">1|schoolid</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(classid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">schoolid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1)</span></code>. This gives us full control of the random-effects specification at each level. For instance, if we had decided to let the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> vary across schools, but wanted it fixed across classes, we could use <code class="docutils literal notranslate"><span class="pre">list(classid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">schoolid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">sex)</span></code>.</p>
-<p>Taking this together, our model can be passed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> uisng the following syntax</p>
+<p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the clustering variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|classid</span></code> and <code class="docutils literal notranslate"><span class="pre">1|schoolid</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(classid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">schoolid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1)</span></code>. This gives us full control of the random-effects specification at each level. Our model can therefore be expressed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> uisng the following syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span>
-
-<span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
 <span class="w">                     </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
 <span class="w">                                   </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
 <span class="w">                     </span><span class="n">data</span><span class="o">=</span><span class="n">classroom</span><span class="p">,</span>
@@ -1010,7 +1030,7 @@ Number of Groups:
 </section>
 <section id="alternative-models">
 <h2>Alternative Models<a class="headerlink" href="#alternative-models" title="Link to this heading">#</a></h2>
-<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all fixed-effects and have reasoned that many of the alternative random effects structures are either not sensible or not possible. However, this would now be an opportunity to test this on the actual data. For example, if we felt very strongly that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we could perform a comparison with a model containing an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. This would encode the idea that there is a difference in attainment between boys and girls, but that this differs across different schools. We do not think this is really the case, but for the purpose of illustration we could test it in the following way. Here, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, where we can pass in a model and then just indicate the arguments that we want to change. This is helpful when we have a lot of options we have set, but only want to change one small thing.</p>
+<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all fixed-effects and have reasoned that many of the alternative random effects structures are either not sensible or not possible. However, this would now be an opportunity to test this on the actual data. For example, if we felt very strongly that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we could perform a comparison with a model containing an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. This would encode the idea that there is a difference in attainment between boys and girls, but that this differs across schools. We do not think this is really the case, but for the purpose of illustration we could test it in the following way. Here, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, where we can pass in a model and then just indicate the arguments that we want to change. This is helpful when we have a lot of options, but only want to change one small thing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
@@ -1136,7 +1156,7 @@ lme.full 14 10426.98
 </div>
 </div>
 <p>So, even if we want to model the variance of <em>both</em>, there are only 4 variance parameters, each supported by hundreds of observations. This is therefore much more feasible than individual classrooms or schools.</p>
-<p>The code below compares model with different variances for <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">minority</span></code> and both <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. Again, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function as a convenient way of changing the options.</p>
+<p>The code below compares model with different variances for <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">minority</span></code> and both <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. For this final model, we use the <code class="docutils literal notranslate"><span class="pre">varComb()</span></code> function, which allows multiple variance structures to be combined together. Again, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function as a convenient way of changing the options.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
@@ -1214,11 +1234,10 @@ lme.full.3 14 10426.29
 </section>
 <section id="checking-assumptions">
 <h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
-<p>To check the assumptions, we have placed the definition of the function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into a separate <code class="docutils literal notranslate"><span class="pre">R</span></code> script called <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code> in the current working directory. Calling <code class="docutils literal notranslate"><span class="pre">source()</span></code> on this script will bring it into scope so we can use it. This results in the following plots.</p>
+<p>To check the assumptions, we will use the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code>, which we brought into scope at the beginning of the analysis. This results in the following plots.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span>
-<span class="nf">plot.lme</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1291,33 +1310,73 @@ attr(,&quot;label&quot;)
 </div>
 </div>
 </div>
-<p>We can see that they are predicted to gain <code class="docutils literal notranslate"><span class="pre">67.40</span></code> points in maths. However, this actual student gained <code class="docutils literal notranslate"><span class="pre">166</span></code> points, which is way more than the model expected. As such, they have a high residual value. But, crucially, do we think we should remove a student from the sample for <em>doing well</em>? Are high achievers automatically incorrect values and should be removed because our model does not predict them? Arguably, the answer is <em>no</em> …</p>
-<p>Considering that we have a lot of variables here, we should also check for multicollinearity.</p>
+<p>We can see that they are predicted to gain <code class="docutils literal notranslate"><span class="pre">67.40</span></code> points in maths. However, this actual student gained <code class="docutils literal notranslate"><span class="pre">166</span></code> points</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
-
-<span class="nf">vif</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">outliers</span><span class="o">$</span><span class="n">mathgain</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 166
 </pre></div>
 </div>
+</div>
+</div>
+<p>which is more than the model expected. As such, they have a high residual value. But, crucially, do we think we should remove a student from the sample for <em>doing well</em>? Are high achievers automatically incorrect values and should be removed because our model does not predict them? Arguably, the answer is <em>no</em>. These students represent genuine data. Indeed, the fact that they are classes as outliers is almost the <em>definition</em> of being a high achiever. Despite their environment and personal circumstances, these children will just do very well. Removing them would artificially bias the accuracy of our model.</p>
+<p>A similar argument can be made about outliers at the other end of the spectrum. Consider the 6th outlier identified. This student is predicted to <em>gain</em> 4.74 points over the year</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">predict</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">outliers</span><span class="p">[</span><span class="m">6</span><span class="p">,])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   22/62 
+4.738723 
+attr(,&quot;label&quot;)
+[1] &quot;Predicted values&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<p>and yet, they actually gained</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">outliers</span><span class="o">$</span><span class="n">mathgain</span><span class="p">[</span><span class="m">6</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] -84
+</pre></div>
+</div>
+</div>
+</div>
+<p>so their score went <em>down</em> dramatically, rather than going up. There could be cause to try and understand this further. Perhaps the child was ill or there were other factors influencing their performance on the day? Alternatively, it could simply be that this child has found newer material harder than others and has not been able to retain it. As a <em>reduction</em> in attainment remains possible (without any information to the contrary), we should not artificially reduce the sample to only those children with <code class="docutils literal notranslate"><span class="pre">mathgain</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>. In reality, this is part of the consultation with domain experts to determine whether such a score is meaningful and realistic. Without this, we can only be guided by the information we have and will retain these scores.</p>
+<p>As a final consideration, we have many variables here and concerns about multicollinearity still exist for a mixed-effects model. As such, we will consult the VIF values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">vif</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex minority mathkind      ses yearstea mathprep mathknow housepov 
 1.001639 1.181395 1.092153 1.102613 1.034432 1.033154 1.038698 1.095134 
 </pre></div>
 </div>
 </div>
 </div>
+<p>As we can see, all the variables are hovering around a VIF of 1, so there is little cause for concern here.</p>
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
+<p>Finally, we get to the inference element of the analysis. Here, we stick to NHST, but recognise that alternatives are available using the <code class="docutils literal notranslate"><span class="pre">intervals()</span></code> function to produce approximate 95% confidence intervals around the estimates. However, remember that these intervals are based upon knowing the standard error of the distribution of the estimates, which we do not.</p>
+<p>The ANOVA table is given below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span>
-<span class="nf">Anova</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1340,23 +1399,36 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 </div>
+<p>As we can see, by the standards of NHST, we have significant effects of <code class="docutils literal notranslate"><span class="pre">minority</span></code>, <code class="docutils literal notranslate"><span class="pre">mathkind</span></code> and <code class="docutils literal notranslate"><span class="pre">ses</span></code>. These are all asymptotic tests, but given that our sample at every level of the model is in the hundreds, we have fewer concerns about this approach. Interestingly, these are all suggestive that it is the characteristics of the students themselves that affects their attainment, not their learning environment. We plot all these effects below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span>
-<span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Use the command
-    lattice::trellis.par.set(effectsTheme())
-  to customize lattice options for effects plots.
-See ?effectsTheme for details.
-</pre></div>
-</div>
 <img alt="../_images/7dbe50b079c6ed220b5cb076604e340775da21779d19c595a3659711711a8fed.png" src="../_images/7dbe50b079c6ed220b5cb076604e340775da21779d19c595a3659711711a8fed.png" />
 </div>
 </div>
+<p>Of interest is that many of these effects are subtly suggestive of a relationship, but the uncertainty is very high. The clearest and most certain effects are those associated with <code class="docutils literal notranslate"><span class="pre">minority</span></code>, <code class="docutils literal notranslate"><span class="pre">mathkind</span></code> and <code class="docutils literal notranslate"><span class="pre">ses</span></code>. Given that none of these are omnibus effects, there is no need for any further testing. As such, we can conclude that the strongest predictors of a student’s maths performance are as follows:</p>
+<ul class="simple">
+<li><p><em>Minority status</em></p>
+<ul>
+<li><p>Children from non-minority backgrounds tend to show larger gains in maths attainment than those from minority backgrounds</p></li>
+</ul>
+</li>
+<li><p><em>Initial performance in Kindergarten</em></p>
+<ul>
+<li><p>Children who score lower in Kindergarten tend to show greater gains than those who already score higher. This may be reflective of a degree of “catching-up”, especially if there are age discrepancies at play between those who score lower and higher in their initial school year.</p></li>
+</ul>
+</li>
+<li><p><em>Socioeconomic status</em></p>
+<ul>
+<li><p>Children from a lower socioeconomic status household tend to show smaller improvements than those from higher socioeconomic status backgrounds.</p></li>
+</ul>
+</li>
+</ul>
+<p>However, it is important not to discount the other effects in the model. These are more subtle and much more uncertain, but are suggestive of <em>some</em> effect of individual teachers and the local school environment. However, this is much more varied as it likely depends very much on the approach of individual teachers as well as the approach of each school.</p>
 </section>
 </section>
 
@@ -1407,6 +1479,7 @@ See ?effectsTheme for details.
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-classroom-data">The Classroom Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
 </ul>
