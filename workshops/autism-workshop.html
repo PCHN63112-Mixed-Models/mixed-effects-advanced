@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>PCHN63… Workshop: Longitudinal Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
+    <title>PCHN63112 Workshop: Longitudinal Data Example &#8212; More Advanced Uses of Mixed-effects Models</title>
   
   
   
@@ -360,7 +360,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>PCHN63… Workshop: Longitudinal Data Example</h1>
+    <h1>PCHN63112 Workshop: Longitudinal Data Example</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -370,7 +370,9 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autism-data">The Autism Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 </ul>
             </nav>
         </div>
@@ -382,270 +384,213 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="pchn63-workshop-longitudinal-data-example">
-<h1>PCHN63… Workshop: Longitudinal Data Example<a class="headerlink" href="#pchn63-workshop-longitudinal-data-example" title="Link to this heading">#</a></h1>
-<section id="the-autism-data">
-<h2>The Autism Data<a class="headerlink" href="#the-autism-data" title="Link to this heading">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-longitudinal-data-example">
+<h1>PCHN63112 Workshop: Longitudinal Data Example<a class="headerlink" href="#pchn63112-workshop-longitudinal-data-example" title="Link to this heading">#</a></h1>
+<section id="loading-packages">
+<h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
+<p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&#39;autism.csv&#39;</span><span class="p">)</span>
-<span class="n">autism</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># plotting functions</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span><span class="w">    </span><span class="c1"># covariance extraction and visualisation</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># mixed-effects modelling</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span><span class="w">       </span><span class="c1"># Asymptotic ANOVA tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Follow-up tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Effects plots from the model</span>
+<span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># custom plot.lme() function for making assumptions plots</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    age vsae sicdegp childid
-1     2    6       3       1
-2     3    7       3       1
-3     5   18       3       1
-4     9   25       3       1
-5    13   27       3       1
-6     2   17       3       3
-7     3   18       3       3
-8     5   12       3       3
-9     9   18       3       3
-10   13   24       3       3
-11    2   12       3       4
-12    3   14       3       4
-13    5   38       3       4
-14    9  114       3       4
-15    2   17       3      19
-16    3   27       3      19
-17    9   75       3      19
-18   13  107       3      19
-19    2   11       3      21
-20    3   21       3      21
-21    9   50       3      21
-22   13   69       3      21
-23    2    8       3      27
-24    3   17       3      27
-25    5   24       3      27
-26    9   31       3      27
-27   13   29       3      27
-28    2   11       3      36
-29    3   17       3      36
-30    9   15       3      36
-31    2   10       3      42
-32    3   27       3      42
-33    9   77       3      42
-34   13  124       3      42
-35    2   13       3      46
-36    3   26       3      46
-37    5   71       3      46
-38    9   31       3      46
-39   13   77       3      46
-40    2   19       3      48
-41    3   22       3      48
-42    5   26       3      48
-43    9   52       3      48
-44    2    9       3      49
-45    3   26       3      49
-46    5   77       3      49
-47    9   81       3      49
-48   13  153       3      49
-49    2   10       3      51
-50    3   20       3      51
-51    5   21       3      51
-52    3   16       3      60
-53    9   34       3      60
-54   13   66       3      60
-55    2   16       3      61
-56    5   33       3      61
-57    2   10       3      62
-58    3   19       3      62
-59    5   25       3      62
-60    9   67       3      62
-61   13   88       3      62
-62    2   11       3      78
-63    3   12       3      78
-64    5   15       3      78
-65    2   12       3      95
-66    3   18       3      95
-67    5   38       3      95
-68    9   73       3      95
-69   13  104       3      95
-70    2   14       3      97
-71    3   11       3      97
-72    5   25       3      97
-73    9   67       3      97
-74   13   50       3      97
-75    2   15       3     100
-76    3   24       3     100
-77    5   37       3     100
-78    9  135       3     100
-79    2   17       3     105
-80    5   65       3     105
-81    9  171       3     105
-82    2   10       3     106
-83    3   39       3     106
-84    9   63       3     106
-85   13  107       3     106
-86    2   15       3     115
-87    3   24       3     115
-88    9   71       3     115
-89   13  135       3     115
-90    2   20       3     122
-91    3   21       3     122
-92    5   34       3     122
-93    9   65       3     122
-94   13   81       3     122
-95    2    9       3     123
-96    3   13       3     123
-97    9   27       3     123
-98   13   66       3     123
-99    2   13       3     131
-100   3   31       3     131
-101   5   22       3     131
-102   9   50       3     131
-103  13   71       3     131
-104   2   12       3     133
-105   3   18       3     133
-106   5   22       3     133
-107   2    9       3     136
-108   3   33       3     136
-109   9  116       3     136
-110  13  192       3     136
-111   2   12       3     141
-112   3   15       3     141
-113   5   26       3     141
-114   9   53       3     141
-115  13   72       3     141
-116   2   18       3     151
-117   3   20       3     151
-118   5   33       3     151
-119   9  101       3     151
-120  13  165       3     151
-121   2   15       3     154
-122   3   20       3     154
-123   5   36       3     154
-124   2   13       3     158
-125   3   24       3     158
-126   5   37       3     158
-127   9   57       3     158
-128   2   12       3     174
-129   3   20       3     174
-130   5   39       3     174
-131   9   90       3     174
-132   2   15       3     180
-133   3   63       3     180
-134   9   68       3     180
-135  13  165       3     180
-136   2   11       3     182
-137   3   19       3     182
-138   9   26       3     182
-139  13   39       3     182
-140   2   15       3     183
-141   3   22       3     183
-142   5   35       3     183
-143   9   65       3     183
-144  13   62       3     183
-145   2    8       3     190
-146   3   22       3     190
-147   5   35       3     190
-148   9   69       3     190
-149  13  130       3     190
-150   2    8       3     195
-151   3   19       3     195
-152   9   59       3     195
-153   2    8       3     198
-154   3   14       3     198
-155   9   34       3     198
-156  13   55       3     198
-157   2   12       3     201
-158   3   14       3     201
-159   5   38       3     201
-160   9   93       3     201
-161   2    8       3     207
-162   3   14       3     207
-163   9   22       3     207
-164  13   48       3     207
-165   2   15       3     211
-166   2   12       2       9
-167   3   21       2       9
-168   9   66       2       9
-169  13   68       2       9
-170   2    7       2      12
-171   3   10       2      12
-172   5    8       2      12
-173   2   12       2      14
-174   3   19       2      14
-175   5   14       2      14
-176   9   28       2      14
-177  13   68       2      14
-178   2   13       2      15
-179   3    8       2      15
-180   5   29       2      15
-181   9   24       2      15
-182  13   44       2      15
-183   2    7       2      16
-184   3    6       2      16
-185   9   39       2      16
-186  13   24       2      16
-187   2    5       2      17
-188   3   10       2      17
-189   5   29       2      17
-190   9   32       2      17
-191  13   67       2      17
-192   2   10       2      18
-193   3    6       2      18
-194   2   11       2      24
-195   3   13       2      24
-196   5   20       2      24
-197   9   33       2      24
-198   2    3       2      28
-199   3   10       2      28
-200   5   17       2      28
-201  13   42       2      28
-202   2   10       2      30
-203   3   15       2      30
-204   9   40       2      30
-205  13  101       2      30
-206   2    7       2      33
-207   3   10       2      33
-208   5   12       2      33
-209   9   15       2      33
-210  13   10       2      33
-211   2    7       2      35
-212   3   10       2      35
-213   2    6       2      37
-214  13   15       2      37
-215   2    7       2      39
-216   3   12       2      39
-217   5    9       2      39
-218   9    6       2      39
-219   2    8       2      40
-220   3   22       2      40
-221   5   24       2      40
-222   9   54       2      40
-223  13   54       2      40
-224   2   17       2      44
-225   3   18       2      44
-226   9   21       2      44
-227   2    8       2      47
-228   3    9       2      47
-229   5   19       2      47
-230   2    7       2      55
-231   3    9       2      55
-232   5   13       2      55
-233   9   29       2      55
-234  13   36       2      55
-235   2   10       2      58
-236   3   19       2      58
-237   9   53       2      58
-238  13   95       2      58
-239   2    6       2      63
-240   3    7       2      63
-241   5   14       2      63
-242   9   32       2      63
-243   2    7       2      64
-244   3   14       2      64
-245   5    9       2      64
-246  13   40       2      64
-247   2    6       2      65
-248   3   10       2      65
-249   5   11       2      65
-250   9   15       2      65
- [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 362 rows ]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+Welcome to emmeans.
+Caution: You lose important information if you filter this package&#39;s results.
+See &#39;? untidy&#39;
+Use the command
+    lattice::trellis.par.set(effectsTheme())
+  to customize lattice options for effects plots.
+See ?effectsTheme for details.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-autism-data">
+<h2>The Autism Data<a class="headerlink" href="#the-autism-data" title="Link to this heading">#</a></h2>
+<p>…</p>
+<p>The data are available to download from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter6.html">here</a>. Once downloaded to the current working directory, the code below will read the data in and then print the values for the first 3 children.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.csv</span><span class="p">(</span><span class="s">&#39;autism.csv&#39;</span><span class="p">)</span>
+<span class="n">autism</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">14</span><span class="p">,]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   age vsae sicdegp childid
+1    2    6       3       1
+2    3    7       3       1
+3    5   18       3       1
+4    9   25       3       1
+5   13   27       3       1
+6    2   17       3       3
+7    3   18       3       3
+8    5   12       3       3
+9    9   18       3       3
+10  13   24       3       3
+11   2   12       3       4
+12   3   14       3       4
+13   5   38       3       4
+14   9  114       3       4
+</pre></div>
+</div>
+</div>
+</div>
+<p>As this is already long-formatted, we just need to convert the relevant variables to factors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism</span><span class="o">$</span><span class="n">childid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">autism</span><span class="o">$</span><span class="n">childid</span><span class="p">)</span>
+<span class="n">autism</span><span class="o">$</span><span class="n">sicdegp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">autism</span><span class="o">$</span><span class="n">sicdegp</span><span class="p">)</span>
+
+<span class="nf">levels</span><span class="p">(</span><span class="n">autism</span><span class="o">$</span><span class="n">sicdegp</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;low&#39;</span><span class="p">,</span><span class="s">&#39;medium&#39;</span><span class="p">,</span><span class="s">&#39;high&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now just briefly summarise all the variables to check everything is in order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">autism</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      age              vsae          sicdegp       childid   
+ Min.   : 2.000   Min.   :  1.00   low   :192   1      :  5  
+ 1st Qu.: 2.000   1st Qu.: 10.00   medium:255   2      :  5  
+ Median : 4.000   Median : 14.00   high  :165   3      :  5  
+ Mean   : 5.771   Mean   : 26.41                14     :  5  
+ 3rd Qu.: 9.000   3rd Qu.: 27.00                15     :  5  
+ Max.   :13.000   Max.   :198.00                17     :  5  
+                  NA&#39;s   :2                     (Other):582  
+</pre></div>
+</div>
+</div>
+</div>
+<p>Of note is that VSAE has a very wide range, from 1-198, and also contains two missing values. Also of note is that there are 582 children in the sample, which would be considered very large.</p>
+</section>
+<section id="data-structure">
+<h2>Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
+<span class="w">  </span><span class="n">vsae</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">sicdegp</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=region, panel=treatment</span>
+<span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">childid</span><span class="p">,</span><span class="w">   </span><span class="c1"># separate lines per-animal</span>
+<span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w">    </span><span class="c1"># data</span>
+<span class="w">  </span><span class="n">type</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w">        </span><span class="c1"># lines with points</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/86cf6db377c41bfe6c6deae6660ad0f24b6d8cc636e54e9a338c2c4a26c69393.png" src="../_images/86cf6db377c41bfe6c6deae6660ad0f24b6d8cc636e54e9a338c2c4a26c69393.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">vsae</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">*</span><span class="n">sicdegp</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: autism 
+      AIC      BIC    logLik
+  4716.13 4760.166 -2348.065
+
+Random effects:
+ Formula: ~1 + age | childid
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev   Corr  
+(Intercept) 8.602952 (Intr)
+age         4.019888 -0.998
+Residual    7.769026       
+
+Fixed effects:  vsae ~ age * sicdegp 
+                      Value Std.Error  DF   t-value p-value
+(Intercept)        1.843174 1.6899783 449  1.090650  0.2760
+age                2.971975 0.6268443 449  4.741170  0.0000
+sicdegpmedium     -0.324782 2.2318719 155 -0.145520  0.8845
+sicdegphigh       -3.858107 2.4775418 155 -1.557232  0.1215
+age:sicdegpmedium  0.715160 0.8290365 449  0.862640  0.3888
+age:sicdegphigh    4.334815 0.9181896 449  4.721046  0.0000
+ Correlation: 
+                  (Intr) age    scdgpm scdgph ag:scdgpm
+age               -0.891                               
+sicdegpmedium     -0.757  0.675                        
+sicdegphigh       -0.682  0.608  0.517                 
+age:sicdegpmedium  0.674 -0.756 -0.891 -0.460          
+age:sicdegphigh    0.609 -0.683 -0.461 -0.888  0.516   
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-3.87638126 -0.34680674 -0.02510791  0.31120771  5.28293063 
+
+Number of Observations: 610
+Number of Groups: 158 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
+<span class="n">Corr</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">cov2cor</span><span class="p">(</span><span class="n">Sigma.1</span><span class="p">)</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Corr</span><span class="p">,</span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9418a42bb44c8e2cf3f341c2409cd2ea765ef8c6401fc1c727e23c31bff1b9b2.png" src="../_images/9418a42bb44c8e2cf3f341c2409cd2ea765ef8c6401fc1c727e23c31bff1b9b2.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/32fef1c2dc1f5c72c5c9a126d0fdf356638ef16360f56d189529e951f8981041.png" src="../_images/32fef1c2dc1f5c72c5c9a126d0fdf356638ef16360f56d189529e951f8981041.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/41c06b4c2e58864bc366941032041a36bd391f1640f4e04d5f43555507bbcc4d.png" src="../_images/41c06b4c2e58864bc366941032041a36bd391f1640f4e04d5f43555507bbcc4d.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: vsae
+              Chisq Df Pr(&gt;Chisq)    
+age         161.601  1  &lt; 2.2e-16 ***
+sicdegp      35.907  2  1.595e-08 ***
+age:sicdegp  25.667  2  2.670e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
@@ -700,7 +645,9 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-autism-data">The Autism Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 </ul>
   </nav></div>
 
