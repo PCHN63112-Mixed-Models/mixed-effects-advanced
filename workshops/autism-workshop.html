@@ -8260,6 +8260,19 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>The key to seeing how this works is to recognise that we replace $\beta_{1j}^{(k)}$ at Level 1 with its full definition from Level 2. This full definition is then multiplied by $\text{age}_{i}$. So, at Level 1 we have</p>
+<p>$$
+\beta_{1j}^{(k)} \times \text{age}_{i},
+$$</p>
+<p>which becomes</p>
+<p>$$
+\left(\beta_{1} + \text{SICDEGP}_{j} + \phi^{(k)}_{j}\right) \times \text{age}_{i}.
+$$</p>
+<p>Removing the brackets then results in</p>
+<p>$$
+\left(\beta_{1} \times \text{age}_{i}\right) + \left(\text{SICDEGP}_{j} \times \text{age}_{i}\right) + \left(\phi^{(k)}_{j} \times \text{age}_{i}\right),
+$$</p>
+<p>producing the overall slope with age, the interactions between age and SICDEGP and the random per-child slope of age.</p>
 <p>$$
 \text{VSAE}^{(k)}_{ij} = \beta_{0} + \left(\beta_{1} \times \text{age}_{i}\right) + \text{SICDEGP}_{j} +  \left(\text{age} \times \text{SICDEGP}\right)_{ij} + \xi^{(k)}_{j} + (\phi^{(k)}_{j} \times \text{age}_{i}) +  \eta^{(k)}_{ij}
 $$</p>
