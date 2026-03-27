@@ -380,9 +380,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a></li>
 </ul>
 </li>
@@ -394,6 +392,7 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
             </nav>
         </div>
@@ -407,6 +406,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-longitudinal-data-example">
 <h1>PCHN63112 Workshop: Longitudinal Data Example<a class="headerlink" href="#pchn63112-workshop-longitudinal-data-example" title="Link to this heading">#</a></h1>
+<p>In this example,we will examine building a mixed-effects model for longitudinal data. Unlike repeated measurements, longitudinal data has a specific temporal ordering that needs to be taken into account. In addition, the actual gaps of time between the measurements are important and must be accommodated. In general, this means dealing with <em>trends</em> over time, where <em>time</em> must be treated as a continuous variable. In repeated measurements, the repeats are treated as levels of a <em>factor</em>. As such, our interest is estimating and comparing means. By comparison, with longitudinal data the repeats are treated as measurements associated with a continuous variable (e.g. time). As such, our interest is estimating and comparing <em>regression slopes</em> over time.</p>
 <section id="loading-packages">
 <h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
 <p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
@@ -467,7 +467,7 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>As this is already long-formatted, we just need to convert the relevant variables to factors. We also rename the levels associated with <code class="docutils literal notranslate"><span class="pre">sicdegp</span></code> factor to make their meaning clearer.</p>
+<p>As this is already long-formatted, we just need to convert the relevant variables to factors. We also capitalise <code class="docutils literal notranslate"><span class="pre">VSAE</span></code> and <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> for clarity, and rename the levels associated with <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> to make their meaning clearer.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism</span><span class="o">$</span><span class="n">childid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">autism</span><span class="o">$</span><span class="n">childid</span><span class="p">)</span>
@@ -502,7 +502,7 @@ See ?effectsTheme for details.
 <p>Of note is that VSAE has a very wide range, from 1-198, and also contains two missing values. This indicates that there were some occasions when a particular child was not measured. There are also more children in the <code class="docutils literal notranslate"><span class="pre">medium</span></code> SICDEGP group than the others, making the data <em>unbalanced</em> in relation to this factor. Also note that <code class="docutils literal notranslate"><span class="pre">childid</span></code> does not run sequentially, as these data represent a subset of children who participated in this study.</p>
 <section id="model-notation">
 <h3>Model Notation<a class="headerlink" href="#model-notation" title="Link to this heading">#</a></h3>
-<p>As these data are a mixture of <em>categorical</em> and <em>continuous</em> variables, a more general regression framework will be needed when writing this model. In what follows, we will use <em>descriptive labels</em> rather than greek letter for categorical variables (e.g. <span class="math notranslate nohighlight">\(\text{SICDEGP}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>) and will introduce <span class="math notranslate nohighlight">\(\beta\)</span>-coefficients for continuous variables (e.g. <span class="math notranslate nohighlight">\(\left(\beta_{1} \times \text{age}_{i}\right)\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which terms are categorical and which are continuous. In reality, the whole model is fit as a regression with dummy variables in place of the categorical predictors. However, it can be less clear to write the model this way, even if this is the reality of how it is fit.</p>
+<p>As these data are a mixture of <em>categorical</em> and <em>continuous</em> variables, a more general regression framework will be needed when writing this model. In what follows, we will use <em>descriptive labels</em> rather than greek letter for effects associated with categorical variables (e.g. <span class="math notranslate nohighlight">\(\text{SICDEGP}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>) and will introduce <span class="math notranslate nohighlight">\(\beta\)</span>-coefficients for continuous variables (e.g. <span class="math notranslate nohighlight">\(\left(\beta_{1} \times \text{age}_{i}\right)\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which terms are categorical and which are continuous. In reality, the whole model is fit as a regression with dummy variables in place of the categorical predictors. However, it can be less clear to write the model this way, even if this is the reality of how it is fit.</p>
 </section>
 </section>
 <section id="data-structure">
@@ -529,7 +529,7 @@ See ?effectsTheme for details.
 </div>
 </div>
 <p>we can see that each row corresponds to a single unit (<em>child</em>) measured <em>multiple times</em>. So these are either <em>repeated measurements</em> or <em>longitudinal</em> data. The difference lies in whether there is an explicit measurement of time here. As we can see, the different repeats are indexed by the values of <code class="docutils literal notranslate"><span class="pre">age</span></code>. Importantly, these values have an <em>order</em> that must be maintained and the temporal gap between successive values is not uniform. The time scale is also meaningful, as it is measured in <em>years</em>. As such, this is <em>longitudinal</em> data.</p>
-<p>Finally, we need to determine whether there are any <em>clustering</em> variables that represent a higher-order dependency structure in these data. The only potential candidate is <code class="docutils literal notranslate"><span class="pre">sicdegp</span></code>, but we know from the data description above that this is an artificial experimental grouping based on the child’s language skills at age 2. It is not indicative of a shared context of environment that binds different children together. As such, this is clearly a <em>grouping</em> variable rather than a <em>clustering</em> variable. Based on this, we can construct the following table of the <em>levels</em> of these data, using the guidance in the lesson</p>
+<p>Finally, we need to determine whether there are any <em>clustering</em> variables that represent a higher-order dependency structure in these data. The only potential candidate is <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, but we know from the data description above that this is an artificial experimental grouping based on the child’s language skills at age 2. It is not indicative of a shared context or environment that binds different children together. As such, this is clearly a <em>grouping</em> variable rather than a <em>clustering</em> variable. Based on this, we can construct the following table of the <em>levels</em> of these data, using the guidance in the lesson</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p><strong>Data Type</strong></p></th>
@@ -552,11 +552,11 @@ See ?effectsTheme for details.
 </tbody>
 </table>
 </div>
-<p>Because these data are quite simple, we can get an initial sense of their structure by constructing a graph of child-specific trajectories over time for each level of <code class="docutils literal notranslate"><span class="pre">sicdegp</span></code></p>
+<p>Because these data are quite simple, we can get an initial sense of their structure by constructing a graph of child-specific trajectories over time for each level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
-<span class="w">  </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=age, panel=SICDe Group</span>
+<span class="w">  </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=age, panel=SICDEG</span>
 <span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">childid</span><span class="p">,</span><span class="w">   </span><span class="c1"># separate lines per-child</span>
 <span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w">    </span><span class="c1"># data</span>
 <span class="w">  </span><span class="n">type</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w">        </span><span class="c1"># lines with points</span>
@@ -568,11 +568,11 @@ See ?effectsTheme for details.
 <img alt="../_images/6447d1cca84c2aed88672e1907b6ed1cec913edd431258c4e176f1b69c0b7a32.png" src="../_images/6447d1cca84c2aed88672e1907b6ed1cec913edd431258c4e176f1b69c0b7a32.png" />
 </div>
 </div>
-<p>Several patterns are noticeable here. Firstly, the variance appears to increase as a function of <code class="docutils literal notranslate"><span class="pre">age</span></code>, getting wider and wider as <code class="docutils literal notranslate"><span class="pre">age</span></code> increases. Whatever model we choose, we will need to make sure that the variance estimated for each value of time increase appropriately. Secondly, there is a slight hint that some of these trajectories are not <em>linear</em>, rather they <em>bend</em> upwards. As such, we may wish to entertain a <em>quadratic</em> model of time as well. Finally, it does not look as if the variance between these trajectories differs majorly between the levels of <code class="docutils literal notranslate"><span class="pre">sicdegp</span></code>, but this is something we could consider.</p>
+<p>Several patterns are noticeable here. Firstly, the variance appears to increase as a function of <code class="docutils literal notranslate"><span class="pre">age</span></code>, getting wider and wider as <code class="docutils literal notranslate"><span class="pre">age</span></code> increases. Whatever model we choose, we will need to make sure that the variance estimated for each value of time increases appropriately. Secondly, there is a slight hint that some of these trajectories are not <em>linear</em>, rather they <em>bend</em> upwards. As such, we may wish to entertain a <em>quadratic</em> model of time as well.</p>
 </section>
 <section id="model-building">
 <h2>Model Building<a class="headerlink" href="#model-building" title="Link to this heading">#</a></h2>
-<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and ready for modelling.</p>
+<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and are ready for modelling.</p>
 <section id="step-i-a-single-dependency-structure">
 <h3>Step I: A Single Dependency Structure<a class="headerlink" href="#step-i-a-single-dependency-structure" title="Link to this heading">#</a></h3>
 <p>We start by isolating a single dependency structure which, in this example, is a single <em>child</em>. We choose the first child in the dataset, who is indexed using <code class="docutils literal notranslate"><span class="pre">childid</span> <span class="pre">==</span> <span class="pre">'1'</span></code>. We subset the data below</p>
@@ -594,10 +594,10 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>In terms of those variables suitable for a model of an individual child, we note that <code class="docutils literal notranslate"><span class="pre">sicdegp</span></code> is constant, given that this is defined at the level of a <em>child</em> as a whole. As such, we remove it from the dataset</p>
+<p>In terms of those variables suitable for a model of an individual child, we note that <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is constant, given that this is defined at the level of a <em>child</em> as a whole. As such, we remove it from the dataset</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">childid</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">SICDEGP</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">childid</span><span class="o">==</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">SICDEGP</span><span class="p">)</span><span class="w"> </span><span class="c1"># remove SICDEGP</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">autism.1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -613,12 +613,12 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>Now we can see that the only variables left are the outcome variable <code class="docutils literal notranslate"><span class="pre">vsae</span></code> and the continuous time predictor of <code class="docutils literal notranslate"><span class="pre">age</span></code>. As such, our basic model for a single child is</p>
+<p>Now we can see that the only variables left are the outcome variable <code class="docutils literal notranslate"><span class="pre">VSAE</span></code> and the continuous time predictor of <code class="docutils literal notranslate"><span class="pre">age</span></code>. As such, our basic model for a single child is</p>
 <div class="math notranslate nohighlight">
 \[
 \text{VSAE}_{i} = \beta_{0} + \left(\beta_{1} \times \text{age}_{i}\right) + \eta_{i},
 \]</div>
-<p>which is just the simple regression of VSAE on age. We can fit this in <code class="docutils literal notranslate"><span class="pre">R</span></code> is we like, just to see that this works</p>
+<p>which is just the simple regression of VSAE on age. We can fit this in <code class="docutils literal notranslate"><span class="pre">R</span></code> if we like, just to see that this works</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.1.lm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism.1</span><span class="p">)</span>
@@ -676,34 +676,22 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
 <img alt="../_images/d249358b50af2661aadfd29268c76f2727b454c214e02e5708635395bb11c1d9.png" src="../_images/d249358b50af2661aadfd29268c76f2727b454c214e02e5708635395bb11c1d9.png" />
 </div>
 </div>
-<p>In most cases, there is enough data to fit the model. Though in some, the fit will be <em>perfect</em> (e.g. child 173 and child 85). It is also notable from this visualisation illustrates how different the trajectories over time are for different children. Some show no improvements in socialisation, whereas others show a dramatic improvement over time. This would seem to justify treating these effects of <code class="docutils literal notranslate"><span class="pre">age</span></code> as varying per-child, rather than fixed across all children.</p>
-</section>
+<p>In most cases, there is enough data to fit the model. In some cases, the fit will be <em>perfect</em> (e.g. child 173 and child 85). It is also notable from this visualisation how different the trajectories over time are for different children. Some show no improvements in socialisation, whereas others show a dramatic improvement over time. This would seem to justify treating these effects of <code class="docutils literal notranslate"><span class="pre">age</span></code> as varying per-child, rather than fixed across all children.</p>
 </section>
 <section id="step-ii-expand-to-multiple-structures">
-<h2>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h2>
+<h3>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h3>
 <p>In our second step, we expand the model above to <em>multiple</em> children. We index these using the notation of <span class="math notranslate nohighlight">\((k)\)</span> to indicate which terms belong to a particular child. We start with the most general case of allowing every term to vary by child, giving us</p>
 <div class="math notranslate nohighlight">
 \[
 \text{VSAE}^{(k)}_{i} = \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{i}.
 \]</div>
 <p>In this model, each child gets their own unique intercept <span class="math notranslate nohighlight">\(\left(\beta_{0}\right)\)</span> and their own unique age slope <span class="math notranslate nohighlight">\(\left(\beta_{1}\right)\)</span>. We can reason about each of these terms, in conjunction with the plots made above.</p>
-<p>In terms of the intercept, if we wish to use a mixed-effects model then the bear minimum is a <em>random intercept</em>. This alone could be enough to decide on this term, but it is worth considering the <em>meaning</em> of doing this as well. In the current model, the intercept will represent the value of VSAE at an <code class="docutils literal notranslate"><span class="pre">age</span></code> of 0, which obviously does not make too much sense. We could change this by either <em>centering</em> age (e.g. <code class="docutils literal notranslate"><span class="pre">age</span> <span class="pre">-</span> <span class="pre">mean(age)</span></code>) or by subtracting a value of 2 (e.g. <code class="docutils literal notranslate"><span class="pre">age</span> <span class="pre">-</span> <span class="pre">2</span></code>). In the former case, the intercept would represent the value of VSAE at the <em>average</em> age of the sample, and in the latter case, the intercept would represent the value of VSAE at an age of 2. We will not do either of these, just to keep things simple. In both cases, the interpretation of the intercept would change, but its <em>role</em> remains the same: it is the <em>starting point</em> of the slope over time. As such, the choice between <em>fixed</em> and <em>random</em> remains the same. If we choose to <em>fix</em> the intercept then we are saying that all children start with the same value of VSAE and any variation is simply sampling error. If we allow the intercept to be <em>random</em>, we are saying that all children will start with different values of VSAE and that this variation represents something fundamental about the children as different entities. More generally, it allows us to treat the children as a random sample from a distribution of children. So, in both senses, it seems most justifiable to keep the intercept (in whatever form it takes) as <em>random</em>.</p>
+<p>In terms of the intercept, if we wish to use a mixed-effects model then the bear minimum is a <em>random intercept</em>. This alone could be enough to decide on this term, but it is worth considering the <em>meaning</em> of doing this as well. In the current model, the intercept will represent the value of VSAE at an <code class="docutils literal notranslate"><span class="pre">age</span></code> of 0, which obviously does not make too much sense. We could change this by either <em>centering</em> age (e.g. <code class="docutils literal notranslate"><span class="pre">age</span> <span class="pre">-</span> <span class="pre">mean(age)</span></code>) or by subtracting a value of 2 (e.g. <code class="docutils literal notranslate"><span class="pre">age</span> <span class="pre">-</span> <span class="pre">2</span></code>). In the former case, the intercept would represent the value of VSAE at the <em>average</em> age of the sample, and in the latter case, the intercept would represent the value of VSAE at an age of 2. We will not do either of these, just to keep things simple. In both cases, the interpretation of the intercept would change, but its <em>role</em> remains the same: it is the <em>starting point</em> of the slope. As such, the choice between <em>fixed</em> and <em>random</em> remains the same. If we choose to <em>fix</em> the intercept then we are saying that all children start with the same value of VSAE and any variation is simply sampling error. If we allow the intercept to be <em>random</em>, we are saying that all children will start with different values of VSAE and that this variation represents something fundamental about the children as different entities. More generally, it allows us to treat the children as a random sample from a distribution of children. So, in both senses, it seems most justifiable to keep the intercept as <em>random</em>.</p>
 <p>In terms of the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope, if we choose to <em>fix</em> this term, we are saying that the change in socialisation over time is <em>the same</em> for every child. There is a constant effect of time and any variation we see is just sampling error. If we sampled children infinitely, we would end up seeing the same average slope for each one of them. In other words, the individual child <em>does not matter</em>. Alternatively, if we allow the slope to be <em>random</em>, we are saying that each child has their own unique trajectory over time and children will not converge on the same value. Their slopes represent something fundamental about each child as a unique entity. Unlike other examples we have seen, this would seem to be a fairly obvious choice given the plausibility of this description and the plots we have seen above. As such, we choose here to allow the slope to be <em>random</em> as well.</p>
+</section>
 <section id="step-iii-write-the-higher-level-models">
 <h3>Step III: Write the Higher-level Models<a class="headerlink" href="#step-iii-write-the-higher-level-models" title="Link to this heading">#</a></h3>
-<p>Now that we have made decisions about all the Level 1 terms, we can write the Level 2 models. As both the intercept and the slope are random, they are both conceived as being drawn from distributions with some mean and some variance</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-    \text{Level 1} \\
-    \text{VSAE}^{(k)}_{i} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{i} \\
-    \quad\\
-    \text{Level 2} \\
-    \beta_{0}^{(k)} &amp;\sim \mathcal{N}\left(\beta_{0}, \sigma^{2}_{\beta_{0}}\right) \\
-    \beta_{1}^{(k)} &amp;\sim \mathcal{N}\left(\beta_{1}, \sigma^{2}_{\beta_{1}}\right)
-\end{alignat*}
-\end{split}\]</div>
-<p>which we tend to write in mean + error form as</p>
+<p>Now that we have made decisions about all the Level 1 terms, we can write the Level 2 models. As both the intercept and the slope are random, they are both conceived as being drawn from distributions with some mean and some variance, which we tend to write in mean + error form as</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -720,14 +708,14 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
 \[\begin{split}
 \begin{alignat*}{1}
     \text{Level 1} \\
-    \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0j}^{(k)} + \left(\beta_{1j}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij} \\
+    \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij} \\
     \quad\\
     \text{Level 2} \\
     \beta_{0}^{(k)} &amp;= \beta_{0} + \text{SICDEGP}_{j} + \xi^{(k)} \\
     \beta_{1}^{(k)} &amp;= \beta_{1} + \phi^{(k)}.
 \end{alignat*}
 \end{split}\]</div>
-<p>As written, this implies only a <em>main effect</em> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, as it only appears in the model for the intercept. In other words, the grouping serves only to shift the intercept <em>up</em> or <em>down</em>, but it does not influence the slope. If we want to also include the <em>interaction</em> between <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and <code class="docutils literal notranslate"><span class="pre">age</span></code>, then we need a new term in the model for the slope. This will allow the slope to be shifted, depending upon the group, meaning that <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is able to to influence both the starting point of the slope <em>and</em> its angle. In order to include <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> in the slope model, we need to make it clear that this is a different set of terms. Traditionally, we might use different Greek letters (e.g. <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\(\gamma_{j}\)</span>), but given that we are using <em>labels</em> here, we will denote the effects of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the intercept as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{0}_{j}\)</span> and the effect of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the slope as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{1}_{j}\)</span>. The model is then</p>
+<p>As written, this implies only a <em>main effect</em> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, as it only appears in the model for the intercept. In other words, the grouping serves only to shift the intercept <em>up</em> or <em>down</em>, but it does not influence the slope. If we want to also include the <em>interaction</em> between <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and <code class="docutils literal notranslate"><span class="pre">age</span></code>, then we need a new term in the model for the slope. This will allow the slope to be shifted, depending upon the group. In order to include <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> in the slope model, we need to make it clear that this is a different set of effects. Traditionally, we might use different Greek letters (e.g. <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\(\gamma_{j}\)</span>), but given that we are using <em>labels</em> here, we will denote the effects of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the intercept as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{0}_{j}\)</span> and the effect of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the slope as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{1}_{j}\)</span>. The model is then</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -799,8 +787,10 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
   Data: autism 
   Log-restricted-likelihood: -2348.065
   Fixed: VSAE ~ 1 + SICDEGP + age + SICDEGP:age 
-      (Intercept)     SICDEGPmedium       SICDEGPhigh               age SICDEGPmedium:age   SICDEGPhigh:age 
-        1.8431741        -0.3247815        -3.8581067         2.9719752         0.7151603         4.3348154 
+      (Intercept)     SICDEGPmedium       SICDEGPhigh               age 
+        1.8431741        -0.3247815        -3.8581067         2.9719752 
+SICDEGPmedium:age   SICDEGPhigh:age 
+        0.7151603         4.3348154 
 
 Random effects:
  Formula: ~1 + age | childid
@@ -816,7 +806,7 @@ Number of Groups: 158
 </div>
 </div>
 </div>
-<p>We can have a look at the marginal covariance structure that this has resulted in</p>
+<p>We can have a look at the marginal covariance structure that this model has resulted in</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
@@ -862,12 +852,12 @@ Number of Groups: 158
 <p>Before we get to checking assumptions and performing inference, it is a good idea to consider other model forms. Effectively, we want to get to our final model <em>before</em> performing these steps. This is both practical, as it prevents multiple confusing round of assumption checking and inference, and is also a guard against <em>bias</em>, particularly if we know the results of a given model specification. This sequence is therefore a self-imposed <em>protection</em> against being swayed by <span class="math notranslate nohighlight">\(p\)</span>-values more than the logic of building a sensible model.</p>
 <section id="a-quadratic-effect-of-age">
 <h3>A Quadratic Effect of <code class="docutils literal notranslate"><span class="pre">age</span></code><a class="headerlink" href="#a-quadratic-effect-of-age" title="Link to this heading">#</a></h3>
-<p>As mentioned earlier, there is a slight hint that some of the trajectories are <em>curved</em> and so we could consider whether a <em>quadratic</em> effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is warranted. There are three ways this could enter the model: fixed-effects only, random-effects only and both. We will consider all these below in terms of model comparisons using the <code class="docutils literal notranslate"><span class="pre">BIC()</span></code> function. Of importance is that we set <code class="docutils literal notranslate"><span class="pre">method='ML'</span></code>. In addition, we make use of the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function to only change one element of the model specification</p>
+<p>As mentioned earlier, there is a slight hint that some of the trajectories are <em>curved</em> and so we could consider whether a <em>quadratic</em> effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is warranted. There are three ways this could enter the model: fixed-effects only, random-effects only and both. We will consider all these below in terms of model comparisons using the <code class="docutils literal notranslate"><span class="pre">BIC()</span></code> function. Of importance is that we set <code class="docutils literal notranslate"><span class="pre">method='ML'</span></code>. In addition, we make use of the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function to only change a subset of options to form each new model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
-<span class="n">autism.lme.full.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="o">=</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">))</span><span class="w"> </span><span class="c1"># quadratic fixed</span>
-<span class="n">autism.lme.full.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w"> </span><span class="c1"># quadratic random</span>
+<span class="n">autism.lme.full.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="o">=</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">))</span><span class="w">                                   </span><span class="c1"># quadratic fixed</span>
+<span class="n">autism.lme.full.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w">                                   </span><span class="c1"># quadratic random</span>
 <span class="n">autism.lme.full.3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="o">=</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w"> </span><span class="c1"># quadratic fixed &amp; random</span>
 
 <span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full.1</span><span class="p">,</span><span class="n">autism.lme.full.2</span><span class="p">,</span><span class="n">autism.lme.full.3</span><span class="p">)</span>
@@ -972,7 +962,7 @@ autism.lme.full.3 16 4706.372
 <p>At this point, we could also look at simplifying the random effects. Although we saw above that a quadratic model of the child-specific slopes was better than a linear fit, we could also examine whether we need a child-specific effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> at all. Based on reason alone, this <em>should</em> be there, but we can see what the data say about this.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w">              </span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
 <span class="n">autism.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span>
 
 <span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full</span><span class="p">)</span>
@@ -1041,6 +1031,7 @@ autism.lme.full 13 4694.026
 </section>
 <section id="checking-assumptions">
 <h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
+<p>To check the assumptions, we will use the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code>, which we brought into scope at the beginning of the analysis. This results in the following plots.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
@@ -1051,26 +1042,63 @@ autism.lme.full 13 4694.026
 <img alt="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" src="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" />
 </div>
 </div>
+<p>In terms of the plots, there are a few elements of note. Firstly, the distributions of the random effects all show heavy tails and so precise equivalence to normal distributions is difficult to justify. To an extent, some of this is due to some potential outliers, as can be seen by a number of data points with standardised residuals &gt; 3. We can extract these using the code below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">res.norm</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1"># get normalised residuals</span>
+<span class="n">idx</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">res.norm</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">             </span><span class="c1"># identify which are &gt; 3</span>
+<span class="n">mod.data</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nlme</span><span class="o">::</span><span class="nf">getData</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span><span class="w">            </span><span class="c1"># get data used in the fit</span>
+<span class="n">outliers</span><span class="w">       </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mod.data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w">                      </span><span class="c1"># subset the data based on the outliers</span>
+<span class="n">outliers</span><span class="o">$</span><span class="n">resid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">res.norm</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w">                        </span><span class="c1"># add the residuals as a column for comparison</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/28b33cac7d0ff28e61e7fb0d663c14cc8ddc1550701ddb549b3119d1582f12ee.png" src="../_images/28b33cac7d0ff28e61e7fb0d663c14cc8ddc1550701ddb549b3119d1582f12ee.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    age VSAE SICDEGP childid     resid
+37    5   71    high      46  5.715804
+38    9   31    high      46 -4.413278
+46    5   77    high      49  4.338568
+133   3   63    high     180  6.814855
+497   3   45     low      80  4.327357
+</pre></div>
 </div>
 </div>
+</div>
+<p>A few details about this process. Firstly, we want to extract the <em>normalised</em> residuals and then find the indices (row numbers) associated with those points with absolute values greater than 3. However, remember that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> <em>removed</em> some data due to us passing the <code class="docutils literal notranslate"><span class="pre">na.omit</span></code> option. As such, the indices of the residuals will now no longer match the raw data. To solve this, we ask <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to give us the data it used for the fitting, not the raw data. This is what <code class="docutils literal notranslate"><span class="pre">nlme::getData()</span></code> does. This then allows us to successfully identify the correct points.</p>
+<p>Before discussing these points, we can first visualise the trajectories of those children identified in the list of outliers</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
+<span class="w">  </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w">                                     </span><span class="c1"># x-axis=age, panel=child</span>
+<span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">childid</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">outliers</span><span class="o">$</span><span class="n">childid</span><span class="p">),</span><span class="w"> </span><span class="c1"># only outlier children</span>
+<span class="w">  </span><span class="n">type</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w">                                            </span><span class="c1"># lines with points</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" src="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" />
+<img alt="../_images/d5231beeffeebc0ecb48b7ca38a16542882e9f53a71ffe83c7ec011527b83e04.png" src="../_images/d5231beeffeebc0ecb48b7ca38a16542882e9f53a71ffe83c7ec011527b83e04.png" />
 </div>
 </div>
+<p>In terms of these, child 46 seems a little odd. Not only did they score very high on socialisation at age 5, they then proceeded to score very low at age 9 and went back up again at age 13. This seems unlikely and may suggest that either the measurement at age 5 is erroneous, the measurement at age 9 is erroneous, or both. For the remaining children, it is more difficult to make a judgement. Their trajectories do not necessarily seem out of the ordinary. The largest outlier is associated with child 180 at age 3, where their VSAE score is much <em>higher</em> than any other children at that age. Unless we had reason to think that a score of 63 is <em>unreasonable</em> at age 3, we have no great justification for removing the child. In most cases, the lack of fit is likely because none of these trajectories can be as well-captured by either a straight or quadratic curve. However, just because a child scores well-below or well-above expectation at a given age, this is not a reason to remove them without further justification. However, we have some suspicions about child 46 and so will choose to remove them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span>
+<span class="w">                  </span><span class="n">subset</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">childid</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&#39;46&#39;</span><span class="w">                         </span><span class="c1"># remove child 46</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
+<p>We have now reached the inference element of the analysis. We can start by generating the ANOVA table of the effects</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span>
@@ -1082,15 +1110,49 @@ autism.lme.full 13 4694.026
 
 Response: VSAE
               Chisq Df Pr(&gt;Chisq)    
-SICDEGP      35.571  2  1.888e-08 ***
-age         157.267  1  &lt; 2.2e-16 ***
-SICDEGP:age  27.565  2  1.034e-06 ***
+SICDEGP      33.040  2  6.692e-08 ***
+age         155.055  1  &lt; 2.2e-16 ***
+SICDEGP:age  27.454  2  1.093e-06 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
 </div>
+<p>This indicates a significant <code class="docutils literal notranslate"><span class="pre">age</span></code> <span class="math notranslate nohighlight">\(\times\)</span> <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> effect, suggesting that the relationship between <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">VSAE</span></code> changes depending upon the <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> grouping. We plot this effect below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/39c01b0a2dc7ee8c71102fb86c9c5ddfb2701dfc667c7cda394e8b070310fbf6.png" src="../_images/39c01b0a2dc7ee8c71102fb86c9c5ddfb2701dfc667c7cda394e8b070310fbf6.png" />
+</div>
+</div>
+<p>From this, it appears as if the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for children in the <code class="docutils literal notranslate"><span class="pre">high</span></code> group is steeper than the slopes for children in the <code class="docutils literal notranslate"><span class="pre">medium</span></code> or <code class="docutils literal notranslate"><span class="pre">low</span></code> groups. We will follow this up and compare these slopes formally.</p>
+<p>Because our inference concerns comparing <em>slopes</em> rather than <em>means</em>, we make use of the <code class="docutils literal notranslate"><span class="pre">emtrends()</span></code> function, rather than the <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> function. This operates in a very similar way, we just need to remember that what we are comparing here are <em>slope magnitudes</em> rather than means.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emtrends</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast      estimate    SE  df z.ratio p.value
+ low - medium    -0.565 0.761 Inf  -0.742  0.4578
+ low - high      -4.107 0.849 Inf  -4.839  &lt;.0001
+ medium - high   -3.542 0.800 Inf  -4.426  &lt;.0001
+
+Degrees-of-freedom method: fixed 
+P value adjustment: holm method for 3 tests 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on this, we can see that the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">low</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">medium</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is non-significant. We can also see that the change in magnitude is very small (0.57). By comparison, the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> and the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">medium</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> are both significant, with much larger shifts in the slope magnitude (4.11 and 3.54 respectively). This matches what we can see in the plot above.</p>
+<p>Our general conclusion is then that, across all <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> levels, there is an overall trend of socialisation improving as the children get older. This becomes more variable as age increases. Those children originally classified in the low or medium expressive language groups show similar degrees of improvement over time. However, those children classified in the high expressive language group show a much steeper increase in socialisation across time. This suggests that those children high in expressive language at age 2 will show the most gains in socialisation by the time they reach the age of 13.</p>
 </section>
 </section>
 
@@ -1149,9 +1211,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a></li>
 </ul>
 </li>
@@ -1163,6 +1223,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
   </nav></div>
 
