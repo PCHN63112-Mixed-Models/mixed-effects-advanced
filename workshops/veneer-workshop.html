@@ -61,6 +61,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'workshops/veneer-workshop';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -371,6 +373,16 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dental-veneer-data">The Dental Veneer Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-to-multiple-patients">Expand to Multiple Patients</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-the-model-in-r">Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -384,129 +396,410 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63-workshop-clustered-longitudinal-data-example">
 <h1>PCHN63… Workshop: Clustered Longitudinal Data Example<a class="headerlink" href="#pchn63-workshop-clustered-longitudinal-data-example" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="s">&#39;lattice&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># plotting functions</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span><span class="w">    </span><span class="c1"># covariance extraction and visualisation</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># mixed-effects modelling</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span><span class="w">       </span><span class="c1"># Asymptotic ANOVA tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Follow-up tests</span>
+<span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Effects plots from the model</span>
+<span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># custom plot.lme() function for making assumptions plots</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
+Welcome to emmeans.
+Caution: You lose important information if you filter this package&#39;s results.
+See &#39;? untidy&#39;
+Use the command
+    lattice::trellis.par.set(effectsTheme())
+  to customize lattice options for effects plots.
+See ?effectsTheme for details.
+</pre></div>
+</div>
+</div>
+</div>
 <section id="the-dental-veneer-data">
 <h2>The Dental Veneer Data<a class="headerlink" href="#the-dental-veneer-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read.table</span><span class="p">(</span><span class="s">&#39;veneer.dat&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
-<span class="n">veneer</span>
+<span class="n">veneer</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">24</span><span class="p">,]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient tooth age base_gcf        cda time gcf
-1         1     6  46       17  4.6666670    3  11
-2         1     6  46       17  4.6666670    6  68
-3         1     7  46       22  4.6666670    3  13
-4         1     7  46       22  4.6666670    6  47
-5         1     8  46       18  5.0000000    3  14
-6         1     8  46       18  5.0000000    6  58
-7         1     9  46       12  3.3333330    3  10
-8         1     9  46       12  3.3333330    6  57
-9         1    10  46       10  8.6666670    3  14
-10        1    10  46       10  8.6666670    6  44
-11        1    11  46       17  5.6666670    3  11
-12        1    11  46       17  5.6666670    6  53
-13        3     6  32        3  7.6666670    3  28
-14        3     6  32        3  7.6666670    6  23
-15        3     7  32        4 11.0000000    3  17
-16        3     7  32        4 11.0000000    6  15
-17        3     8  32        3 10.6666700    3  19
-18        3     8  32        3 10.6666700    6  32
-19        3     9  32       10 10.0000000    3  34
-20        3     9  32       10 10.0000000    6  46
-21        3    10  32       11  9.3333330    3  54
-22        3    10  32       11  9.3333330    6  39
-23        3    11  32        7  8.0000000    3  38
-24        3    11  32        7  8.0000000    6  19
-25        4     6  51       14  2.3333330    3  23
-26        4     6  51       14  2.3333330    6  16
-27        4     7  51       25  7.3333330    3  25
-28        4     7  51       25  7.3333330    6   7
-29        4     8  51       14  3.0000000    3  29
-30        4     8  51       14  3.0000000    6   6
-31        4     9  51       10  3.3333330    3  23
-32        4     9  51       10  3.3333330    6   7
-33        4    10  51       11 -1.0000000    3  32
-34        4    10  51       11 -1.0000000    6  11
-35        4    11  51       20  1.0000000    3  25
-36        4    11  51       20  1.0000000    6   8
-37        5     7  25       21  7.3333330    3  12
-38        5     7  25       21  7.3333330    6  13
-39        5     8  25       30  6.3333330    3  16
-40        5     8  25       30  6.3333330    6  21
-41        5     9  25       13  4.6666670    3  13
-42        5     9  25       13  4.6666670    6  13
-43        5    10  25       11  6.3333330    3  19
-44        5    10  25       11  6.3333330    6  11
-45        6     6  53       17  3.6666670    3  23
-46        6     6  53       17  3.6666670    6  27
-47        6     7  53       11  5.0000000    3   5
-48        6     7  53       11  5.0000000    6  16
-49        6     8  53       18  7.6666670    3   4
-50        6     8  53       18  7.6666670    6   9
-51        6     9  53       11  3.6666670    3   8
-52        6     9  53       11  3.6666670    6  21
-53        6    10  53       22  0.6666667    3   7
-54        6    10  53       22  0.6666667    6  10
-55        6    11  53       31  3.0000000    3  10
-56        6    11  53       31  3.0000000    6  33
-57        7     6  47       37  4.3333330    3  24
-58        7     6  47       37  4.3333330    6  17
-59        7     7  47       28  4.6666670    3   8
-60        7     7  47       28  4.6666670    6   9
-61        7     8  47        3  6.0000000    3   6
-62        7     8  47        3  6.0000000    6   6
-63        7     9  47        4  4.3333330    3  11
-64        7     9  47        4  4.3333330    6   8
-65        7    10  47        6  5.3333330    3  19
-66        7    10  47        6  5.3333330    6   4
-67        7    11  47       12  4.3333330    3   7
-68        7    11  47       12  4.3333330    6  10
-69        8     6  21       29  3.3333330    3  51
-70        8     6  21       29  3.3333330    6  22
-71        8     7  21       11  9.3333330    3  67
-72        8     7  21       11  9.3333330    6  30
-73        8     8  21       39  6.6666670    3  16
-74        8     8  21       39  6.6666670    6   8
-75        8     9  21       39  3.6666670    3  41
-76        8     9  21       39  3.6666670    6  23
-77        8    10  21       10 11.0000000    3  45
-78        8    10  21       10 11.0000000    6  30
-79        8    11  21       23  5.0000000    3  34
-80        8    11  21       23  5.0000000    6  22
-81        9     6  50        8 -0.3333333    3  16
-82        9     6  50        8 -0.3333333    6   8
-83        9     7  50       11  5.3333330    3  10
-84        9     7  50       11  5.3333330    6   9
-85       10     6  36       27  2.3333330    3  29
-86       10     6  36       27  2.3333330    6  87
-87       10     7  36       10  8.6666670    3  28
-88       10     7  36       10  8.6666670    6  61
-89       10     8  36       25  6.3333330    3  17
-90       10     8  36       25  6.3333330    6  47
-91       10     9  36        7  6.6666670    3  11
-92       10     9  36        7  6.6666670    6  42
-93       10    10  36       15  6.3333330    3  48
-94       10    10  36       15  6.3333330    6  65
-95       10    11  36       19  4.6666670    3  55
-96       10    11  36       19  4.6666670    6  70
-97       12     7  28       42  2.3333330    3  34
-98       12     7  28       42  2.3333330    6   5
-99       12     8  28       30 -1.0000000    3  30
-100      12     8  28       30 -1.0000000    6   7
-101      12     9  28       27 -3.0000000    3  32
-102      12     9  28       27 -3.0000000    6   3
-103      12    10  28       16  6.3333330    3  25
-104      12    10  28       16  6.3333330    6  16
-105      13    10  41       30  7.6666670    3   4
-106      13    10  41       30  7.6666670    6  17
-107      14     8  62       27  4.6666670    3  10
-108      14     8  62       27  4.6666670    6   3
-109      14    10  62        8  7.0000000    3  18
-110      14    10  62        8  7.0000000    6   3
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   patient tooth age base_gcf       cda time gcf
+1        1     6  46       17  4.666667    3  11
+2        1     6  46       17  4.666667    6  68
+3        1     7  46       22  4.666667    3  13
+4        1     7  46       22  4.666667    6  47
+5        1     8  46       18  5.000000    3  14
+6        1     8  46       18  5.000000    6  58
+7        1     9  46       12  3.333333    3  10
+8        1     9  46       12  3.333333    6  57
+9        1    10  46       10  8.666667    3  14
+10       1    10  46       10  8.666667    6  44
+11       1    11  46       17  5.666667    3  11
+12       1    11  46       17  5.666667    6  53
+13       3     6  32        3  7.666667    3  28
+14       3     6  32        3  7.666667    6  23
+15       3     7  32        4 11.000000    3  17
+16       3     7  32        4 11.000000    6  15
+17       3     8  32        3 10.666670    3  19
+18       3     8  32        3 10.666670    6  32
+19       3     9  32       10 10.000000    3  34
+20       3     9  32       10 10.000000    6  46
+21       3    10  32       11  9.333333    3  54
+22       3    10  32       11  9.333333    6  39
+23       3    11  32        7  8.000000    3  38
+24       3    11  32        7  8.000000    6  19
 </pre></div>
 </div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer</span><span class="o">$</span><span class="n">patient</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">patient</span><span class="p">)</span>
+<span class="n">veneer</span><span class="o">$</span><span class="n">tooth</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.factor</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">tooth</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
+<span class="w">  </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=age, panel=SICDEG</span>
+<span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tooth</span><span class="p">,</span><span class="w">   </span><span class="c1"># separate lines per-child</span>
+<span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w">    </span><span class="c1"># data</span>
+<span class="w">  </span><span class="n">type</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="p">,</span><span class="w">       </span><span class="c1"># lines with points</span>
+<span class="w">  </span><span class="n">auto.key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6ffcfbf95f9e4f27dd1f6a85f771e61c2823ecb0de1954ed6e2d18a7e579f356.png" src="../_images/6ffcfbf95f9e4f27dd1f6a85f771e61c2823ecb0de1954ed6e2d18a7e579f356.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>Patient</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">patient</span></code>: the unique identifier of each <em>patient</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">age</span></code>: the patient’s age</p></li>
+</ul>
+</li>
+<li><p>Tooth</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tooth</span></code>: the unique identifier of each <em>tooth</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">based_cdf</span></code>: the baseline measure of GCF for that tooth</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cda</span></code>: the … for that tooth</p></li>
+</ul>
+</li>
+<li><p>Longitudinal Measurements</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>: the time in months after fitting the veneer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gcf</span></code>: <strong>the measurement of GCF at that time point</strong></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="model-building">
+<h2>Model Building<a class="headerlink" href="#model-building" title="Link to this heading">#</a></h2>
+<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and ready for modelling.</p>
+<section id="step-i-a-single-dependency-structure">
+<h3>Step I: A Single Dependency Structure<a class="headerlink" href="#step-i-a-single-dependency-structure" title="Link to this heading">#</a></h3>
+<p>We start by isolating a single dependency structure. This needs to be at the <em>lowest</em> level, with no further dependency structures within. In this example, this is a single <em>tooth</em> from a single <em>patient</em>. We choose <code class="docutils literal notranslate"><span class="pre">tooth</span> <span class="pre">==</span> <span class="pre">'6'</span></code> within <code class="docutils literal notranslate"><span class="pre">patient</span> <span class="pre">==</span> <span class="pre">'1'</span></code> for this purpose.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">patient.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">veneer</span><span class="p">,</span><span class="w">    </span><span class="n">patient</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">tooth.6</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">patient.1</span><span class="p">,</span><span class="w"> </span><span class="n">tooth</span><span class="w">   </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;6&#39;</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">tooth.6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  patient tooth age base_gcf      cda time gcf
+1       1     6  46       17 4.666667    3  11
+2       1     6  46       17 4.666667    6  68
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">tooth.6</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">patient.1</span><span class="p">,</span><span class="w"> </span><span class="n">tooth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;6&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">patient</span><span class="p">,</span><span class="o">-</span><span class="n">age</span><span class="p">,</span><span class="o">-</span><span class="n">base_gcf</span><span class="p">,</span><span class="o">-</span><span class="n">cda</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">tooth.6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  tooth time gcf
+1     6    3  11
+2     6    6  68
+</pre></div>
+</div>
+</div>
+</div>
+<p>Based on this, our basic model for a single tooth is</p>
+<div class="math notranslate nohighlight">
+\[
+\text{GCF}_{i} = \beta_{0} + (\beta_{1} \times \text{time}_{i}) + \eta_{i}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>time</em>. Already, a problem should be visible. As we only have two measurements per-tooth, the model fit will be perfect and there will be no residual variance left.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">tooth.6.lm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">tooth.6</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">tooth.6.lm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = gcf ~ 1 + time, data = tooth.6)
+
+Residuals:
+ALL 2 residuals are 0: no residual degrees of freedom!
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)      -46        NaN     NaN      NaN
+time              19        NaN     NaN      NaN
+
+Residual standard error: NaN on 0 degrees of freedom
+Multiple R-squared:      1,	Adjusted R-squared:    NaN 
+F-statistic:   NaN on 1 and 0 DF,  p-value: NA
+</pre></div>
+</div>
+</div>
+</div>
+<p>This means that we will not be able to estimate a unique effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> for each tooth from each <code class="docutils literal notranslate"><span class="pre">patient</span></code>. Instead, we will need to <em>pool</em> information <em>across</em> patients. This is a constraint of the data that we will need to bear in mind.</p>
+</section>
+<section id="step-ii-expand-to-multiple-structures">
+<h3>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h3>
+<p>In our second step, we expand the model above to <em>multiple</em> teeth from the same patient. We index these using the notation of <span class="math notranslate nohighlight">\((t)\)</span>, to indicate which terms <em>belong</em> to a particular <em>tooth</em>. We start with the most general case of allowing every term to vary by-tooth, giving us</p>
+<div class="math notranslate nohighlight">
+\[
+\text{GCF}^{(t)}_{i} = \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}.
+\]</div>
+<p>We can now reason more carefully about each of these.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">patient.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   patient tooth age base_gcf      cda time gcf
+1        1     6  46       17 4.666667    3  11
+2        1     6  46       17 4.666667    6  68
+3        1     7  46       22 4.666667    3  13
+4        1     7  46       22 4.666667    6  47
+5        1     8  46       18 5.000000    3  14
+6        1     8  46       18 5.000000    6  58
+7        1     9  46       12 3.333333    3  10
+8        1     9  46       12 3.333333    6  57
+9        1    10  46       10 8.666667    3  14
+10       1    10  46       10 8.666667    6  44
+11       1    11  46       17 5.666667    3  11
+12       1    11  46       17 5.666667    6  53
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-iii-write-the-higher-level-models">
+<h3>Step III: Write the Higher-level Models<a class="headerlink" href="#step-iii-write-the-higher-level-models" title="Link to this heading">#</a></h3>
+<p>Now that we have made a decision about all the Level 1 terms, we can write the Level 2 models for each term…</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1 (Longitudinal)} \\
+    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \beta_{0} + \left(\beta_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
+    \beta^{(t)}_{1} &amp;= \beta_{1} \\
+\end{alignat*}
+\end{split}\]</div>
+<p>… we can add interactions with the effect of time in the model for <span class="math notranslate nohighlight">\(\beta^{(t)}_{1}\)</span> …</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1 (Longitudinal)} \\
+    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \beta_{0} + \left(\beta_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
+    \beta^{(t)}_{1} &amp;= \beta_{1} + \left(\beta_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta_{5} \times \text{CDA}^{(t)}\right)  \\
+\end{alignat*}
+\end{split}\]</div>
+<section id="expand-to-multiple-patients">
+<h4>Expand to Multiple Patients<a class="headerlink" href="#expand-to-multiple-patients" title="Link to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
+    \beta^{(t)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t)}\right) \\ \quad \\
+\text{Level 3 (Patient)} \\
+    \beta^{(p)}_{0} &amp;= \beta_{0} + \left(\beta_{6} \times \text{age}^{(p)}\right) + \phi_{0}^{(p)} \\
+    \beta^{(p)}_{1} &amp;= \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)} \\
+    \beta^{(p)}_{2} &amp;= \beta_{2}  \\
+    \beta^{(p)}_{3} &amp;= \beta_{3} \\
+    \beta^{(p)}_{4} &amp;= \beta_{4} \\
+    \beta^{(p)}_{5} &amp;= \beta_{5} 
+\end{alignat*}
+\end{split}\]</div>
+<p>… The full model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1 (Longitudinal)} \\
+    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
+    \beta^{(t)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t)}\right) \\ \quad \\
+\text{Level 3 (Patient)} \\
+    \beta^{(p)}_{0} &amp;= \beta_{0} + \left(\beta_{6} \times \text{age}^{(p)}\right) + \phi_{0}^{(p)} \\
+    \beta^{(p)}_{1} &amp;= \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)} \\
+    \beta^{(p)}_{2} &amp;= \beta_{2}  \\
+    \beta^{(p)}_{3} &amp;= \beta_{3} \\
+    \beta^{(p)}_{4} &amp;= \beta_{4} \\
+    \beta^{(p)}_{5} &amp;= \beta_{5} 
+\end{alignat*}
+\end{split}\]</div>
+<p>which we can simplify by collapsing the fixed-effects back into the different levels to give</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1 (Longitudinal)} \\
+    \text{GCF}^{(t)}_{i} &amp;=  \\ \quad \\
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \\ \quad \\
+\text{Level 3 (Patient)} \\
+    \beta^{(p)}_{0} &amp;=  \\
+    \beta^{(p)}_{1} &amp;= 
+\end{alignat*}
+\end{split}\]</div>
+</section>
+</section>
+</section>
+<section id="fitting-the-model-in-r">
+<h2>Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-the-model-in-r" title="Link to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{GCF}^{(t)}_{i} = &amp;\: + \\
+     &amp;\xi_{0}^{(t)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t)}_{i}
+\end{alignat*}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \xi_{0} &amp;\:|\: t \\
+    \phi_{0} + \left(\phi_{1} \times \text{time}_{i}\right) &amp;\:|\: p \\
+\end{alignat*}
+\end{split}\]</div>
+<p>implying that we need both <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> in the model.</p>
+<p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the relevent factor variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(tooth</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">patient</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">age)</span></code>. This gives us full control of the random-effects specification at each level. Our model can therefore be expressed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> uisng the following syntax</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                  </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">tooth</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">patient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">),</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span><span class="w"> </span>
+<span class="p">)</span><span class="w"> </span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">try</span><span class="p">(</span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Error in getVarCov.lme(veneer.lme) : 
+  not implemented for multiple levels of nesting
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" src="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
+In plot.lme(veneer.lme) :
+  Marginal covariance structure not available for more than 2 levels
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                  </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">tooth</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">patient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">),</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span><span class="w"> </span>
+<span class="p">)</span><span class="w"> </span>
+
+<span class="nf">plot.lme</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" src="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
+In plot.lme(veneer.lme) :
+  Marginal covariance structure not available for more than 2 levels
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
+
+Response: gcf
+                Chisq Df Pr(&gt;Chisq)    
+base_gcf       0.2237  1    0.63622    
+cda            0.0008  1    0.97751    
+time           0.6217  1    0.43041    
+age           16.5425  1  4.757e-05 ***
+base_gcf:time  0.2034  1    0.65197    
+cda:time       2.7075  1    0.09988 .  
+time:age       4.4098  1    0.03573 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;time:age&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">veneer.lme</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fbbb4a8a67ea1c5dec9a4069d44ae2d8227dfc819b057ff7ec712a722a0d174d.png" src="../_images/fbbb4a8a67ea1c5dec9a4069d44ae2d8227dfc819b057ff7ec712a722a0d174d.png" />
 </div>
 </div>
 </section>
@@ -560,6 +853,16 @@
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-dental-veneer-data">The Dental Veneer Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-to-multiple-patients">Expand to Multiple Patients</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-the-model-in-r">Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
 </ul>
   </nav></div>
 
