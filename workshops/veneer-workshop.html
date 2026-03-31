@@ -412,7 +412,6 @@
 <span class="nf">library</span><span class="p">(</span><span class="s">&#39;Matrix&#39;</span><span class="p">)</span><span class="w">    </span><span class="c1"># covariance extraction and visualisation</span>
 <span class="nf">library</span><span class="p">(</span><span class="s">&#39;nlme&#39;</span><span class="p">)</span><span class="w">      </span><span class="c1"># mixed-effects modelling</span>
 <span class="nf">library</span><span class="p">(</span><span class="s">&#39;car&#39;</span><span class="p">)</span><span class="w">       </span><span class="c1"># Asymptotic ANOVA tests</span>
-<span class="nf">library</span><span class="p">(</span><span class="s">&#39;emmeans&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Follow-up tests</span>
 <span class="nf">library</span><span class="p">(</span><span class="s">&#39;effects&#39;</span><span class="p">)</span><span class="w">   </span><span class="c1"># Effects plots from the model</span>
 <span class="nf">source</span><span class="p">(</span><span class="s">&#39;plot-lme.R&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1"># custom plot.lme() function for making assumptions plots</span>
 </pre></div>
@@ -420,9 +419,6 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading required package: carData
-Welcome to emmeans.
-Caution: You lose important information if you filter this package&#39;s results.
-See &#39;? untidy&#39;
 Use the command
     lattice::trellis.par.set(effectsTheme())
   to customize lattice options for effects plots.
@@ -434,7 +430,7 @@ See ?effectsTheme for details.
 </section>
 <section id="the-dental-veneer-data">
 <h2>The Dental Veneer Data<a class="headerlink" href="#the-dental-veneer-data" title="Link to this heading">#</a></h2>
-<p>The data we will use concern measurements of …</p>
+<p>The data we will use concern measurements of Gingival Crevicular Fluid (GRF) taken adjacent to newly placed dental veneers. In this study, researchers were interested in subsequent gum health after ceramic veneers were fitted to different teeth in a selection of patients. These veneers are designed to hide discolouration and are attached by first removing some tooth surface and then using a special adhesive to secure the veneer in place. Of particular interest was whether any difference in contour between the original tooth and the veneer was associated with increased levels of GRF over time. The researchers took measurements of GRF at the time when the veneers were fitted (the baseline GRF) as well as measurements 3 months and 6 months post-treatment.</p>
 <p>The data can be downloaded from <a class="reference external" href="https://websites.umich.edu/~bwest/chapter7.html">here</a>. Once downloaded to the current working directory, the code below will read the data into <code class="docutils literal notranslate"><span class="pre">R</span></code> and then print values for all the teeth from the first two patients.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -473,7 +469,7 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>There are a few variables here, so we split them into those that relate to each <em>patient</em> as a whole, each <em>tooth</em> as a whole and each <em>time-point</em> as a whole.</p>
+<p>There are a few variables here, so we split them into those that relate to each <em>patient</em> as a whole, each <em>tooth</em> as a whole and each <em>time point</em>.</p>
 <ul class="simple">
 <li><p>Patient</p>
 <ul>
@@ -484,18 +480,18 @@ See ?effectsTheme for details.
 <li><p>Tooth</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">tooth</span></code>: the unique identifier of each <em>tooth</em></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">based_cdf</span></code>: the baseline measure of GCF for that tooth</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cda</span></code>: the … for that tooth</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base_gcf</span></code>: the baseline measure of GCF for that tooth</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cda</span></code>: the <em>curvature difference</em> between the original tooth and the veneer</p></li>
 </ul>
 </li>
 <li><p>Time</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>: the time in months after fitting the veneer</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">gcf</span></code>: <strong>the measurement of GCF at that time point</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gcf</span></code>: <strong>the measurement of Gingival Crevicular Fluid (GCF) at that time point</strong></p></li>
 </ul>
 </li>
 </ul>
-<p>Some of these variables are indices to keep things organised and to allow us to define different levels of the data. Notable, <code class="docutils literal notranslate"><span class="pre">patient</span></code> and <code class="docutils literal notranslate"><span class="pre">tooth</span></code>. The outcome variable is <code class="docutils literal notranslate"><span class="pre">gcf</span></code>, highlighted in <strong>bold</strong>, indicative of … . This leaves <em>four</em> predictor variables, as well as several opportunities for <em>interactions</em>.</p>
+<p>Some of these variables are indices to keep things organised and to allow us to define different levels of the data (e.g. <code class="docutils literal notranslate"><span class="pre">patient</span></code> and <code class="docutils literal notranslate"><span class="pre">tooth</span></code>). The outcome variable is <code class="docutils literal notranslate"><span class="pre">gcf</span></code>, highlighted in <strong>bold</strong>, indicative of the amount of Gingival Crevicular Fluid (GCF) measured adjacent to a given tooth at a particular time point. Of primary interest is the relationship with CDA and how it interacts with the amount of GCF over time. Also of interest is assessing how the amount of baseline GCF interacts with time. For instance, patients with greater GCF at baseline may show a different change over time compared to those with less GCF at baseline. Finally, the patients age should also be considered, as older adults can exhibit higher levels of GCF than younger adults.</p>
 <p>As these data are already long-formatted, we just need to convert the relevant variables to factors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -513,19 +509,27 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda              time          gcf       
- 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000   Min.   :3.0   Min.   : 3.00  
- 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417   1st Qu.:3.0   1st Qu.:10.00  
- 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000   Median :4.5   Median :17.50  
- 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182   Mean   :4.5   Mean   :23.59  
- 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250   3rd Qu.:6.0   3rd Qu.:32.00  
- 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000   Max.   :6.0   Max.   :87.00  
- (Other):38                                                                                         
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda        
+ 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000  
+ 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417  
+ 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000  
+ 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182  
+ 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250  
+ 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000  
+ (Other):38                                                           
+      time          gcf       
+ Min.   :3.0   Min.   : 3.00  
+ 1st Qu.:3.0   1st Qu.:10.00  
+ Median :4.5   Median :17.50  
+ Mean   :4.5   Mean   :23.59  
+ 3rd Qu.:6.0   3rd Qu.:32.00  
+ Max.   :6.0   Max.   :87.00  
+                              
 </pre></div>
 </div>
 </div>
 </div>
-<p>Of note is that there are unbalanced representations of each level of <code class="docutils literal notranslate"><span class="pre">tooth</span></code>, …</p>
+<p>Of note is that there are unbalanced representations of each level of <code class="docutils literal notranslate"><span class="pre">tooth</span></code>, given that not every patient had veneers fit to the same teeth.</p>
 <section id="model-notation">
 <h3>Model Notation<a class="headerlink" href="#model-notation" title="Link to this heading">#</a></h3>
 <p>As these data are all <em>continuous</em> variables, a more general regression framework will be needed when writing this model. In what follows, we will use <span class="math notranslate nohighlight">\(\beta\)</span>-coefficients for continuous variables (e.g. <span class="math notranslate nohighlight">\(\beta_{1} \times \text{CDA}_{i}\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which variable each term relates to when writing the model down.</p>
@@ -534,7 +538,7 @@ See ?effectsTheme for details.
 <section id="data-structure">
 <h2>Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h2>
 <p>Although we already know what structure these data have, we will run through the logic for completeness.</p>
-<p>Firstly, we need to determine our <em>unit of analysis</em>. In this example, … From the perspective of a psychologist, this can sound off. However, remember that dentists care about <em>teeth</em> and not necessarily the person that the teeth belong to.</p>
+<p>Firstly, we need to determine our <em>unit of analysis</em>. In this example, our model is trying to explain change in GCF measured adjacent to <em>teeth</em>. The entities that our model is describing are the <em>teeth</em> themselves, not the patients who contain the teeth. From the perspective of a psychologist, this can sound off. However, remember that dentists care about <em>teeth</em>, not necessarily the person that the teeth belong to.</p>
 <p>Secondly, we determine what each <em>row</em> of the long-formatted data represents in relation to the units of analysis. Examining the first few rows</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -554,8 +558,8 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>…</p>
-<p>Based on this, we can construct the following table of the <em>levels</em> of these data, using the guidance in the lesson</p>
+<p>we can see that each row corresponds to a single unit (<em>tooth</em>) measured <em>twice</em>. So these are either <em>repeated measurements</em> or <em>longitudinal</em> data. The difference lies in whether there is an explicit measurement of time here. As we can see, the different repeats are indexed by the values of <code class="docutils literal notranslate"><span class="pre">time</span></code>. Importantly, these values have an <em>order</em> that must be maintained and the temporal gap between successive values is important. The time scale is also meaningful, as it is measured in <em>months</em>. As such, this is <em>longitudinal</em> data.</p>
+<p>Finally, we need to determine whether there are any <em>clustering</em> variables that represent a higher-order dependency structure in these data. As we can see from printing the data earlier, the only categorical measurement that is constant across different sets of teeth is <code class="docutils literal notranslate"><span class="pre">patient</span></code>. This is entirely indicative of a shared context or environment that binds different teeth together. All the teeth from the same individual are very likely to be correlated to some degree. The <code class="docutils literal notranslate"><span class="pre">patient</span></code> is something that each tooth is <em>IN</em> rather than something each tooth <em>HAS</em>. Indeed, this is one of the clearest real-world examples of clustering as it is very obvious how teeth from the same person share an environment that may impact all of them in a similar way. As such, <code class="docutils literal notranslate"><span class="pre">patient</span></code> is a clustering variable, making these data <em>clustered longitudinal</em>. Based on this, we can construct the following table of the <em>levels</em> of these data, using the guidance in the lesson</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p><strong>Data Type</strong></p></th>
@@ -578,13 +582,30 @@ See ?effectsTheme for details.
 </tbody>
 </table>
 </div>
+<p>We can get an initial sense of the structure of these data by plotting the different levels in the following way.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
+<span class="w">  </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span><span class="w"> </span><span class="c1"># x-axis=time, panel=patient</span>
+<span class="w">  </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tooth</span><span class="p">,</span><span class="w">     </span><span class="c1"># separate lines per-tooth</span>
+<span class="w">  </span><span class="n">data</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w">    </span><span class="c1"># data</span>
+<span class="w">  </span><span class="n">type</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;b&quot;</span><span class="w">        </span><span class="c1"># lines with points</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/740d57baa6b67a20d85a708793864447e90cfcea8e8dcb76c8e765674eca20ca.png" src="../_images/740d57baa6b67a20d85a708793864447e90cfcea8e8dcb76c8e765674eca20ca.png" />
+</div>
+</div>
+<p>Of note is that the trajectory of GCF tends to be similar across all teeth from the same patient, but can differ a lot from patient-to-patient. We can also see the different numbers of trajectories per-patient, given that only some teeth were fitted with veneers for each person. This drives home the idea that the teeth are a random sample within each patient, and each patient is a random sample from a wider population. This conceptualisation will help in terms of the model building.</p>
 </section>
 <section id="model-building">
 <h2>Model Building<a class="headerlink" href="#model-building" title="Link to this heading">#</a></h2>
 <p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and ready for modelling.</p>
 <section id="step-i-a-single-dependency-structure">
 <h3>Step I: A Single Dependency Structure<a class="headerlink" href="#step-i-a-single-dependency-structure" title="Link to this heading">#</a></h3>
-<p>We start by isolating a single dependency structure. This needs to be at the <em>lowest</em> level, with no further dependency structures within. In this example, this is a single <em>tooth</em> from a single <em>patient</em>. We choose <code class="docutils literal notranslate"><span class="pre">tooth</span> <span class="pre">==</span> <span class="pre">'6'</span></code> within <code class="docutils literal notranslate"><span class="pre">patient</span> <span class="pre">==</span> <span class="pre">'1'</span></code> for this purpose.</p>
+<p>We start by isolating a single dependency structure. This needs to be at the <em>lowest</em> level, with no further dependency structures within. In this example, this is a single <em>tooth</em> from a single <em>patient</em>. We choose <code class="docutils literal notranslate"><span class="pre">tooth</span> <span class="pre">==</span> <span class="pre">'6'</span></code> within <code class="docutils literal notranslate"><span class="pre">patient</span> <span class="pre">==</span> <span class="pre">'1'</span></code> as the example, subsetting the data below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">patient.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">veneer</span><span class="p">,</span><span class="w">    </span><span class="n">patient</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;1&#39;</span><span class="p">)</span>
@@ -602,27 +623,28 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
+<p>In terms of variables suitable for modelling the effect of <em>time</em> for a single tooth, we note that <code class="docutils literal notranslate"><span class="pre">age</span></code>, <code class="docutils literal notranslate"><span class="pre">cda</span></code> and <code class="docutils literal notranslate"><span class="pre">base_gcf</span></code> are <em>constant</em>, given that they are defined at the level of each <em>tooth</em> or <em>patient</em> as a whole. As such, we remove them from the dataset</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">tooth.6</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">patient.1</span><span class="p">,</span><span class="w"> </span><span class="n">tooth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;6&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">patient</span><span class="p">,</span><span class="o">-</span><span class="n">age</span><span class="p">,</span><span class="o">-</span><span class="n">base_gcf</span><span class="p">,</span><span class="o">-</span><span class="n">cda</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">tooth.6</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">subset</span><span class="p">(</span><span class="n">patient.1</span><span class="p">,</span><span class="w"> </span><span class="n">tooth</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&#39;6&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="o">-</span><span class="n">age</span><span class="p">,</span><span class="o">-</span><span class="n">base_gcf</span><span class="p">,</span><span class="o">-</span><span class="n">cda</span><span class="p">))</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">tooth.6</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  tooth time gcf
-1     6    3  11
-2     6    6  68
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  patient tooth time gcf
+1       1     6    3  11
+2       1     6    6  68
 </pre></div>
 </div>
 </div>
 </div>
-<p>Based on this, our basic model for a single tooth is</p>
+<p>Now we can see that the only variables left are the outcome variable <code class="docutils literal notranslate"><span class="pre">gcf</span></code> and the continuous predictor of <code class="docutils literal notranslate"><span class="pre">time</span></code>. As such, our basic model for a single tooth is</p>
 <div class="math notranslate nohighlight">
 \[
 \text{GCF}_{i} = \beta_{0} + (\beta_{1} \times \text{time}_{i}) + \eta_{i}
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>time</em>. Already, a problem should be visible. As we only have two measurements per-tooth, the model fit will be perfect and there will be no residual variance left.</p>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes <em>time</em>. Already a problem should be visible, as we only have two measurements per-tooth. As such, the model fit will be <em>perfect</em> and there will be no residual variance left. We can see this below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">tooth.6.lm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">tooth.6</span><span class="p">)</span>
@@ -649,7 +671,7 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 </div>
 </div>
 </div>
-<p>This means that we will not be able to estimate a unique effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> for each tooth from each <code class="docutils literal notranslate"><span class="pre">patient</span></code>. Instead, we will need to <em>pool</em> information <em>across</em> patients. This is a constraint of the data that we will need to bear in mind.</p>
+<p>This means that we will not be able to estimate a unique effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> for each tooth from each <code class="docutils literal notranslate"><span class="pre">patient</span></code>. Thinking slightly ahead, this means that we can only fit a <em>random intercept</em> per-tooth, rather than a random intercept + slope with <code class="docutils literal notranslate"><span class="pre">time</span></code>. This is not necessarily an issue. Looking back at the profiles plot above, teeth within each patient tend to show a similar effect of <code class="docutils literal notranslate"><span class="pre">time</span></code>, so there is no obvious need to allow the <em>slope</em> of each tooth to differ randomly within each patient. The teeth themselves do appear to differ randomly in terms of their absolute amount of GCF, justifying a random intercept per-tooth. However, differences in the effect of <code class="docutils literal notranslate"><span class="pre">time</span></code> appear to exist at the level of a <em>patient</em> as a whole. As such, integration of a random intercept + slope model at the level of <em>patient</em> would be more in-keeping with the patterns in the data, rather than a random intercept + slope model at the level of each <em>tooth</em>.</p>
 </section>
 <section id="step-ii-expand-to-multiple-structures">
 <h3>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h3>
@@ -659,34 +681,23 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 \text{GCF}^{(t)}_{i} = \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}.
 \]</div>
 <p>We can now reason more carefully about each of these.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">patient.1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   patient tooth age base_gcf      cda time gcf
-1        1     6  46       17 4.666667    3  11
-2        1     6  46       17 4.666667    6  68
-3        1     7  46       22 4.666667    3  13
-4        1     7  46       22 4.666667    6  47
-5        1     8  46       18 5.000000    3  14
-6        1     8  46       18 5.000000    6  58
-7        1     9  46       12 3.333333    3  10
-8        1     9  46       12 3.333333    6  57
-9        1    10  46       10 8.666667    3  14
-10       1    10  46       10 8.666667    6  44
-11       1    11  46       17 5.666667    3  11
-12       1    11  46       17 5.666667    6  53
-</pre></div>
-</div>
-</div>
-</div>
+<p>In terms of the intercept, if we wish to use a mixed-effects model then the bear minimum is a <em>random intercept</em>. This alone could be enough to decide on this term, but it is worth considering the <em>meaning</em> of doing this as well, especially as we could still include a random intercept at the level of each <em>patient</em>, even if we did not at the level of each <em>tooth</em>. In the current model, the intercept represents the average amount of GCF for tooth <span class="math notranslate nohighlight">\(t\)</span>. If we choose to <em>fix</em> this value, we are saying that <em>all</em> teeth start with the same amount of GCF and any variability is simply sampling error. In other words, <em>different teeth do not matter</em>. By allowing this term to vary randomly, we are saying that the amount of GCF differs depending upon the specific tooth, encoding the idea that each tooth is a random sample from a population of teeth. Given the discussion above, it makes most sense to treat teeth in this way and thus we choose to allow the intercept to vary randomly.</p>
+<p>In terms of the <code class="docutils literal notranslate"><span class="pre">time</span></code> slope, we have two different considerations here. Firstly, we know from above that the data do not support a random slope of <code class="docutils literal notranslate"><span class="pre">time</span></code> per-tooth. As such, this is not <em>practically</em> possible. However, we also need to think about whether <em>conceptually</em> this is something that we would desire and whether being forced to fix this value is a fundamental limitation of these data. If we were to allow the slope per-tooth to vary, this would suggest that each tooth has its own unique trajectory across time. In other words, the specific tooth <em>does matter</em> in terms of the time-effect. For this particular example, there are two reasons to think this may not be necessary. Firstly, from a purely theoretical perspective, all teeth within a single patient are likely to change in a similar way across time. A person’s mouth is not partitioned in such a way that some teeth may be able to change in a fashion that is completely different from other teeth. Any changes that affect GCF for one tooth are likely to apply to all other teeth from the same mouth. Secondly, we can see from plotting the data that trajectories of teeth from the same person look very similar to each other. In fact, the main difference is the <em>height</em> of the slopes, which is already covered by the random intercept. If we remove these height differences, the slopes would be so similar that any differences between teeth from the same patient can most likely be considered sampling error. As such, there seems little <em>theoretical</em> or <em>data-driven</em> reason to allow the effect of time to differ on a per-tooth basis. For all these reasons, we shall <em>fix</em> the effect of time across teeth.</p>
 </section>
 <section id="step-iii-write-the-higher-level-models">
 <h3>Step III: Write the Higher-level Models<a class="headerlink" href="#step-iii-write-the-higher-level-models" title="Link to this heading">#</a></h3>
-<p>Now that we have made a decision about all the Level 1 terms, we can write the Level 2 models for each term…</p>
+<p>Now that we have made a decision about all the Level 1 terms, we can write the Level 2 models for each term. Given that only the intercept is random per-tooth, this is the only Level 2 model that gets an error term <span class="math notranslate nohighlight">\(\left(\xi_{0}^{(t)}\right)\)</span>, leading to</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 1 (Time)} \\
+    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i} \\ \quad \\
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t)} &amp;= \beta_{0} + \xi_{0}^{(t)} \\
+    \beta^{(t)}_{1} &amp;= \beta_{1}. \\
+\end{alignat*}
+\end{split}\]</div>
+<p>We can now consider adding further predictor variables to the Level 2 models of teeth as a whole. Looking back at the table from earlier, both <code class="docutils literal notranslate"><span class="pre">base_GCF</span></code> and <code class="docutils literal notranslate"><span class="pre">cda</span></code> are defined at the level of individual teeth. We can add both of these terms to the model of the intercept like so</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -694,10 +705,11 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
     \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
 \text{Level 2 (Tooth)} \\
     \beta_{0}^{(t)} &amp;= \beta_{0} + \left(\beta_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
-    \beta^{(t)}_{1} &amp;= \beta_{1} \\
+    \beta^{(t)}_{1} &amp;= \beta_{1}. \\
 \end{alignat*}
 \end{split}\]</div>
-<p>… we can add interactions with the effect of time in the model for <span class="math notranslate nohighlight">\(\beta^{(t)}_{1}\)</span> …</p>
+<p>So, now we have a model where the intercept for a given tooth depends upon the amount of GCF at time 0 across all teeth <span class="math notranslate nohighlight">\(\left(\beta_{0}\right)\)</span>, plus a shift depending upon the actual amount of GCF recorded for that tooth at baseline <span class="math notranslate nohighlight">\(\left(\beta_{2}\right)\)</span> plus the effect of the curvature discrepancy for that specific tooth <span class="math notranslate nohighlight">\(\left(\beta_{3}\right)\)</span>.</p>
+<p>We can also add these terms to the model for the <em>slope</em> as well. Importantly, these terms will shift the slope depending on these other predictor variables. As such, these represent <em>interactions</em> with <code class="docutils literal notranslate"><span class="pre">time</span></code>. This will become more apparent when we collapse the levels together because each of these terms will then be <em>multiplied</em> by <span class="math notranslate nohighlight">\(\text{time}_{i}\)</span>. Not every model will justifiably include interactions of this form. However, we are specifically interested in the effects of <code class="docutils literal notranslate"><span class="pre">time</span></code> on <code class="docutils literal notranslate"><span class="pre">gcf</span></code> and have reason to think that baseline levels of GCF and CDA could change how time affects each tooth. So, for us, the model form is as follows</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -708,14 +720,16 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
     \beta^{(t)}_{1} &amp;= \beta_{1} + \left(\beta_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta_{5} \times \text{CDA}^{(t)}\right)  \\
 \end{alignat*}
 \end{split}\]</div>
+<p>So, now we have a model where, in addition to the intercept for a given tooth, the effect of time on that tooth depends upon the effect of time across all teeth <span class="math notranslate nohighlight">\(\left(\beta_{1}\right)\)</span>, plus a shift in the slope that depends upon the actual amount of GCF recorded for that tooth at baseline <span class="math notranslate nohighlight">\(\left(\beta_{4}\right)\)</span> plus a shift in the slope that depends upon the the curvature discrepancy for that specific tooth <span class="math notranslate nohighlight">\(\left(\beta_{5}\right)\)</span>.</p>
 <section id="expand-to-multiple-patients">
 <h4>Expand to Multiple Patients<a class="headerlink" href="#expand-to-multiple-patients" title="Link to this heading">#</a></h4>
+<p>… Once we expand to multiple patients, we also need to recognise that each tooth is not some free-floating unit as it <em>has</em> to be within a given patient. As such, we need to change our notation a little to <span class="math notranslate nohighlight">\((t|p)\)</span>, which we can read as <em>tooth <span class="math notranslate nohighlight">\(t\)</span> within patient <span class="math notranslate nohighlight">\(p\)</span></em>.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 2 (Tooth)} \\
-    \beta_{0}^{(t)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
-    \beta^{(t)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t)}\right) \\ \quad \\
+    \beta_{0}^{(t|p)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t|p)}\right) + \xi_{0}^{(t|p)} \\
+    \beta^{(t|p)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t|p)}\right) \\ \quad \\
 \text{Level 3 (Patient)} \\
     \beta^{(p)}_{0} &amp;= \beta_{0} + \left(\beta_{6} \times \text{age}^{(p)}\right) + \phi_{0}^{(p)} \\
     \beta^{(p)}_{1} &amp;= \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)} \\
@@ -814,8 +828,10 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
   Data: veneer 
   Log-restricted-likelihood: -459.1694
   Fixed: gcf ~ 1 + base_gcf + cda + time + age + time:base_gcf + time:cda +      time:age 
-  (Intercept)      base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
-  88.89247933   -0.26927505   -2.30330590  -11.18323137   -1.30710933    0.05086456    0.62792054    0.19630363 
+  (Intercept)      base_gcf           cda          time           age 
+  88.89247933   -0.26927505   -2.30330590  -11.18323137   -1.30710933 
+base_gcf:time      cda:time      time:age 
+   0.05086456    0.62792054    0.19630363 
 
 Random effects:
  Formula: ~1 | tooth
@@ -872,8 +888,10 @@ In plot.lme(veneer.lme) :
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
-     8.321834      8.480576     37.151996      7.962650     12.208380     12.435790     22.079264 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time 
+     8.321834      8.480576     37.151996      7.962650     12.208380 
+     cda:time      time:age 
+    12.435790     22.079264 
 </pre></div>
 </div>
 </div>
@@ -898,8 +916,10 @@ In plot.lme(veneer.lme) :
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
-         1.701232          1.754961          1.000000          1.604670          1.679292          1.732705          1.590532 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c 
+         1.701232          1.754961          1.000000          1.604670 
+base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
+         1.679292          1.732705          1.590532 
 </pre></div>
 </div>
 </div>
@@ -940,7 +960,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/73251c1b292c9bbfda284fba138c221e32703a7a83f0cbc7f7408d755c4b2057.png" src="../_images/73251c1b292c9bbfda284fba138c221e32703a7a83f0cbc7f7408d755c4b2057.png" />
+<img alt="../_images/34241d2bf645115a066569c22e9711e52db4df14b16dccc4daa565bd706d5416.png" src="../_images/34241d2bf645115a066569c22e9711e52db4df14b16dccc4daa565bd706d5416.png" />
 </div>
 </div>
 <p>By default, when plotting a continuous x continuous interaction, the <code class="docutils literal notranslate"><span class="pre">effect()</span></code> function will choose 5 values of one predictor over which to display the slope of the other predictor. So, in this example, 5 values of <code class="docutils literal notranslate"><span class="pre">age</span></code> have been chosen to illustrate how the slope with <code class="docutils literal notranslate"><span class="pre">time</span></code> changes. This can be controlled using the <code class="docutils literal notranslate"><span class="pre">xlevels</span></code> argument, which we can set to a single value to control the number of equally-spaced values chosen. For instance, if we used <code class="docutils literal notranslate"><span class="pre">xlevels=20</span></code>, we would get</p>
@@ -951,7 +971,7 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/ab369d50c72de3303575f7f37ec74a2992ca0816f9abe7830aacc1d862e5c242.png" src="../_images/ab369d50c72de3303575f7f37ec74a2992ca0816f9abe7830aacc1d862e5c242.png" />
+<img alt="../_images/47b79b2aa80af61a064d128f0518e6e7b83ca3824cfc3afbc823b1c272a66a90.png" src="../_images/47b79b2aa80af61a064d128f0518e6e7b83ca3824cfc3afbc823b1c272a66a90.png" />
 </div>
 </div>
 <p>The only problem we have here is that the plots are constructed on the <em>centered</em> scale, which is difficult to interpret in terms of the original scale of each variable. To accommodate this, we can calculate the effects first and then rescale them before plotting.</p>
