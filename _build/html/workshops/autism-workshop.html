@@ -406,7 +406,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-longitudinal-data-example">
 <h1>PCHN63112 Workshop: Longitudinal Data Example<a class="headerlink" href="#pchn63112-workshop-longitudinal-data-example" title="Link to this heading">#</a></h1>
-<p>In this example,we will examine building a mixed-effects model for longitudinal data. Unlike repeated measurements, longitudinal data has a specific temporal ordering that needs to be taken into account. In addition, the actual gaps of time between the measurements are important and must be accommodated. In general, this means dealing with <em>trends</em> over time, where <em>time</em> must be treated as a continuous variable. In repeated measurements, the repeats are treated as levels of a <em>factor</em>. As such, our interest is estimating and comparing means. By comparison, with longitudinal data the repeats are treated as measurements associated with a continuous variable (e.g. time). As such, our interest is estimating and comparing <em>regression slopes</em> over time.</p>
+<p>In this example,we will examine building a mixed-effects model for longitudinal data. Unlike repeated measurements, longitudinal data has a specific temporal ordering that needs to be taken into account. In addition, the actual gaps of time between the measurements are important and must be accommodated. In general, this means dealing with <em>trends</em> over time, where <em>time</em> must be treated as a continuous variable. In repeated measurements, the repeats are treated as levels of a <em>factor</em>. As such, our interest is estimating and comparing means. By comparison, with longitudinal data the repeats are treated as measurements associated with a continuous variable. As such, our interest is estimating and comparing <em>regression slopes</em> over time.</p>
 <section id="loading-packages">
 <h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
 <p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
@@ -499,10 +499,10 @@ See ?effectsTheme for details.
 </div>
 </div>
 </div>
-<p>Of note is that VSAE has a very wide range, from 1-198, and also contains two missing values. This indicates that there were some occasions when a particular child was not measured. There are also more children in the <code class="docutils literal notranslate"><span class="pre">medium</span></code> SICDEGP group than the others, making the data <em>unbalanced</em> in relation to this factor. Also note that <code class="docutils literal notranslate"><span class="pre">childid</span></code> does not run sequentially, as these data represent a subset of children who participated in this study.</p>
+<p>Of note is that <code class="docutils literal notranslate"><span class="pre">VSAE</span></code> has a very wide range, from 1-198, and also contains two missing values. This indicates that there were some occasions when a particular child was not measured. There are also more children in the <code class="docutils literal notranslate"><span class="pre">medium</span></code> group than the others, making the data <em>unbalanced</em> in relation to <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. Also note that <code class="docutils literal notranslate"><span class="pre">childid</span></code> does not run sequentially, as these data represent a subset of the children who participated in the original study.</p>
 <section id="model-notation">
 <h3>Model Notation<a class="headerlink" href="#model-notation" title="Link to this heading">#</a></h3>
-<p>As these data are a mixture of <em>categorical</em> and <em>continuous</em> variables, a more general regression framework will be needed when writing this model. In what follows, we will use <em>descriptive labels</em> rather than greek letter for effects associated with categorical variables (e.g. <span class="math notranslate nohighlight">\(\text{SICDEGP}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\alpha_{j}\)</span>) and will introduce <span class="math notranslate nohighlight">\(\beta\)</span>-coefficients for continuous variables (e.g. <span class="math notranslate nohighlight">\(\left(\beta_{1} \times \text{age}_{i}\right)\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which terms are categorical and which are continuous. In reality, the whole model is fit as a regression with dummy variables in place of the categorical predictors. However, it can be less clear to write the model this way, even if this is the reality of how it is fit.</p>
+<p>In order to facilitate consistency across the examples in these workshops, we will represent all models using more general regression notation. For instance, whether a variable is categorical or continuous, it will be written in the model as e.g. <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>. In the categorical case, it will be implicitly assumed that <span class="math notranslate nohighlight">\(x_{i1}\)</span> is a <em>dummy variable</em>. Although this will make the notation for models that <em>only</em> contain categorical variables busier, it will make things much clearer when we have models that contain <em>both</em> categorical and continuous predictors (as is the case with this example). In addition, we will be using <em>variable labels</em> going forward, rather than generic notation (e.g. <span class="math notranslate nohighlight">\(\beta_{1} \times \text{SICDEGP}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which variable each term relates to when writing the model down.</p>
 </section>
 </section>
 <section id="data-structure">
@@ -659,7 +659,7 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
 <img alt="../_images/09e209cff63510ce6c9d4e5ef13533c604c38294bbb0585fa02649ff4e3c9c02.png" src="../_images/09e209cff63510ce6c9d4e5ef13533c604c38294bbb0585fa02649ff4e3c9c02.png" />
 </div>
 </div>
-<p>Notably, there is not a huge amount of data per-child. Only 5 datapoints, with some children having even fewer due to attrition over time. We can get a sense of the data within the whole sample by plotting a random subset of children</p>
+<p>Notably, there is not a huge amount of data per-child. Only 5 datapoints in the example above, with some children having even fewer due to attrition over time. We can get a sense of the data within the whole sample by plotting a random subset of children</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">666</span><span class="p">)</span>
@@ -695,83 +695,107 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{Level 1} \\
+    \text{Level 1 (Time)} \\
     \text{VSAE}^{(k)}_{i} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{i} \\
     \quad\\
-    \text{Level 2} \\
-    \beta_{0}^{(k)} &amp;= \beta_{0} + \xi^{(k)} \\
-    \beta_{1}^{(k)} &amp;= \beta_{1} + \phi^{(k)}.
+    \text{Level 2 (Child)} \\
+    \beta_{0}^{(k)} &amp;= \beta_{0} + \xi_{0}^{(k)} \\
+    \beta_{1}^{(k)} &amp;= \beta_{1} + \xi_{1}^{(k)}.
 \end{alignat*}
 \end{split}\]</div>
-<p>We can now determine whether there are any child-level predictors we want to include as well. In this dataset, we have the SICD grouping variable <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. So now, we can include an additional index <span class="math notranslate nohighlight">\(j\)</span> to show that a specific child is associated with level <span class="math notranslate nohighlight">\(j\)</span> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. We can then include the effect of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> within the Level 2 models, like so.</p>
+<p>We can now determine whether there are any child-level predictors we want to include as well. In this dataset, we have the SICD grouping variable <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. So now, we can include an additional index <span class="math notranslate nohighlight">\(j\)</span> to show that a specific child is associated with level <span class="math notranslate nohighlight">\(j\)</span> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. We can then include the effect of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> within the Level 2 models, like so</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{Level 1} \\
+    \text{Level 1 (Time)} \\
     \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij} \\
     \quad\\
-    \text{Level 2} \\
-    \beta_{0}^{(k)} &amp;= \beta_{0} + \text{SICDEGP}_{j} + \xi^{(k)} \\
-    \beta_{1}^{(k)} &amp;= \beta_{1} + \phi^{(k)}.
+    \text{Level 2 (Child)} \\
+    \beta_{0}^{(k)} &amp;= \beta_{0} + \left(\beta_{2} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{3} \times \text{SICDEGP}_{2j}\right) + \xi_{0}^{(k)} \\
+    \beta_{1}^{(k)} &amp;= \beta_{1} + \xi_{1}^{(k)},
 \end{alignat*}
 \end{split}\]</div>
-<p>As written, this implies only a <em>main effect</em> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, as it only appears in the model for the intercept. In other words, the grouping serves only to shift the intercept <em>up</em> or <em>down</em>, but it does not influence the slope. If we want to also include the <em>interaction</em> between <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and <code class="docutils literal notranslate"><span class="pre">age</span></code>, then we need a new term in the model for the slope. This will allow the slope to be shifted, depending upon the group. In order to include <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> in the slope model, we need to make it clear that this is a different set of effects. Traditionally, we might use different Greek letters (e.g. <span class="math notranslate nohighlight">\(\alpha_{j}\)</span> and <span class="math notranslate nohighlight">\(\gamma_{j}\)</span>), but given that we are using <em>labels</em> here, we will denote the effects of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the intercept as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{0}_{j}\)</span> and the effect of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> on the slope as <span class="math notranslate nohighlight">\(\text{SICDEGP}^{1}_{j}\)</span>. The model is then</p>
+<p>where <span class="math notranslate nohighlight">\(\text{SICDEGP}_{1j}\)</span> and <span class="math notranslate nohighlight">\(\text{SICDEGP}_{2j}\)</span> are the two dummy variables that code the 3 levels of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, defined as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\text{SICDEGP}_{1j} =
+\begin{cases}
+    1 &amp; \text{if $j=1$}\\
+    0 &amp; \text{otherwise}
+\end{cases}\;\;
+\text{SICDEGP}_{2j} =
+\begin{cases}
+    1 &amp; \text{if $j=2$}\\
+    0 &amp; \text{otherwise}
+\end{cases}.
+\end{split}\]</div>
+<p>As written, this implies only a <em>main effect</em> of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>, as it only appears in the model for the intercept. In other words, the grouping serves only to shift the intercept <em>up</em> or <em>down</em>, but it does not influence the slope. If we want to also include the <em>interaction</em> between <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and <code class="docutils literal notranslate"><span class="pre">age</span></code>, then we need new terms in the model for the slope. This will allow the slope to be shifted, depending upon the group. The model is then</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{Level 1} \\
+    \text{Level 1 (Time)} \\
     \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij} \\
     \quad\\
-    \text{Level 2} \\
-    \beta_{0}^{(k)} &amp;= \beta_{0} + \text{SICDEGP}^{0}_{j} + \xi^{(k)} \\
-    \beta_{1}^{(k)} &amp;= \beta_{1} + \text{SICDEGP}^{1}_{j} + \phi^{(k)}.
+    \text{Level 2 (Child)} \\
+    \beta_{0}^{(k)} &amp;= \beta_{0} + \left(\beta_{2} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{3} \times \text{SICDEGP}_{2j}\right) + \xi_{0}^{(k)} \\
+    \beta_{1}^{(k)} &amp;= \beta_{1} + \left(\beta_{4} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{5} \times \text{SICDEGP}_{2j}\right) + \xi_{1}^{(k)},
 \end{alignat*}
 \end{split}\]</div>
-<p>The key to seeing how this works is to recognise that we replace <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> at Level 1 with its full definition from Level 2. This full definition is then multiplied by <span class="math notranslate nohighlight">\(\text{age}_{i}\)</span>. So, at Level 1 we have</p>
-<div class="math notranslate nohighlight">
-\[
-\beta_{1}^{(k)} \times \text{age}_{i},
-\]</div>
-<p>which becomes</p>
-<div class="math notranslate nohighlight">
-\[
-\overbrace{\left(\beta_{1} + \text{SICDEGP}^{1}_{j} + \phi^{(k)}\right)}^{\beta_{1}^{(k)}} \times \text{age}_{i}.
-\]</div>
-<p>Removing the brackets then results in</p>
-<div class="math notranslate nohighlight">
-\[
-\left(\beta_{1} \times \text{age}_{i}\right) + \left(\text{SICDEGP}^{1}_{j} \times \text{age}_{i}\right) + \left(\phi^{(k)} \times \text{age}_{i}\right),
-\]</div>
-<p>producing the overall slope with age, the interaction between <code class="docutils literal notranslate"><span class="pre">age</span></code> and <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and the random per-child slope of age. Key to this is recognising that <span class="math notranslate nohighlight">\(\text{SICDEGP}^{1}_{j}\)</span> is acting like a regression slope, but one that has been shifted by the <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> grouping. Similarly, <span class="math notranslate nohighlight">\(\phi^{(k)}\)</span> is also acting like a regression slope, but one that is specific to each child.</p>
+<p>This may not look much like an interaction at present, however, we will see what happens when we collapse the levels together in the next step.</p>
 </section>
 </section>
 <section id="fitting-the-model-in-r">
 <h2>Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-the-model-in-r" title="Link to this heading">#</a></h2>
-<p>In order to fit the model in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we have to collapse all the levels together. After doing this and reordering the terms (and recognising how the effects with age are formed above), we have</p>
+<p>In order to fit the model in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we have to collapse all the levels together. Key to seeing how this works is recognising that all the terms in the definition of <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> at Level 2 will by multiplied by <span class="math notranslate nohighlight">\(\text{age}_{i}\)</span> when they are collapsed into Level 1. For instance, at Level 1 we have</p>
 <div class="math notranslate nohighlight">
 \[
-\text{VSAE}^{(k)}_{ij} = \beta_{0} + \text{SICDEGP}^{0}_{j} + \left(\beta_{1} \times \text{age}_{i}\right) + \left(\text{SICDEGP}^{1}_{j} \times \text{age}_{i}\right) + \xi^{(k)} + (\phi^{(k)} \times \text{age}_{i}) +  \eta^{(k)}_{ij}.
+\left(\beta_{1}^{(k)} \times \text{age}_{i}\right), 
 \]</div>
+<p>but the definition of <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> from Level 2 is</p>
+<div class="math notranslate nohighlight">
+\[
+\beta_{1}^{(k)} = \beta_{1} + \left(\beta_{4} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{5} \times \text{SICDEGP}_{2j}\right) + \xi_{1}^{(k)}.
+\]</div>
+<p>So, expanding <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> in Level 1 to its full definition from Level 2 gives</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\beta_{1}^{(k)} \times \text{age}_{i}\right) = \left(\left[\beta_{1} + \left(\beta_{4} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{5} \times \text{SICDEGP}_{2j}\right) + \xi_{1}^{(k)}\right] \times \text{age}_{i}\right)
+\]</div>
+<p>Removing the brackets then results in</p>
+<div class="math notranslate nohighlight">
+\[
+ \left(\beta_{1} \times \text{age}_{i}\right) + \left(\beta_{4} \times \text{SICDEGP}_{1j} \times \text{age}_{i}\right) + \left(\beta_{5} \times \text{SICDEGP}_{2j} \times \text{age}_{i}\right) + \left(\xi_{1}^{(k)} \times \text{age}_{i}\right)
+\]</div>
+<p>illustrating how the interaction terms are formed <em>through</em> the different levels of the model.</p>
+<p>After continuing in this fashion and reordering the terms, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0} + \left(\beta_{1} \times \text{age}_{i}\right) + \left(\beta_{2} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{3} \times \text{SICDEGP}_{2j}\right) + \\ 
+                           &amp;\quad\left(\beta_{4} \times \text{SICDEGP}_{1j} \times \text{age}_{i}\right) + \left(\beta_{5} \times \text{SICDEGP}_{2j} \times \text{age}_{i}\right) + \\ 
+                           &amp;\quad\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij}
+\end{alignat*}
+\end{split}\]</div>
 <p>To see how to specify the random effects, we isolate the random terms</p>
 <div class="math notranslate nohighlight">
 \[
-\xi^{(k)} + (\phi^{(k)} \times \text{age}_{i}) +  \eta^{(k)}_{ij}
+\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{age}_{i}\right) + \eta^{(k)}_{ij}
 \]</div>
 <p>and remove the final errors, as they do not need to be specified</p>
 <div class="math notranslate nohighlight">
 \[
-\xi^{(k)} + (\phi^{(k)} \times \text{age}_{i}).
+\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{age}_{i}\right).
 \]</div>
 <p>We then adjust the conditional notation and we get</p>
 <div class="math notranslate nohighlight">
 \[
-\xi + (\phi \times \text{age}_{i}) | k
+\xi_{0} + \left(\xi_{1} \times \text{age}_{i}\right)\;|\; k
 \]</div>
-<p>which we can then simply translate to <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">age|childid</span></code>. You can think of this as fitting a simple regression of <code class="docutils literal notranslate"><span class="pre">age</span></code> for each child, which is expressed by the <code class="docutils literal notranslate"><span class="pre">R</span></code> formula <code class="docutils literal notranslate"><span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">age</span></code>.</p>
-<p>Our model is therefore</p>
+<p>which we can then simply translate to <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">age|childid</span></code>. You can think of this as fitting a simple regression of <code class="docutils literal notranslate"><span class="pre">age</span></code> for each child separately.</p>
+<p>Our model is therefore expressed by the following <code class="docutils literal notranslate"><span class="pre">lme()</span></code> syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
@@ -786,11 +810,9 @@ F-statistic:  21.7 on 1 and 3 DF,  p-value: 0.01866
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
   Data: autism 
   Log-restricted-likelihood: -2348.065
-  Fixed: VSAE ~ 1 + SICDEGP + age + SICDEGP:age 
-      (Intercept)     SICDEGPmedium       SICDEGPhigh               age 
-        1.8431741        -0.3247815        -3.8581067         2.9719752 
-SICDEGPmedium:age   SICDEGPhigh:age 
-        0.7151603         4.3348154 
+  Fixed: VSAE ~ 1 + age + SICDEGP + SICDEGP:age 
+      (Intercept)               age     SICDEGPmedium       SICDEGPhigh age:SICDEGPmedium   age:SICDEGPhigh 
+        1.8431741         2.9719752        -0.3247815        -3.8581067         0.7151603         4.3348154 
 
 Random effects:
  Formula: ~1 + age | childid
@@ -806,6 +828,7 @@ Number of Groups: 158
 </div>
 </div>
 </div>
+<p>Notice that we have had to pass the <code class="docutils literal notranslate"><span class="pre">na.omit</span></code> option to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> what to do with the <code class="docutils literal notranslate"><span class="pre">NA</span></code> values. Although mixed-effects models can deal with missing data, this is only true if values are missing by <em>omission</em>, not missing by replacing them with non-numeric values.</p>
 <p>We can have a look at the marginal covariance structure that this model has resulted in</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -817,11 +840,11 @@ Number of Groups: 158
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1          2          3          4          5
-1  60.932515  -1.624765  -6.023788  -14.82183  -23.61988
-2  -1.624765  72.692988  40.255191   96.09513  151.93507
-3  -6.023788  40.255191 193.170917  317.92906  503.04498
-4 -14.821834  96.095132 317.929064  821.95470 1205.26479
-5 -23.619881 151.935073 503.044980 1205.26479 1967.84238
+1  60.932515  -1.624765  -6.023787  -14.82183  -23.61988
+2  -1.624765  72.692989  40.255191   96.09513  151.93507
+3  -6.023787  40.255191 193.170916  317.92906  503.04497
+4 -14.821831  96.095133 317.929061  821.95469 1205.26477
+5 -23.619876 151.935074 503.044974 1205.26477 1967.84234
 </pre></div>
 </div>
 <img alt="../_images/a7a22232bdad2e396e4ba812c6768b03d42d05b11ed348d7e9722819e1806ee8.png" src="../_images/a7a22232bdad2e396e4ba812c6768b03d42d05b11ed348d7e9722819e1806ee8.png" />
@@ -835,12 +858,12 @@ Number of Groups: 158
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            1           2           3          4           5
-1  1.00000000 -0.02441292 -0.05552317 -0.0662298 -0.06821156
-2 -0.02441292  1.00000000  0.33970721  0.3931255  0.40171368
-3 -0.05552317  0.33970721  1.00000000  0.7978760  0.81590725
-4 -0.06622980  0.39312547  0.79787603  1.0000000  0.94768362
-5 -0.06821156  0.40171368  0.81590725  0.9476836  1.00000000
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            1           2           3           4           5
+1  1.00000000 -0.02441292 -0.05552316 -0.06622979 -0.06821155
+2 -0.02441292  1.00000000  0.33970721  0.39312548  0.40171369
+3 -0.05552316  0.33970721  1.00000000  0.79787603  0.81590725
+4 -0.06622979  0.39312548  0.79787603  1.00000000  0.94768362
+5 -0.06821155  0.40171369  0.81590725  0.94768362  1.00000000
 </pre></div>
 </div>
 </div>
@@ -855,58 +878,40 @@ Number of Groups: 158
 <p>As mentioned earlier, there is a slight hint that some of the trajectories are <em>curved</em> and so we could consider whether a <em>quadratic</em> effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is warranted. There are three ways this could enter the model: fixed-effects only, random-effects only and both. We will consider all these below in terms of model comparisons using the <code class="docutils literal notranslate"><span class="pre">BIC()</span></code> function. Of importance is that we set <code class="docutils literal notranslate"><span class="pre">method='ML'</span></code>. In addition, we make use of the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function to only change a subset of options to form each new model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
-<span class="n">autism.lme.full.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="o">=</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">))</span><span class="w">                                   </span><span class="c1"># quadratic fixed</span>
-<span class="n">autism.lme.full.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w">                                   </span><span class="c1"># quadratic random</span>
-<span class="n">autism.lme.full.3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="o">=</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w"> </span><span class="c1"># quadratic fixed &amp; random</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">age</span><span class="o">*</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="c1"># increase iterations to allow convergence </span>
+<span class="w">                         </span><span class="n">method</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
+<span class="n">autism.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                          </span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">*</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                          </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span><span class="w"> </span>
 
-<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full.1</span><span class="p">,</span><span class="n">autism.lme.full.2</span><span class="p">,</span><span class="n">autism.lme.full.3</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="n">BIC.delta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+<span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Change in BIC = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">BIC.delta</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                  df      BIC
-autism.lme.null   10 4767.514
-autism.lme.full.1 13 4776.759
-autism.lme.full.2 13 4694.026
-autism.lme.full.3 16 4706.372
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                df      BIC
+autism.lme.null 10 4767.514
+autism.lme.full 16 4706.372
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;Change in BIC = 61.14&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>In terms of change in BIC, we can first compare the model with no quadratic terms, to the one with both fixed <em>and</em> random quadratic terms</p>
+<p>This indicates <em>very strong evidence</em> in favour of the <em>lower</em> BIC model. In this comparison, the lower BIC model is the one with the quadratic terms, so there is evidence that some sort of curve is beneficial here. So, based on this, our final model is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 61.14189
-</pre></div>
-</div>
-</div>
-</div>
-<p>which, based on our interpretation given in the ANOVA workshop from last semester, indicates <em>very strong evidence</em> in favour of the <em>lower</em> BIC model. In this comparison, the lower BIC model is the one with all the quadratic terms, so there is evidence that some sort of curve is beneficial here. Next, we can compare the fixed-only and the random-only to the model with both</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 70.38623
-[1] 12.34614
-</pre></div>
-</div>
-</div>
-</div>
-<p>In both cases, this is <em>very strong</em> evidence favouring the <em>lower</em> BIC model. The first comparison indicates that the model with <em>both</em> quadratic effects is better than the model with only a <em>fixed</em> quadratic effect. The second comparison indicates that the model with <em>random only</em> is better than the model with <em>both</em> effects. So, based on this, our final model is</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">:</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
@@ -916,7 +921,17 @@ autism.lme.full.3 16 4706.372
 </div>
 </div>
 </div>
-<p>Which indicates that the <em>population-level</em> effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is linear, but individual children can diverge from this by curving up and down to various degrees. We can see what effect this has had on the modelled covariance structure</p>
+<p>which, written formally, becomes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+    \text{VSAE}^{(k)}_{ij} &amp;= \beta_{0} + \left(\beta_{1} \times \text{age}_{i}\right) + \left(\beta_{2} \times \text{age}^{2}_{i}\right) + \left(\beta_{3} \times \text{SICDEGP}_{1j}\right) + \left(\beta_{4} \times \text{SICDEGP}_{2j}\right) + \\ 
+                           &amp;\quad\left(\beta_{5} \times \text{SICDEGP}_{1j} \times \text{age}_{i}\right) + \left(\beta_{6} \times \text{SICDEGP}_{2j} \times \text{age}_{i}\right) + \\
+                           &amp;\quad\left(\beta_{7} \times \text{SICDEGP}_{1j} \times \text{age}^{2}_{i}\right) + \left(\beta_{8} \times \text{SICDEGP}_{2j} \times \text{age}^{2}_{i}\right) + \\ 
+                           &amp;\quad\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{age}_{i}\right)  + \left(\xi_{2}^{(k)} \times \text{age}^{2}_{i}\right) + \eta^{(k)}_{ij}.
+\end{alignat*}
+\end{split}\]</div>
+<p>We can see what effect this has had on the modelled covariance structure</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
@@ -926,12 +941,12 @@ autism.lme.full.3 16 4706.372
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          1          2          3          4          5
-1 39.551115   2.144941   5.819979   24.20281   57.29597
-2  2.144941  53.979738  44.042993   99.84853  155.58718
-3  5.819979  44.042993 158.518409  274.53461  429.29428
-4 24.202807  99.848532 274.534606  755.34984 1285.20720
-5 57.295970 155.587182 429.294284 1285.20720 2590.31632
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>          1          2          3          4         5
+1 39.107184   2.398842   6.180047   24.04741   55.6547
+2  2.398842  53.710473  44.290509   99.62922  154.3773
+3  6.180047  44.290509 158.025707  274.37743  429.1250
+4 24.047408  99.629223 274.377425  755.52294 1287.8312
+5 55.654705 154.377261 429.125030 1287.83120 2596.1290
 </pre></div>
 </div>
 <img alt="../_images/71ededd395f3dc61ce5744527a2ab506b09727b35256db42ed6180823b931f4e.png" src="../_images/71ededd395f3dc61ce5744527a2ab506b09727b35256db42ed6180823b931f4e.png" />
@@ -946,11 +961,11 @@ autism.lme.full.3 16 4706.372
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           1          2          3         4         5
-1 1.00000000 0.04642166 0.07350252 0.1400272 0.1790063
-2 0.04642166 1.00000000 0.47612565 0.4944840 0.4160850
-3 0.07350252 0.47612565 1.00000000 0.7933835 0.6699445
-4 0.14002717 0.49448398 0.79338352 1.0000000 0.9188036
-5 0.17900630 0.41608497 0.66994454 0.9188036 1.0000000
+1 1.00000000 0.05234123 0.07861395 0.1398995 0.1746668
+2 0.05234123 1.00000000 0.48074780 0.4945764 0.4134193
+3 0.07861395 0.48074780 1.00000000 0.7940735 0.6699723
+4 0.13989950 0.49457644 0.79407345 1.0000000 0.9195429
+5 0.17466684 0.41341926 0.66997229 0.9195429 1.0000000
 </pre></div>
 </div>
 </div>
@@ -959,65 +974,45 @@ autism.lme.full.3 16 4706.372
 </section>
 <section id="simplifying-the-random-effects">
 <h3>Simplifying the Random Effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
-<p>At this point, we could also look at simplifying the random effects. Although we saw above that a quadratic model of the child-specific slopes was better than a linear fit, we could also examine whether we need a child-specific effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> at all. Based on reason alone, this <em>should</em> be there, but we can see what the data say about this.</p>
+<p>At this point, we could also look at simplifying the random effects. Although we saw above that a quadratic model of the child-specific slopes was better than a linear fit, we could also examine whether we need a child-specific effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> at all. Based on reason alone, this <em>should</em> be there, but we can see what the data say.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
-<span class="n">autism.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">*</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                      </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                      </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                      </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                      </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span>
+<span class="w">                      </span><span class="n">method</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
 
-<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full</span><span class="p">)</span>
+<span class="n">autism.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w">        </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="n">autism.lme.full</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="n">BIC.delta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+<span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Change in BIC = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">BIC.delta</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                df      BIC
-autism.lme.null  8 5506.508
-autism.lme.full 13 4694.026
+autism.lme.null 11 5520.604
+autism.lme.full 16 4706.372
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;Change in BIC = 814.23&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>We do not even need to calculate the change here to see that we very much do prefer having <code class="docutils literal notranslate"><span class="pre">age</span></code> as a random effect. This confirms our suspicions and demonstrates that our reasoning appeared to be accurate. So, we keep the model with the quadratic effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> as a random slope term.</p>
+<p>So we <em>very much</em> do prefer having <code class="docutils literal notranslate"><span class="pre">age</span></code> as a random effect. This confirms our suspicions and demonstrates that our reasoning appeared to be accurate. So, we keep the model with the quadratic effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> as a random slope term.</p>
 </section>
 <section id="additional-variance-structures">
 <h3>Additional Variance Structures<a class="headerlink" href="#additional-variance-structures" title="Link to this heading">#</a></h3>
-<p>As a final consideration, we can think about whether there are any additional variance structure we may wish to capture. At present, our model is assuming that the variance across the levels of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is homogenous. So, we could entertain a model that allows these variances to differ. Unfortunately, this is too complex for the data to support. If we try it, we get singular precision errors, which is effectively telling us that there is not enough left-over after fitting the fixed-effects and our complex polynomial random-effects to actually estimate a different variance for each level is <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>.</p>
+<p>As a final consideration, we can think about whether there are any additional variance structure we may wish to capture. At present, our model is assuming that the variance across the levels of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is homogenous. So, we could entertain a model that allows these variances to differ. Unfortunately, this is too complex for the data to support. If we try it, we get singular precision errors, which is effectively telling us that there is not enough left-over after fitting the fixed-effects and our complex polynomial random-effects to actually estimate a different variance for each level in <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code>. So, unfortunately, we will need to abandon this idea and keep the variance homoscedastic. Our final model is therefore</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">*</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">autism</span><span class="p">,</span><span class="w"> </span><span class="n">na.action</span><span class="o">=</span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">msMaxIter</span><span class="o">=</span><span class="m">100</span><span class="p">),</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">)</span>
-<span class="n">autism.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">try</span><span class="p">(</span><span class="nf">update</span><span class="p">(</span><span class="n">autism.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="o">=</span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="m">1</span><span class="o">|</span><span class="n">SICDEGP</span><span class="p">)))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning messages:
-1: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-2: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-3: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-4: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-5: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-6: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-7: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-8: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-9: In logLik.reStruct(object, conLin) :
-  Singular precision matrix in level -1, block 15
-</pre></div>
-</div>
-</div>
-</div>
-<p>So, unfortunately, we will need to abandon this idea and keep the variance homoscedastic. Our final model is then</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">:</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
@@ -1039,7 +1034,7 @@ autism.lme.full 13 4694.026
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" src="../_images/7ca9ef7af925d11d7e6007ce1656e500aaa0f9b77ef987cb292b20dc2cff9203.png" />
+<img alt="../_images/b97a6a5bc80c7bdee7a0509350a81eb6eceab0a430bb5c108023c31b713b9d80.png" src="../_images/b97a6a5bc80c7bdee7a0509350a81eb6eceab0a430bb5c108023c31b713b9d80.png" />
 </div>
 </div>
 <p>In terms of the plots, there are a few elements of note. Firstly, the distributions of the random effects all show heavy tails and so precise equivalence to normal distributions is difficult to justify. To an extent, some of this is due to some potential outliers, as can be seen by a number of data points with standardised residuals &gt; 3. We can extract these using the code below</p>
@@ -1056,11 +1051,12 @@ autism.lme.full 13 4694.026
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    age VSAE SICDEGP childid     resid
-37    5   71    high      46  5.715804
-38    9   31    high      46 -4.413278
-46    5   77    high      49  4.338568
-133   3   63    high     180  6.814855
-497   3   45     low      80  4.327357
+37    5   71    high      46  5.845105
+38    9   31    high      46 -4.320342
+46    5   77    high      49  4.470470
+83    3   39    high     106  3.002857
+133   3   63    high     180  6.863016
+497   3   45     low      80  4.333835
 </pre></div>
 </div>
 </div>
@@ -1078,13 +1074,13 @@ autism.lme.full 13 4694.026
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d5231beeffeebc0ecb48b7ca38a16542882e9f53a71ffe83c7ec011527b83e04.png" src="../_images/d5231beeffeebc0ecb48b7ca38a16542882e9f53a71ffe83c7ec011527b83e04.png" />
+<img alt="../_images/7b2a2be72e75875eb417c4dac533be8c2b25475c2c44a31f6ddbad1dd257af33.png" src="../_images/7b2a2be72e75875eb417c4dac533be8c2b25475c2c44a31f6ddbad1dd257af33.png" />
 </div>
 </div>
 <p>In terms of these, child 46 seems a little odd. Not only did they score very high on socialisation at age 5, they then proceeded to score very low at age 9 and went back up again at age 13. This seems unlikely and may suggest that either the measurement at age 5 is erroneous, the measurement at age 9 is erroneous, or both. For the remaining children, it is more difficult to make a judgement. Their trajectories do not necessarily seem out of the ordinary. The largest outlier is associated with child 180 at age 3, where their VSAE score is much <em>higher</em> than any other children at that age. Unless we had reason to think that a score of 63 is <em>unreasonable</em> at age 3, we have no great justification for removing the child. In most cases, the lack of fit is likely because none of these trajectories can be as well-captured by either a straight or quadratic curve. However, just because a child scores well-below or well-above expectation at a given age, this is not a reason to remove them without further justification. However, we have some suspicions about child 46 and so will choose to remove them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="o">:</span><span class="n">age</span><span class="p">,</span><span class="w"> </span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">autism.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">VSAE</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SICDEGP</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">:</span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">poly</span><span class="p">(</span><span class="n">age</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">|</span><span class="n">childid</span><span class="p">,</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">autism</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span><span class="w"> </span>
@@ -1098,7 +1094,63 @@ autism.lme.full 13 4694.026
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
-<p>We have now reached the inference element of the analysis. We can start by generating the ANOVA table of the effects</p>
+<p>We have now reached the inference element of the analysis. We can start by viewing the model fit via <code class="docutils literal notranslate"><span class="pre">summary()</span></code>, though we will ignore the inferential tests</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: autism 
+  Subset: childid != &quot;46&quot; 
+       AIC      BIC    logLik
+  4485.458 4555.702 -2226.729
+
+Random effects:
+ Formula: ~1 + poly(age, 2) | childid
+ Structure: General positive-definite, Log-Cholesky parametrization
+              StdDev     Corr         
+(Intercept)    15.562463 (Intr) p(,2)1
+poly(age, 2)1 428.834949 0.986        
+poly(age, 2)2 114.054038 0.458  0.597 
+Residual        5.622703              
+
+Fixed effects:  VSAE ~ 1 + poly(age, 2) + SICDEGP + poly(age, 2):SICDEGP 
+                               Value Std.Error  DF  t-value p-value
+(Intercept)                  18.9942   2.37477 442 7.998330  0.0000
+poly(age, 2)1               291.3561  67.74312 442 4.300896  0.0000
+poly(age, 2)2                17.1364  22.66800 442 0.755973  0.4501
+SICDEGPmedium                 3.5226   3.13504 154 1.123619  0.2629
+SICDEGPhigh                  22.1237   3.51751 154 6.289603  0.0000
+poly(age, 2)1:SICDEGPmedium  55.7714  89.29037 442 0.624607  0.5326
+poly(age, 2)2:SICDEGPmedium   0.6724  29.78911 442 0.022572  0.9820
+poly(age, 2)1:SICDEGPhigh   479.8958  99.71983 442 4.812442  0.0000
+poly(age, 2)2:SICDEGPhigh    46.6440  33.08023 442 1.410025  0.1592
+ Correlation: 
+                            (Intr) pl(,2)1 pl(,2)2 SICDEGPm SICDEGPh ply(g,2)1:SICDEGPm ply(g,2)2:SICDEGPm ply(g,2)1:SICDEGPh
+poly(age, 2)1                0.956                                                                                           
+poly(age, 2)2                0.432  0.568                                                                                    
+SICDEGPmedium               -0.757 -0.725  -0.327                                                                            
+SICDEGPhigh                 -0.675 -0.646  -0.292   0.511                                                                    
+poly(age, 2)1:SICDEGPmedium -0.726 -0.759  -0.431   0.956    0.490                                                           
+poly(age, 2)2:SICDEGPmedium -0.329 -0.433  -0.761   0.425    0.222    0.561                                                  
+poly(age, 2)1:SICDEGPhigh   -0.650 -0.679  -0.386   0.492    0.956    0.515              0.294                               
+poly(age, 2)2:SICDEGPhigh   -0.296 -0.390  -0.685   0.224    0.429    0.296              0.521              0.564            
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-3.13907996 -0.40058651 -0.04815231  0.28664200  7.51597537 
+
+Number of Observations: 605
+Number of Groups: 157 
+</pre></div>
+</div>
+</div>
+</div>
+<p>As we can see, we have 9 fixed-effects commensurate with the 9 terms we wrote in the expanded polynomial model earlier. We also have 4 variances, commensurate with the 4 error terms from the expanded polynomial model. So everything is as expected.</p>
+<p>We can now generate the ANOVA table of the effects</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">)</span>
@@ -1109,10 +1161,10 @@ autism.lme.full 13 4694.026
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
 
 Response: VSAE
-              Chisq Df Pr(&gt;Chisq)    
-SICDEGP      33.040  2  6.692e-08 ***
-age         155.055  1  &lt; 2.2e-16 ***
-SICDEGP:age  27.454  2  1.093e-06 ***
+                       Chisq Df Pr(&gt;Chisq)    
+poly(age, 2)         162.366  2  &lt; 2.2e-16 ***
+SICDEGP               33.127  2  6.406e-08 ***
+poly(age, 2):SICDEGP  30.480  4  3.907e-06 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
@@ -1127,23 +1179,30 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/39c01b0a2dc7ee8c71102fb86c9c5ddfb2701dfc667c7cda394e8b070310fbf6.png" src="../_images/39c01b0a2dc7ee8c71102fb86c9c5ddfb2701dfc667c7cda394e8b070310fbf6.png" />
+<img alt="../_images/943f0594797225a99dfb128af8ecfd03f93de83cc57d52370fa27a713e3b9256.png" src="../_images/943f0594797225a99dfb128af8ecfd03f93de83cc57d52370fa27a713e3b9256.png" />
 </div>
 </div>
 <p>From this, it appears as if the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for children in the <code class="docutils literal notranslate"><span class="pre">high</span></code> group is steeper than the slopes for children in the <code class="docutils literal notranslate"><span class="pre">medium</span></code> or <code class="docutils literal notranslate"><span class="pre">low</span></code> groups. We will follow this up and compare these slopes formally.</p>
-<p>Because our inference concerns comparing <em>slopes</em> rather than <em>means</em>, we make use of the <code class="docutils literal notranslate"><span class="pre">emtrends()</span></code> function, rather than the <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> function. This operates in a very similar way, we just need to remember that what we are comparing here are <em>slope magnitudes</em> rather than means.</p>
+<p>Because our inference concerns comparing <em>slopes</em> rather than <em>means</em>, we make use of the <code class="docutils literal notranslate"><span class="pre">emtrends()</span></code> function, rather than the <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code> function. This operates in a very similar way, we just need to remember that what we are comparing here are <em>slope magnitudes</em> rather than means. We also include the <code class="docutils literal notranslate"><span class="pre">max.degree</span></code> argument which provides comparisons of the slopes at different degrees of the polynomial. So we get tests of the linear component of the curves and tests of the quadratic element of the curves.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emtrends</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">emm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">emtrends</span><span class="p">(</span><span class="n">autism.lme</span><span class="p">,</span><span class="w"> </span><span class="n">pairwise</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">SICDEGP</span><span class="p">,</span><span class="w"> </span><span class="n">var</span><span class="o">=</span><span class="s">&#39;age&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;asymptotic&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">adjust</span><span class="o">=</span><span class="s">&#39;holm&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">max.degree</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">emm</span><span class="o">$</span><span class="n">contrasts</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> contrast      estimate    SE  df z.ratio p.value
- low - medium    -0.565 0.761 Inf  -0.742  0.4578
- low - high      -4.107 0.849 Inf  -4.839  &lt;.0001
- medium - high   -3.542 0.800 Inf  -4.426  &lt;.0001
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>degree = linear:
+ contrast      estimate    SE  df z.ratio p.value
+ low - medium  -0.56392 0.781 Inf  -0.722  0.4705
+ low - high    -4.41587 0.872 Inf  -5.063  &lt;.0001
+ medium - high -3.85195 0.821 Inf  -4.693  &lt;.0001
+
+degree = quadratic:
+ contrast      estimate    SE  df z.ratio p.value
+ low - medium  -0.00243 0.107 Inf  -0.023  0.9820
+ low - high    -0.16821 0.119 Inf  -1.410  0.4100
+ medium - high -0.16579 0.111 Inf  -1.488  0.4100
 
 Degrees-of-freedom method: fixed 
 P value adjustment: holm method for 3 tests 
@@ -1151,7 +1210,8 @@ P value adjustment: holm method for 3 tests
 </div>
 </div>
 </div>
-<p>Based on this, we can see that the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">low</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">medium</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is non-significant. We can also see that the change in magnitude is very small (0.57). By comparison, the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> and the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">medium</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> are both significant, with much larger shifts in the slope magnitude (4.11 and 3.54 respectively). This matches what we can see in the plot above.</p>
+<p>Based on the tests of the <em>linear</em> component, we can see that the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">low</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> and the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope at the <code class="docutils literal notranslate"><span class="pre">medium</span></code> level of <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> is non-significant. We can also see that the change in magnitude is very small (0.56). By comparison, the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">low</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> and the difference between the <code class="docutils literal notranslate"><span class="pre">age</span></code> slope for <code class="docutils literal notranslate"><span class="pre">medium</span></code> and <code class="docutils literal notranslate"><span class="pre">high</span></code> are both significant, with much larger shifts in the slope magnitude (4.42 and 3.85 respectively). This matches what we can see in the plot above.</p>
+<p>In terms of the <em>quadratic</em> components, we can see none of the tests are significant, suggesting that the slopes do not differ in terms of their degree of bending. This is echoed in the plots above, where the effects appear largely linear. If one of the slopes very clearly bent upwards and the rest remained straight, we would likely see an effect here.</p>
 <p>Our general conclusion is then that, across all <code class="docutils literal notranslate"><span class="pre">SICDEGP</span></code> levels, there is an overall trend of socialisation improving as the children get older. This becomes more variable as age increases. Those children originally classified in the low or medium expressive language groups show similar degrees of improvement over time. However, those children classified in the high expressive language group show a much steeper increase in socialisation across time. This suggests that those children high in expressive language at age 2 will show the most gains in socialisation by the time they reach the age of 13.</p>
 </section>
 </section>

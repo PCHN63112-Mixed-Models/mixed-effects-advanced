@@ -374,7 +374,10 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-brain-data">The Rat Brain Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a><ul class="nav section-nav flex-column">
@@ -548,10 +551,14 @@ See ?effectsTheme for details.
 </table>
 </div>
 <p>Despite no clustering existing here, we could <em>imagine</em> such a structure if this experiment were a multi-centre study, where the same measurements were taken using different rats at different labs around the country. In this case, <em>lab</em> could be a <em>clustering</em> variable, as it is conceivable that measurements from rats in the same lab may be dependent in some way (same scientists, same lab environment, same equipment, same living standards etc.) We do not have this here, but this situation is certainly <em>possible</em>. This would make these data <em>clustered repeated measurements</em>, with <em>lab</em> appearing at Level 3. This is not a type we have described, but which remains perfectly analysable using the examples you will see across these workshops.</p>
+<section id="model-notation">
+<h3>Model Notation<a class="headerlink" href="#model-notation" title="Link to this heading">#</a></h3>
+<p>In order to facilitate consistency across the examples in these workshops, we will represent all models using more general regression notation. For instance, whether a variable is categorical or continuous, it will be written in the model as e.g. <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>. In the categorical case, it will be implicitly assumed that <span class="math notranslate nohighlight">\(x_{i1}\)</span> is a <em>dummy variable</em>. Although this will make the notation for models that <em>only</em> contain categorical variables busier, it will make things much clearer when we have models that contain <em>both</em> categorical and continuous predictors. In addition, we will be using <em>variable labels</em> going forward, rather than generic notation (e.g. <span class="math notranslate nohighlight">\(\beta_{1} \times \text{treatment}_{j}\)</span> rather than <span class="math notranslate nohighlight">\(\beta_{1}x_{i1}\)</span>). This should hopefully make it clearer which variable each term relates to when writing the model down.</p>
+</section>
 </section>
 <section id="model-building">
 <h2>Model Building<a class="headerlink" href="#model-building" title="Link to this heading">#</a></h2>
-<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and ready for modelling.</p>
+<p>To build a model of this dataset, we use the 3-step procedure outlined in the lesson. We assume at this point that the data has been investigated, wrangled, cleaned and is ready for modelling.</p>
 <section id="step-i-a-single-dependency-structure">
 <h3>Step I: A Single Dependency Structure<a class="headerlink" href="#step-i-a-single-dependency-structure" title="Link to this heading">#</a></h3>
 <p>We start by isolating a single dependency structure which, in this example, is a single <em>rat</em>. We choose the first rat in the dataset, who is indexed using <code class="docutils literal notranslate"><span class="pre">animal</span> <span class="pre">==</span> <span class="pre">'R111097'</span></code>. Based on the summaries earlier, the data are fully balanced within each rat, so the particular rat chosen will not make a difference here. We subset the data below</p>
@@ -599,100 +606,133 @@ See ?effectsTheme for details.
 \[
 y_{ij} = \mu + \alpha_{j} + \eta_{ij}
 \]</div>
-<p>where <span class="math notranslate nohighlight">\(i\)</span> indexes the observation and <span class="math notranslate nohighlight">\(j\)</span> indexes the treatment. To make things clearer we will use the data labels from now on, rather than generic notation. Our model is therefore</p>
+<p>in ANOVA notation, which is equivalent to</p>
 <div class="math notranslate nohighlight">
 \[
-\text{activate}_{ij} = \text{mean} + \text{treatment}_{j} + \eta_{ij}.
+y_{ij} = \beta_{0} + \beta_{1}x_{ij} + \eta_{ij}
 \]</div>
-<p>We <em>could</em> check that this fits for this particular rat, but we leave this to one side. We can see that there are 3 measurements of each treatment and so we have no concerns about fitting this model.</p>
+<p>in generic regression notation, with <span class="math notranslate nohighlight">\(x_{ij}\)</span> defined as a dummy variable where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+x_{ij} =
+\begin{cases}
+    1 &amp; \text{if $j=1$}\\
+    0 &amp; \text{otherwise}
+\end{cases}
+\end{split}\]</div>
+<p>To make this clearer, we can use variable labels, giving</p>
+<div class="math notranslate nohighlight">
+\[
+\text{activate}_{ij} = \beta_{0} + \left(\beta_{1} \times \text{treatment}_{j}\right) + \eta_{ij},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{treatment}_{j}\)</span> is the dummy value associated with level <span class="math notranslate nohighlight">\(j\)</span> of the treatment (either a 0 or a 1).</p>
+<p>For completeness, we can check that this model fits in <code class="docutils literal notranslate"><span class="pre">R</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.1.lm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lm</span><span class="p">(</span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratbrain.1</span><span class="p">)</span>
+<span class="nf">summary</span><span class="p">(</span><span class="n">ratbrain.1.lm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Call:
+lm(formula = activate ~ treatment, data = ratbrain.1)
+
+Residuals:
+      1       2       3       4       5       6 
+115.320 -51.560 -63.760  -2.767 -72.457  75.223 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)          250.87      50.78   4.941  0.00781 **
+treatmentCarbachol   123.61      71.81   1.721  0.16030   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 87.95 on 4 degrees of freedom
+Multiple R-squared:  0.4255,	Adjusted R-squared:  0.2819 
+F-statistic: 2.963 on 1 and 4 DF,  p-value: 0.1603
+</pre></div>
+</div>
+</div>
+</div>
+<p>Given that there are 3 measurements of each treatment, we should have no concerns about fitting this model.</p>
 </section>
 <section id="step-ii-expand-to-multiple-structures">
 <h3>Step II: Expand to Multiple Structures<a class="headerlink" href="#step-ii-expand-to-multiple-structures" title="Link to this heading">#</a></h3>
 <p>In our second step, we expand the model above to <em>multiple</em> rats. We index these using the same notation we used in the lesson, to make it clear which terms <em>belong</em> to a particular rat. We start with the most general case of allowing every term to vary by-rat, giving us</p>
 <div class="math notranslate nohighlight">
 \[
-\text{activate}^{(k)}_{ij} = \text{mean}^{(k)} + \text{treatment}^{(k)}_{j} + \eta^{(k)}_{ij}.
+\text{activate}^{(k)}_{ij} = \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}.
 \]</div>
-<p>We can now reason more carefully about the terms <span class="math notranslate nohighlight">\(\text{mean}^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span>. This can be done in a more <em>data-driven</em> fashion by plotting the data and reasoning about the patterns we can see. For now, we will stick to using the theoretical implications of our decisions, but we will see this alternative illustrated further below.</p>
+<p>We can now reason more carefully about the parameters <span class="math notranslate nohighlight">\(\beta_{0}^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span>. This can be done in a more <em>data-driven</em> fashion by plotting the data and reasoning about the patterns we can see. For now, we will stick to using the theoretical implications of our decisions, but we will see this alternative illustrated further below.</p>
 <section id="random-intercept-decision">
 <h4>Random Intercept Decision<a class="headerlink" href="#random-intercept-decision" title="Link to this heading">#</a></h4>
-<p>As mentioned in the lesson, the most basic form of mixed-effects model will always contain a <em>random intercept</em> term. There is often little sensible reason to drop this, unless we are retuning to the normal linear model with no dependencies. In this context, keeping <span class="math notranslate nohighlight">\(\text{mean}^{(k)}\)</span> <em>random</em> encodes the idea that each rat is a random sample from a distribution of rats. Without this, the model would not consider each rat to be a random draw. In other words, we would be implying that we had <em>all</em> the rats we were interested in within this dataset. This <em>may</em> be justifiable in a case study of only a set of very specific individuals, but does not apply here. As such, we allow the term <span class="math notranslate nohighlight">\(\text{mean}^{(k)}\)</span> to vary from rat-to-rat.</p>
+<p>As mentioned in the lesson, the most basic form of mixed-effects model will always contain a <em>random intercept</em> term. There is often little sensible reason to drop this, unless we are retuning to the normal linear model with no dependencies. In this context, keeping <span class="math notranslate nohighlight">\(\beta_{0}^{(k)}\)</span> <em>random</em> encodes the idea that each rat is a random sample from a distribution of rats. Without this, the model would not consider each rat to be a random draw. In other words, we would be implying that we had <em>all</em> the rats we were interested in within this dataset. This <em>may</em> be justifiable in a case study of only a set of very specific individuals, but does not apply here. As such, we allow the term <span class="math notranslate nohighlight">\(\beta_{0}^{(k)}\)</span> to vary from rat-to-rat.</p>
 </section>
 <section id="random-slope-decision">
 <h4>Random Slope Decision<a class="headerlink" href="#random-slope-decision" title="Link to this heading">#</a></h4>
-<p>In terms of <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span>, we have more of a choice. Keeping this term <em>random</em> encodes the idea that the difference between carbachol and saline is specific to each individual rat. Depending upon their biology, the degree of activation difference between the two treatments will shift on a per-rat basis. In some rats, this difference may be very <em>small</em> and in others it may be much <em>larger</em>. If we had infinite samples of infinite rats, the treatment effect across rats would <em>not</em> converge on the same value. Instead, each rat would have its own individual treatment effect. In this sense, any deviations we see from the population value of treatment are not simply sampling noise, they reflect something fundamental about differences between the rats.</p>
-<p>The alternative is to set <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span> to be <em>fixed</em>. This would encode the idea that the difference between carbachol and saline is universal and does not depend upon a specific rat. This is a simple fact of biology. The treatment impacts the brain in exactly the same way, irrespective of the specific rat. Any variation we see is simply sampling noise due to imperfect measurement and has nothing to do with a given rat. If we had infinite samples of infinite rats, the treatment effect across rats would all converge on the same value. In other words, the specific rat does not matter.</p>
-<p>As mentioned in the lesson, in cases where we are uncertain we can simply treat a term as <em>random</em> and then use model comparisons to see what the data suggests. In this case, it seems like keeping <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span> <em>random</em> is the more justifiable choice, but we can assess this using the data later. So, because we have no strong reason for <em>fixing</em> this term, we leave it as random. Because there are multiple measurements of each level of treatment within each rat, the data also supports fitting this model. As such, our final Level 1 model is</p>
+<p>In terms of <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span>, we have more of a choice. Keeping this term <em>random</em> encodes the idea that the difference between carbachol and saline is specific to each individual rat. Depending upon their biology, the degree of activation difference between the two treatments will shift on a per-rat basis. In some rats, this difference may be very <em>small</em> and in others it may be much <em>larger</em>. If we had infinite samples of infinite rats, the treatment effect across rats would <em>not</em> converge on the same value. Instead, each rat would have its own individual treatment effect. In this sense, any deviations we see from the population value of treatment are not simply sampling noise, they reflect something fundamental about differences between the rats.</p>
+<p>The alternative is to set <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> to be <em>fixed</em>. This would encode the idea that the difference between carbachol and saline is universal and does not depend upon a specific rat. This is a simple fact of biology. The treatment impacts the brain in exactly the same way, irrespective of the specific rat. Any variation we see is simply sampling noise due to imperfect measurement and has nothing to do with a given rat. If we had infinite samples of infinite rats, the treatment effect across rats would all converge on the same value. In other words, the specific rat does not matter.</p>
+<p>As mentioned in the lesson, in cases where we are uncertain we can use model comparisons to see what the data suggests. In this case, we will keep <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span> <em>random</em>, but will assess the impact of this decision using the data later. Because there are multiple measurements of each level of treatment within each rat, the data also supports fitting this model. As such, our final Level 1 model is</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-\text{Level 1} \\
-    \text{activate}^{(k)}_{ij} &amp;= \text{mean}^{(k)} + \text{treatment}^{(k)}_{j} + \eta^{(k)}_{ij}.
-\end{alignat*}
-\end{split}\]</div>
+\[
+\text{activate}^{(k)}_{ij} = \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}.
+\]</div>
 </section>
 </section>
 <section id="step-iii-write-the-higher-level-models">
 <h3>Step III: Write the Higher-level Models<a class="headerlink" href="#step-iii-write-the-higher-level-models" title="Link to this heading">#</a></h3>
 <p>In our final step, we take our Level 1 model and we expand each of the terms at the next level of the hierarchy. As mentioned in the lesson, irrespective of whether we have chosen to make a term <em>fixed</em> or <em>random</em>, it is useful to keep the per-structure indexing. The decision around whether a term is <em>fixed</em> or <em>random</em> emerges in terms of whether the 2nd-level models have <em>random error</em> or not.</p>
-<p>For the current example, we express 2nd-level models for both <span class="math notranslate nohighlight">\(\text{mean}^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span>. Because these terms are both treated as <em>random</em>, these models come from expressing each term as a <em>normal random variate</em> with a population-level mean effect and some variance</p>
+<p>For the current example, we express 2nd-level models for both <span class="math notranslate nohighlight">\(\beta_{0}^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\beta_{1}^{(k)}\)</span>. Because these terms are both treated as <em>random</em>, these models come from expressing each term as a <em>normal random variate</em> with a population-level mean effect and some variance</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{mean}^{(k)}          &amp;\sim \mathcal{N}\left(\text{mean}, \sigma^{2}_{\text{mean}}\right) \\
-    \text{treatment}^{(k)}_{j} &amp;\sim \mathcal{N}\left(\text{treatment}_{j}, \sigma^{2}_{\text{treat}_{j}}\right),
+    \beta_{0}^{(k)} &amp;\sim \mathcal{N}\left(\beta_{0}, \sigma_{0}^{2}\right) \\
+    \beta_{1}^{(k)} &amp;\sim \mathcal{N}\left(\beta_{1}, \sigma_{1}^{2}\right),
 \end{alignat*}
 \end{split}\]</div>
 <p>which we re-write in <em>mean + error</em> format, to integrate into our general model specification. This gives</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{Level 1} \\
-    \text{activate}^{(k)}_{ij} &amp;= \text{mean}^{(k)} + \text{treatment}^{(k)}_{j} + \eta^{(k)}_{ij} \\
-    \quad\\
-    \text{Level 2} \\
-    \text{mean}^{(k)}          &amp;= \text{mean} + \xi^{(k)} \\
-    \text{treatment}^{(k)}_{j} &amp;= \text{treatment}_{j} + \phi^{(k)}_{j}
+    \text{Level 1 (Repeated Measures)} \\
+    \text{activate}^{(k)}_{ij} &amp;= \beta_{0}^{(k)} + \left(\beta_{1}^{(k)} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij} \\
+    \quad \\
+    \text{Level 2 (Rat)} \\
+    \beta_{0}^{(k)} &amp;= \beta_{0} + \xi_{0}^{(k)} \\
+    \beta_{1}^{(k)} &amp;= \beta_{1} + \xi_{1}^{(k)}
 \end{alignat*}
 \end{split}\]</div>
-<p>where the assumptions about the error terms are now</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-    \text{Level 1} \\
-    \eta^{(k)}_{ij} &amp;\sim \mathcal{N}\left(0, \sigma^{2}_{\eta}\right) \\
-    \quad\\
-    \text{Level 2} \\
-    \xi^{(k)} &amp;\sim \mathcal{N}\left(0, \sigma^{2}_{\text{mean}}\right) \\
-    \phi^{(k)}_{j} &amp;\sim \mathcal{N}\left(0, \sigma^{2}_{\text{treat}_{j}}\right).
-\end{alignat*}
-\end{split}\]</div>
-<p>The only additional step is whether we have more variables to integrate into the Level 2 models of the mean and the treatment. This would require additional grouping or clustering variables in this dataset, which we do not have. So, at this point, our multilevel model specification is complete.</p>
+<p>The only additional step is whether we have more variables to integrate into the Level 2 models of the mean and the treatment slope. This would require additional grouping or clustering variables in this dataset, which we do not have. So, at this point, our multilevel model specification is complete.</p>
 </section>
 </section>
 <section id="fitting-the-model-in-r">
 <h2>Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-the-model-in-r" title="Link to this heading">#</a></h2>
 <p>In order to fit the multilevel model given above, we need to collapse it to mixed-effects form. Using the equalities at Level 2 and integrating them into Level 1, we get</p>
 <div class="math notranslate nohighlight">
-\[
-\text{activate}^{(k)}_{ij} = \text{mean} + \text{treatment}_{j} + \xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij}.
-\]</div>
+\[\begin{split}
+\begin{alignat*}{1}
+\text{activate}^{(k)}_{ij} =&amp;\: \beta_{0} + \left(\beta_{1} \times \text{treatment}_{j}\right) + \\ 
+                            &amp;\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}.
+\end{alignat*}
+\end{split}\]</div>
 <p>To see how to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> about the random effects, we isolate the random components (i.e. the error terms)</p>
 <div class="math notranslate nohighlight">
 \[
-\xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij}
+\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}
 \]</div>
 <p>and remove the final errors, as they do not need to be explicitly specified</p>
 <div class="math notranslate nohighlight">
 \[
-\xi^{(k)} + \phi^{(k)}_{j}.
+\xi_{0}^{(k)} + \left(\xi_{1}^{(k)} \times \text{treatment}_{j}\right).
 \]</div>
 <p>If we now change the notation to make the conditional element of these terms clearer</p>
 <div class="math notranslate nohighlight">
 \[
-\xi + \phi_{j} | k
+\xi_{0} + \left(\xi_{1} \times \text{treatment}_{j}\right) | k
 \]</div>
-<p>we can easily translate this specification into <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">treatment|animal</span></code>. This comes from the fact that <span class="math notranslate nohighlight">\(\xi\)</span> is constant (it has no index), <span class="math notranslate nohighlight">\(\phi_{j}\)</span> is indexed by <span class="math notranslate nohighlight">\(j\)</span> which corresponds to <code class="docutils literal notranslate"><span class="pre">treatment</span></code> and <span class="math notranslate nohighlight">\(k\)</span> is used to index individual rats and so becomes <code class="docutils literal notranslate"><span class="pre">animal</span></code>.</p>
+<p>we can easily translate this specification into <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">treatment|animal</span></code>. This comes from the fact that the specification above is <em>essentially</em> a simple regression model containing the variable <span class="math notranslate nohighlight">\(\text{treatment}_{j}\)</span>, but fit to each rat separately.</p>
 <p>Our model is therefore</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -758,19 +798,43 @@ Number of Groups: 5
 <section id="including-region-in-the-model">
 <h3>Including <code class="docutils literal notranslate"><span class="pre">region</span></code> in the Model<a class="headerlink" href="#including-region-in-the-model" title="Link to this heading">#</a></h3>
 <p>As discussed earlier, we left <code class="docutils literal notranslate"><span class="pre">region</span></code> out of our initial model for simplicity. However, we now consider whether to include this additional factor.</p>
-<p>In terms of reasoning, it would seem sensible to consider the fact that different parts of the brain may respond differently to the effects of <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. These regions will differ in size and cytoarchitectural composition which could easily impact the effectiveness of the treatment. Including <code class="docutils literal notranslate"><span class="pre">region</span></code> in our model would allow us to assess whether these brain region differ fundamentally in levels of <code class="docutils literal notranslate"><span class="pre">activation</span></code>, as well as allowing us to entertaining the possibility of a <code class="docutils literal notranslate"><span class="pre">treatment:region</span></code> interaction. This would provide further insight into whether the effectiveness of the treatment depends upon the brain region that is measured. For instance, the treatment may be more <em>targeted</em> compared to a <em>global</em> effect in the brain.</p>
+<p>In terms of reasoning, it would seem sensible to consider the fact that different parts of the brain may respond differently to the effects of <code class="docutils literal notranslate"><span class="pre">treatment</span></code>. These regions will differ in size and cytoarchitectural composition which could easily impact the effectiveness of the treatment. Including <code class="docutils literal notranslate"><span class="pre">region</span></code> in our model would allow us to assess whether these brain region differ fundamentally in levels of <code class="docutils literal notranslate"><span class="pre">activation</span></code>, as well as allowing us to entertaining the possibility of a <code class="docutils literal notranslate"><span class="pre">treatment:region</span></code> interaction. This would provide further insight into whether the effectiveness of the treatment depends upon the brain region that is measured. For instance, the treatment may be more <em>targeted</em> compared to our current assumption of a <em>global</em> effect of treatment in the brain.</p>
 <p>In order to integrate <code class="docutils literal notranslate"><span class="pre">region</span></code>, we go back to our Level 1 model of a single rat and entertain the following model</p>
 <div class="math notranslate nohighlight">
-\[
-\text{activate}_{ij} = \text{mean} + \text{region}_{i} + \text{treatment}_{j} + (\text{region} \times \text{treatment})_{ij} + \eta_{ij}
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(i\)</span> now indexes the <em>region</em>. Already, we can see a problem because the interaction term and the error-term have the same indices. This is something of a clue to a limitation in this model, but we will press on for the moment. If we now expand this model to multiple rats, we have</p>
+\[\begin{split}
+\begin{aligned}
+    \text{activate}_{ij}
+        &amp;= \beta_{0} + \left(\beta_{1} \times \text{region}_{1i}\right) + \left(\beta_{2} \times \text{region}_{2i}\right) + \left(\beta_{3} \times \text{treatment}_{j}\right) + \\
+        &amp;\quad\left(\beta_{4} \times \text{region}_{1i} \times \text{treatment}_{j}\right)
+        + \left(\beta_{5} \times \text{region}_{2i} \times \text{treatment}_{j}\right) + \eta_{ij}
+\end{aligned}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(i\)</span> now indexes the <em>region</em>. Because <code class="docutils literal notranslate"><span class="pre">region</span></code> has 3 levels it needs <em>two</em> dummy variables to represent it. So the definitions of <span class="math notranslate nohighlight">\(\text{region}_{1i}\)</span> and <span class="math notranslate nohighlight">\(\text{region}_{2i}\)</span> are</p>
 <div class="math notranslate nohighlight">
-\[
-\text{activate}^{(k)}_{ij} = \text{mean}^{(k)} + \text{region}^{(k)}_{i} + \text{treatment}^{(k)}_{j} + (\text{region} \times \text{treatment})^{(k)}_{ij} + \eta^{(k)}_{ij}.
-\]</div>
-<p>So, we now have decisions to make about whether 4 terms should be random or not. We will stick to treating both <span class="math notranslate nohighlight">\(\text{mean}^{(k)}\)</span> and <span class="math notranslate nohighlight">\(\text{treatment}^{(k)}_{j}\)</span> as random, given the discussions from earlier. So, our new decision is whether to treat <span class="math notranslate nohighlight">\(\text{region}^{(k)}_{i}\)</span> as random. If we do, this would suggest that differences in activation between brain regions are <em>rat-specific</em>. For instance, in one rat the activation of the BST is larger than the VDB, whereas in another rat the regions are the other way around.</p>
-<p>We can reason about whether this is sensible assumption, but we can also look at the data and see what it suggests. This is a more general <em>data-driven</em> approach that can be used to make decisions about <em>all</em> the random effects. This is an alternative to simply trying to reason about each term.</p>
+\[\begin{split}
+\text{region}_{1i} =
+\begin{cases}
+    1 &amp; \text{if $i=1$}\\
+    0 &amp; \text{otherwise}
+\end{cases}\;\;
+\text{region}_{2i} =
+\begin{cases}
+    1 &amp; \text{if $i=2$}\\
+    0 &amp; \text{otherwise}
+\end{cases}.
+\end{split}\]</div>
+<p>If we now expand this model to multiple rats, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+    \text{activate}^{(k)}_{ij}
+        &amp;= \beta^{(k)}_{0} + \left(\beta^{(k)}_{1} \times \text{region}_{1i}\right) + \left(\beta^{(k)}_{2} \times \text{region}_{2i}\right) + \left(\beta^{(k)}_{3} \times \text{treatment}_{j}\right) + \\
+        &amp;\quad\left(\beta^{(k)}_{4} \times \text{region}_{1i} \times \text{treatment}_{j}\right)
+        + \left(\beta^{(k)}_{5} \times \text{region}_{2i} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}
+\end{aligned}
+\end{split}\]</div>
+<p>So, we now have decisions to make about whether 6 terms should be random or not. We will stick to treating both <span class="math notranslate nohighlight">\(\beta^{(k)}_{0}\)</span> (the intercept) and <span class="math notranslate nohighlight">\(\beta^{(k)}_{3}\)</span> (the treatment slope) as random, given the discussions from earlier. So, our new decision is whether to treat the remaining terms as random. Starting with the main effects of <code class="docutils literal notranslate"><span class="pre">region</span></code> <span class="math notranslate nohighlight">\(\left(\beta^{(k)}_{1}, \beta^{(k)}_{2}\right)\)</span>, if we treat these terms as random this would suggest that differences in activation between brain regions are <em>rat-specific</em>. For instance, in one rat the activation of the BST is larger than the VDB, whereas in another rat the regions are the other way around.</p>
+<p>We can reason about whether this is sensible assumption. On the face of it, it may <em>not</em> be because we assume that regions have very similar cytoarchitecture across different rats (this is why they are consider the <em>same</em> region, even in different brains). This means that they <em>should</em> react to the treatment in a very similar pattern, irrespective of the specific rat. However, we can also look at the data and see what it suggests.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">xyplot</span><span class="p">(</span>
@@ -787,42 +851,50 @@ Number of Groups: 5
 </div>
 </div>
 <p>Notice that the pattern across the brain regions within each panel is very similar across the rats. For instance, under carbachol, notice that the v-shape is largely the <em>same</em> for each rat. This suggest that the differences in measurement between these regions does not differ on a per-rat basis. The slight differences we see could simply be sampling error. There is not enough variation here to suggest that this is something that differs fundamentally from rat-to-rat. As such, this suggests that <code class="docutils literal notranslate"><span class="pre">region</span></code> can defensibly be treated as a <em>fixed-effect</em>.</p>
-<p>On the back of this decision, it makes little sense to treat <span class="math notranslate nohighlight">\((\text{region} \times \text{treatment})^{(k)}_{ij}\)</span> as <em>random</em>, given that one of the terms involved in the interaction is <em>fixed</em>. The interaction can be seen in the plot above because the pattern of responses across the regions is <em>different</em> between the two panels. One is L-shaped and one is V-shaped. If the lines were V-shaped in both panels, there would be no interaction, just a main effect. If we suggest that the interaction <em>differs</em> across rats, then there would need to be a different change in shape between the two panels for each rat. Perhaps one rat has a flat line in one panel and a V-shape in the other. Perhaps another rat has an L-shaped pattern in both panels. This then implies that the shapes within a single panel <em>must</em> be different between the rats, but this cannot be the case if <code class="docutils literal notranslate"><span class="pre">region</span></code> is fixed. As such, unless <em>both</em> terms are random, it makes limited sense to try and include a random interaction. In addition, even if we had treated <code class="docutils literal notranslate"><span class="pre">region</span></code> as random, the data would not support inclusion of the interaction term in the random effects. Because of all of this, we will also treat <code class="docutils literal notranslate"><span class="pre">region:treatment</span></code> as a <em>fixed-effect</em>.</p>
+<p>On the back of this decision, it makes little sense to treat the interaction parameters as <em>random</em>, given that the terms involved in the interaction are <em>fixed</em>. The interaction can be seen in the plot above because the pattern of responses across the regions is <em>different</em> between the two panels. One is L-shaped and one is V-shaped. If the lines were V-shaped in both panels, there would be no interaction. If we suggest that the interaction <em>differs</em> across rats, then there would need to be a different change in shape between the two panels for each rat. Perhaps one rat has a flat line in one panel and a V-shape in the other. Perhaps another rat has an L-shaped pattern in both panels. This then implies that the shapes within a single panel <em>must</em> be different between the rats, but this cannot be the case if <code class="docutils literal notranslate"><span class="pre">region</span></code> is fixed. As such, unless <em>both</em> terms are random, it makes limited sense to try and include a random interaction. In addition, even if we had treated <code class="docutils literal notranslate"><span class="pre">region</span></code> as random, the data would not support inclusion of the interaction term in the random effects. Because of all of this, we will also treat <code class="docutils literal notranslate"><span class="pre">region:treatment</span></code> as a <em>fixed-effect</em>.</p>
 <p>Taking all this together, our model that includes <code class="docutils literal notranslate"><span class="pre">region</span></code> is</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{1}
-    \text{Level 1} \\
-    \text{activate}^{(k)}_{ij} &amp;= \text{mean}^{(k)}  + \text{region}^{(k)}_{i} + \text{treatment}^{(k)}_{j} + (\text{region} \times \text{treatment})^{(k)}_{ij} + \eta^{(k)}_{ij} \\
-    \quad\\
-    \text{Level 2} \\
-    \text{mean}^{(k)}          &amp;= \text{mean} + \xi^{(k)} \\
-    \text{region}^{(k)}_{i}    &amp;= \text{region}_{i} \\
-    \text{treatment}^{(k)}_{j} &amp;= \text{treatment}_{j} + \phi^{(k)}_{j} \\
-    (\text{region} \times \text{treatment})^{(k)}_{ij} &amp;= (\text{region} \times \text{treatment})_{ij},
-\end{alignat*}
+\begin{aligned}
+    \text{Level 1 (Repeated Measures)}\\
+        \text{activate}^{(k)}_{ij} &amp;= \beta^{(k)}_{0} + \left(\beta^{(k)}_{1} \times \text{region}_{1i}\right) + \left(\beta^{(k)}_{2} \times \text{region}_{2i}\right) + \left(\beta^{(k)}_{3} \times \text{treatment}_{j}\right) + \\
+        &amp;\quad\left(\beta^{(k)}_{4} \times \text{region}_{1i} \times \text{treatment}_{j}\right)
+        + \left(\beta^{(k)}_{5} \times \text{region}_{2i} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij} \\[1em]
+    \text{Level 2 (Rat)}\\
+        \beta_{0}^{(k)} &amp;= \beta_{0} + \xi_{0}^{(k)} \\
+        \beta_{1}^{(k)} &amp;= \beta_{1} \\
+        \beta_{2}^{(k)} &amp;= \beta_{2} \\
+        \beta_{3}^{(k)} &amp;= \beta_{3} + \xi_{3}^{(k)} \\
+        \beta_{4}^{(k)} &amp;= \beta_{4} \\
+        \beta_{5}^{(k)} &amp;= \beta_{5}
+\end{aligned}
 \end{split}\]</div>
 <p>noticing that those terms that are <em>fixed</em> do not contain random error terms in their 2nd-level models. We could also express this by collapsing those fixed terms back into Level 1</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{1}
-    \text{Level 1} \\
-    \text{activate}^{(k)}_{ij} &amp;= \text{mean}^{(k)}  + \text{region}_{i} + \text{treatment}^{(k)}_{j} + (\text{region} \times \text{treatment})_{ij} + \eta^{(k)}_{ij} \\
-    \quad\\
-    \text{Level 2} \\
-    \text{mean}^{(k)}          &amp;= \text{mean} + \xi^{(k)} \\
-    \text{treatment}^{(k)}_{j} &amp;= \text{treatment}_{j} + \phi^{(k)}_{j}.
-\end{alignat*}
+\begin{aligned}
+    \text{Level 1 (Repeated Measures)}\\
+        \text{activate}^{(k)}_{ij} &amp;= \beta^{(k)}_{0} + \left(\beta_{1} \times \text{region}_{1i}\right) + \left(\beta_{2} \times \text{region}_{2i}\right) + \left(\beta^{(k)}_{3} \times \text{treatment}_{j}\right) + \\
+                                   &amp;\quad \left(\beta_{4} \times \text{region}_{1i} \times \text{treatment}_{j}\right) + \left(\beta_{5} \times \text{region}_{2i} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij} \\[1em]
+    \text{Level 2 (Rat)}\\
+        \beta_{0}^{(k)} &amp;= \beta_{0} + \xi_{0}^{(k)} \\
+        \beta_{3}^{(k)} &amp;= \beta_{3} + \xi_{3}^{(k)} \\
+\end{aligned}
 \end{split}\]</div>
 <p>The mixed-effects specification is then</p>
 <div class="math notranslate nohighlight">
-\[
-\text{activate}^{(k)}_{ij} = \text{mean} + \text{region}_{i} +\text{treatment}_{j} + (\text{region} \times \text{treatment})_{ij} + \xi^{(k)} + \phi^{(k)}_{j} + \eta^{(k)}_{ij},
-\]</div>
-<p>where the random effects have remained the same as our earlier model. Indeed, the only change here is that <span class="math notranslate nohighlight">\(\text{region}_{i}\)</span> and <span class="math notranslate nohighlight">\((\text{region} \times \text{treatment})_{ij}\)</span> have entered the mean function. We can specify this in <code class="docutils literal notranslate"><span class="pre">R</span></code> using</p>
+\[\begin{split}
+\begin{aligned}
+    \text{activate}^{(k)}_{ij}
+        &amp;= \beta_{0} + \left(\beta_{1} \times \text{region}_{1i}\right) + \left(\beta_{2} \times \text{region}_{2i}\right) + \left(\beta_{3} \times \text{treatment}_{j}\right) + \\
+        &amp;\quad\left(\beta_{4} \times \text{region}_{1i} \times \text{treatment}_{j}\right) + \left(\beta_{5} \times \text{region}_{2i} \times \text{treatment}_{j}\right) + \\ 
+        &amp;\quad \xi_{0}^{(k)} + \left(\xi^{(k)}_{3} \times \text{treatment}_{j}\right) + \eta^{(k)}_{ij}
+\end{aligned}
+\end{split}\]</div>
+<p>where the random effects have remained the same as our earlier model. Indeed, the only change here is that <code class="docutils literal notranslate"><span class="pre">region</span></code> and <code class="docutils literal notranslate"><span class="pre">region:treatment</span></code> have entered the mean function. We can specify this in <code class="docutils literal notranslate"><span class="pre">R</span></code> using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="o">:</span><span class="n">treatment</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
@@ -836,13 +908,11 @@ Number of Groups: 5
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
   Data: ratbrain 
   Log-restricted-likelihood: -124.5952
-  Fixed: activate ~ 1 + treatment * region 
-                 (Intercept)           treatmentCarbachol 
-                     428.506                       98.204 
-                    regionLS                    regionVDB 
-                    -190.762                     -216.212 
- treatmentCarbachol:regionLS treatmentCarbachol:regionVDB 
-                      99.322                      261.822 
+  Fixed: activate ~ 1 + region + treatment + region:treatment 
+                 (Intercept)                     regionLS                    regionVDB           treatmentCarbachol  regionLS:treatmentCarbachol 
+                     428.506                     -190.762                     -216.212                       98.204                       99.322 
+regionVDB:treatmentCarbachol 
+                     261.822 
 
 Random effects:
  Formula: ~1 + treatment | animal
@@ -880,19 +950,27 @@ Number of Groups: 5
 <img alt="../_images/43eff7a3e0289fa4cbb17599744140bc1c8ac0ec272453d8d8f9f0e605311a5c.png" src="../_images/43eff7a3e0289fa4cbb17599744140bc1c8ac0ec272453d8d8f9f0e605311a5c.png" />
 </div>
 </div>
-<p>We can see that the block associated with the carbachol treatment is <em>very dark</em> because the variance in this treatment is <em>much higher</em> relative to the saline treatment. We can see this in the plot from earlier where the lines were very spread out under carbachol and much closer together under saline.</p>
+<p>We can see that the block associated with the carbachol treatment is <em>very dark</em> because the variance in this treatment is <em>much higher</em> relative to the saline treatment. We can also see this in the plot from earlier where the lines were very spread out under carbachol and much closer together under saline.</p>
 </section>
 <section id="simplifying-the-random-effects">
 <h3>Simplifying the Random Effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
-<p>Now that we have our fixed-effects and random-effects sorted, we could leave the model as it is. However, it is always worth checking where a more <em>parsimonious</em> model may be as equally effective. Generally, this comes down to seeing whether a <em>simpler</em> random effects structure is justifiable. As present we are using <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">treatment|animal</span></code>, so our decision is whether we keep this structure or whether we could simplify it to <code class="docutils literal notranslate"><span class="pre">1|animal</span></code>. Although we reasoned earlier that the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> could differ across rats, the plot from earlier did not suggest that this was particularly strong. All the lines in the left panel seemed to increase by a similar amount in the right panel. The order of the lines was largely similar as well. So there is reason to think that <code class="docutils literal notranslate"><span class="pre">treatment</span></code> could be treated simply as <em>fixed</em>.</p>
-<p>In order to check, we compare the two possible structures below. Of importance is setting <code class="docutils literal notranslate"><span class="pre">method='ML'</span></code> to make sure this comparison is <em>meaningful</em>. In addition, rather than requesting the full model comparison output of <code class="docutils literal notranslate"><span class="pre">anova()</span></code>, we just work with the BIC by using the <code class="docutils literal notranslate"><span class="pre">BIC()</span></code> function.</p>
+<p>Now that we have our fixed-effects and random-effects sorted, we could leave the model as it is. However, it is always worth checking whether a more <em>parsimonious</em> model may be as equally effective. Generally, this comes down to seeing whether a <em>simpler</em> random effects structure is justifiable. As present we are using <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">treatment|animal</span></code>, so our decision is whether we keep this structure or whether we could simplify it to <code class="docutils literal notranslate"><span class="pre">1|animal</span></code>. Although we reasoned earlier that the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> could differ across rats, the plot from earlier did not suggest that this was particularly strong. All the lines in the left panel seemed to increase by a similar amount in the right panel. The order of the lines was largely similar as well. So there is reason to think that <code class="docutils literal notranslate"><span class="pre">treatment</span></code> could be treated simply as <em>fixed</em>.</p>
+<p>In order to check, we compare the two possible structures below. Of importance is setting <code class="docutils literal notranslate"><span class="pre">method='ML'</span></code> to make sure this comparison is <em>meaningful</em>. In addition, rather than requesting the full model comparison output of <code class="docutils literal notranslate"><span class="pre">anova()</span></code>, we just work with the BIC by using the <code class="docutils literal notranslate"><span class="pre">BIC()</span></code> function. We also introduce use of the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, which allows us to take an existing model and change some of the fitting options. This is helpful when you want to keep everything the same apart from a small number of adjustments. In this example, we change the random effects specification only.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span><span class="w">             </span><span class="n">data</span><span class="o">=</span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
-<span class="n">ratbrain.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
+<span class="p">)</span>
 
-<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme.full</span><span class="p">)</span>
+<span class="n">ratbrain.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme.full</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="n">BIC.delta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+<span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Change in BIC = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">BIC.delta</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -902,25 +980,15 @@ ratbrain.lme.null  8 352.5472
 ratbrain.lme.full 10 326.7349
 </pre></div>
 </div>
-</div>
-</div>
-<p>The change in BIC between these models is</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 25.81224
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;Change in BIC = 25.81&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>which sits in the category of <em>very strong evidence favouring the lower-BIC model</em>. So, even though the model that includes <code class="docutils literal notranslate"><span class="pre">treatment</span></code> as a random-effect has <em>more</em> parameters (the <code class="docutils literal notranslate"><span class="pre">df</span></code> shown in the comparison), it has a <em>lower</em> BIC. That means that these extra parameters are <em>justifiable</em> in terms of capturing something useful in the data. We therefore choose to continue with</p>
+<p>This change in BIC sits in the category of <em>very strong evidence favouring the lower-BIC model</em>. So, even though the model that includes <code class="docutils literal notranslate"><span class="pre">treatment</span></code> as a random-effect has <em>more</em> parameters (the <code class="docutils literal notranslate"><span class="pre">df</span></code> shown in the comparison), it has a <em>lower</em> BIC. That means that these extra parameters are <em>justifiable</em> in terms of capturing something useful in the data. We therefore choose to continue with</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
@@ -935,11 +1003,19 @@ ratbrain.lme.full 10 326.7349
 <p>As a final check, we should consider whether there are any additional variance structures that we may wish to capture using the <code class="docutils literal notranslate"><span class="pre">weights=</span></code> option. Looking back at the covariance structure from earlier, we can see that the variance of the two different treatments is already captured by the random effects. However, we may have cause to think that variance differences exist between regions. It is not wholly implausible that some regions are fundamentally more variable in their measurements of <code class="docutils literal notranslate"><span class="pre">activation</span></code> than others. So, as a final step, we choose to check this by comparing models with and without a <code class="docutils literal notranslate"><span class="pre">weights</span></code> option.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span><span class="w">                                     </span><span class="n">data</span><span class="o">=</span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
-<span class="n">ratbrain.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="o">=</span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">region</span><span class="p">),</span><span class="w"> </span><span class="n">data</span><span class="o">=</span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
+<span class="w">                         </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                         </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
+<span class="p">)</span>
 
-<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme.full</span><span class="p">)</span>
+<span class="n">ratbrain.lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=~</span><span class="m">1</span><span class="o">|</span><span class="n">region</span><span class="p">))</span><span class="w"> </span><span class="c1"># different var per-region</span>
+<span class="n">mod.comp</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">ratbrain.lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme.full</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="n">BIC.delta</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+<span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Change in BIC = &#39;</span><span class="p">,</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">BIC.delta</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -949,25 +1025,15 @@ ratbrain.lme.null 10 326.7349
 ratbrain.lme.full 12 326.1652
 </pre></div>
 </div>
-</div>
-</div>
-<p>The change in BIC is</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 0.5697309
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] &quot;Change in BIC = 0.57&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>which suggests that there is <em>very little evidence</em> in favour of the model with the <em>lower</em> BIC. As such, this additional complication is <em>not supported</em> by the data and we arrive at our final model of</p>
+<p>This suggests that there is <em>very little evidence</em> in favour of the model with the <em>lower</em> BIC. As such, this additional complication is <em>not supported</em> by the data and we arrive at our final model of</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">*</span><span class="n">region</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ratbrain.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">activate</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">region</span><span class="o">*</span><span class="n">treatment</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">treatment</span><span class="o">|</span><span class="n">animal</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">ratbrain</span><span class="p">,</span>
 <span class="w">                    </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
@@ -991,12 +1057,60 @@ ratbrain.lme.full 12 326.1652
 <img alt="../_images/ed72b3e45172fe6ffdf8616becba30e90053c70d5c60dfa920944998dcdf9cea.png" src="../_images/ed72b3e45172fe6ffdf8616becba30e90053c70d5c60dfa920944998dcdf9cea.png" />
 </div>
 </div>
-<p>There is nothing here of immediate concern. There are no signs of missing variance structures and no signs of any outliers. The only element that is particularly difficult to assess is the normality of the random effects. However, this is never going to be reliable with only 5 dependency structures. So, unfortunately, we cannot really say either way whether this assumption is valid. We just need to press on, but should be acutely aware of how small the sample is at the level of individual rats when it comes to inference.</p>
+<p>There is nothing here of immediate concern. There are no signs of missing variance structures and no signs of any outliers. The only element that is particularly difficult to assess is the normality of the random effects. However, this is never going to be reliable with only 5 rats. So, unfortunately, we cannot really say either way whether this assumption is valid. We just need to press on, but should be acutely aware of how small the sample is at the level of individual rats when it comes to inference.</p>
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
 <p>As our final stop in this process, we turn our attention to inference on the fixed-effects. As usual, our process is to generate omnibus tests using <code class="docutils literal notranslate"><span class="pre">Anova()</span></code>, plot anything of note using <code class="docutils literal notranslate"><span class="pre">plot(effect(...))</span></code> and follow-up any tests that need to be followed-up using <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code>.</p>
-<p>We start with the ANOVA table</p>
+<p>We can start by checking the final model using <code class="docutils literal notranslate"><span class="pre">summary()</span></code>, but ignoring the inferential tests reported</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summary</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
+  Data: ratbrain 
+       AIC     BIC    logLik
+  269.1904 280.971 -124.5952
+
+Random effects:
+ Formula: ~1 + treatment | animal
+ Structure: General positive-definite, Log-Cholesky parametrization
+                   StdDev   Corr  
+(Intercept)        35.83670 (Intr)
+treatmentCarbachol 79.82041 0.801 
+Residual           23.21427       
+
+Fixed effects:  activate ~ 1 + region * treatment 
+                                Value Std.Error DF    t-value p-value
+(Intercept)                   428.506  19.09540 20  22.440273  0.0000
+regionLS                     -190.762  14.68199 20 -12.992922  0.0000
+regionVDB                    -216.212  14.68199 20 -14.726338  0.0000
+treatmentCarbachol             98.204  38.59819 20   2.544264  0.0193
+regionLS:treatmentCarbachol    99.322  20.76347 20   4.783496  0.0001
+regionVDB:treatmentCarbachol  261.822  20.76347 20  12.609739  0.0000
+ Correlation: 
+                             (Intr) regnLS rgnVDB trtmnC rgLS:C
+regionLS                     -0.384                            
+regionVDB                    -0.384  0.500                     
+treatmentCarbachol            0.475  0.190  0.190              
+regionLS:treatmentCarbachol   0.272 -0.707 -0.354 -0.269       
+regionVDB:treatmentCarbachol  0.272 -0.354 -0.707 -0.269  0.500
+
+Standardized Within-Group Residuals:
+        Min          Q1         Med          Q3         Max 
+-1.56110225 -0.40391939 -0.00640113  0.46415718  1.82517689 
+
+Number of Observations: 30
+Number of Groups: 5 
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, we have 6 parameter estimates consistent with the 6 terms we wrote down earlier for this model. This includes the 2 terms for region (reported as <code class="docutils literal notranslate"><span class="pre">regionLS</span></code> and <code class="docutils literal notranslate"><span class="pre">regionVDB</span></code>) and the subsequent 2 term for the interaction. We also have 3 variances (reported in the <code class="docutils literal notranslate"><span class="pre">StdDev</span></code> column of the <code class="docutils literal notranslate"><span class="pre">Random</span> <span class="pre">effects</span></code> section), consistent with the 3 error terms.</p>
+<p>We can now generate the ANOVA table</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">ratbrain.lme</span><span class="p">)</span>
@@ -1008,9 +1122,9 @@ ratbrain.lme.full 12 326.1652
 
 Response: activate
                    Chisq Df Pr(&gt;Chisq)    
-treatment         35.495  1  2.558e-09 ***
 region           187.414  2  &lt; 2.2e-16 ***
-treatment:region 162.092  2  &lt; 2.2e-16 ***
+treatment         35.495  1  2.558e-09 ***
+region:treatment 162.092  2  &lt; 2.2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
@@ -1020,12 +1134,12 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <p>where there is a strong suggestion of a 2-way interaction. Even though this is asymptotic, the <span class="math notranslate nohighlight">\(p\)</span>-value is so small that it seems unlikely this could be a function of small-sample bias alone. As such, we choose to continue by plotting this effect</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;treatment:region&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">x.var</span><span class="o">=</span><span class="s">&#39;treatment&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;region:treatment&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">ratbrain.lme</span><span class="p">,</span><span class="w"> </span><span class="n">residuals</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="w"> </span><span class="n">x.var</span><span class="o">=</span><span class="s">&#39;treatment&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">partial.residuals</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">smooth</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/807fb3c81a252c7d857d851b26582c66ca1b5127772c2007ca0f3d5fc59f571a.png" src="../_images/807fb3c81a252c7d857d851b26582c66ca1b5127772c2007ca0f3d5fc59f571a.png" />
+<img alt="../_images/88834566c69f7acd4ed6e9ec77fe66d1ee6f14e33ffaa5d51b57f2a278eab394.png" src="../_images/88834566c69f7acd4ed6e9ec77fe66d1ee6f14e33ffaa5d51b57f2a278eab394.png" />
 </div>
 </div>
 <p>So it appears as if the effect of <code class="docutils literal notranslate"><span class="pre">treatment</span></code> is much larger in the VDB than the other two regions. Both LS and BST are similar, with the effect in BST slightly more subtle than in LS. As a final step, we run some comparisons using <code class="docutils literal notranslate"><span class="pre">emmeans()</span></code>.</p>
@@ -1107,7 +1221,10 @@ Degrees-of-freedom method: fixed
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-packages">Loading Packages</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-rat-brain-data">The Rat Brain Data</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">Data Structure</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-notation">Model Notation</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-building">Model Building</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-i-a-single-dependency-structure">Step I: A Single Dependency Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a><ul class="nav section-nav flex-column">

@@ -383,11 +383,18 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-to-multiple-patients">Expand to Multiple Patients</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-model-full-and-simplified">The Final Model (Full and Simplified)</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-the-model-in-r">Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-models">Alternative Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplifying-the-random-effects">Simplifying the Random Effects</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-variance-structures">Additional Variance Structures</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
             </nav>
@@ -509,22 +516,14 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda        
- 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000  
- 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417  
- 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000  
- 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182  
- 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250  
- 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000  
- (Other):38                                                           
-      time          gcf       
- Min.   :3.0   Min.   : 3.00  
- 1st Qu.:3.0   1st Qu.:10.00  
- Median :4.5   Median :17.50  
- Mean   :4.5   Mean   :23.59  
- 3rd Qu.:6.0   3rd Qu.:32.00  
- Max.   :6.0   Max.   :87.00  
-                              
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda              time          gcf       
+ 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000   Min.   :3.0   Min.   : 3.00  
+ 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417   1st Qu.:3.0   1st Qu.:10.00  
+ 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000   Median :4.5   Median :17.50  
+ 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182   Mean   :4.5   Mean   :23.59  
+ 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250   3rd Qu.:6.0   3rd Qu.:32.00  
+ 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000   Max.   :6.0   Max.   :87.00  
+ (Other):38                                                                                         
 </pre></div>
 </div>
 </div>
@@ -723,7 +722,44 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 <p>So, now we have a model where, in addition to the intercept for a given tooth, the effect of time on that tooth depends upon the effect of time across all teeth <span class="math notranslate nohighlight">\(\left(\beta_{1}\right)\)</span>, plus a shift in the slope that depends upon the actual amount of GCF recorded for that tooth at baseline <span class="math notranslate nohighlight">\(\left(\beta_{4}\right)\)</span> plus a shift in the slope that depends upon the the curvature discrepancy for that specific tooth <span class="math notranslate nohighlight">\(\left(\beta_{5}\right)\)</span>.</p>
 <section id="expand-to-multiple-patients">
 <h4>Expand to Multiple Patients<a class="headerlink" href="#expand-to-multiple-patients" title="Link to this heading">#</a></h4>
-<p>… Once we expand to multiple patients, we also need to recognise that each tooth is not some free-floating unit as it <em>has</em> to be within a given patient. As such, we need to change our notation a little to <span class="math notranslate nohighlight">\((t|p)\)</span>, which we can read as <em>tooth <span class="math notranslate nohighlight">\(t\)</span> within patient <span class="math notranslate nohighlight">\(p\)</span></em>.</p>
+<p>At this point, we have a perfectly useable two-level model that would be suitable for <em>one patient</em>. However, we know that we have an additional level of clustering in the form of <em>different patients</em>. This means we need to repeat some of our process from above, but for Level 2 instead. So, let us take the Level 2 specification and expand it to <em>multiple patients</em>. We will use a similar notation to earlier, where terms that can differ by patient are indicated by superscript <span class="math notranslate nohighlight">\((p)\)</span>. In addition, we also need to adjust our notation to indicate the fact that each tooth is now nested inside a specific patient. As such, we change from <span class="math notranslate nohighlight">\((t)\)</span> to <span class="math notranslate nohighlight">\((t|p)\)</span>, which we can read as <em>tooth <span class="math notranslate nohighlight">\(t\)</span> within patient <span class="math notranslate nohighlight">\(p\)</span></em>.</p>
+<p>If we start by allowing every Level 2 parameter to differ by-patient, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t|p)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t|p)}\right) + \xi_{0}^{(t|p)} \\
+    \beta^{(t|p)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t|p)}\right).
+\end{alignat*}
+\end{split}\]</div>
+<p>So, now we have to make similar decisions to our Level 1 model in terms of deciding which of these 6 parameters are going to be <em>fixed</em> and which are going to be <em>random</em>.</p>
+<p>We can start by ignoring the effects related to GCFb and CDA and just focus on the <em>intercept</em> and <em>slope</em> parameters. Remembering that we want to treat each patient as a random sample from a population of patients, treating the intercept as <em>random</em> makes the most sense. This also fits with the idea that the average measurements of GCF across teeth will depend on a specific patient, rather than being the same for all patients. In terms of the <em>slope</em>, remembering that this is the effect of <em>time</em>, we would also prefer to treat this as <em>random</em>. As discussed earlier, this is is not possible at the level of an individual tooth, but should be possible (and more meaningful) at the level of an individual patient. The graphs from earlier suggest that each patient shows their own unique trajectory over time that is not convincingly the result of sampling error, further justifying this decision.</p>
+<p>In terms of the other parameters, it becomes harder to justify treating them as random. For one, doing so would lead to quite a complex random effects structure and it is doubtful that this would fit successfully. For another, doing so would make some implications about reality that are harder to justify. For instance, the parameters associated with baseline GCF are there to adjust for initial differences in GCF across teeth. They are effectively putting all teeth on the same footing so that any subsequent effects are interpreted <em>as if</em> all teeth started with the same value of GCF. This is an ANCOVA-style adjustment that is quite commonly seen in longitudinal research. Making this term random across patients would not make sense because it would only adjust teeth within a patient. So, teeth within a single patient would act as if they started with the same value of GCF, but this would not be true <em>across</em> patients, which is the whole point. The effects with CDA are slightly different only in terms of our interest in their magnitude (rather than treating them as a nuisance variable). However, a similar logic applies. If these parameters are random then it means that the relationship between CDA and GCF varies in every single person. But, in this case, we imagine there is likely to be a more mechanistic process in play where the curvature difference between the veneer and the original tooth affects GCF in a similar fashion, irrespective of the specific patient. There seems little about a particular individual that would make such a fundamental difference here. So, rather than defining this as an effect across teeth within each person separately, we prefer to treat this as an effect across teeth and across all patients.</p>
+<p>From this, only <span class="math notranslate nohighlight">\(\beta^{(p)}_{0}\)</span> and <span class="math notranslate nohighlight">\(\beta^{(p)}_{1}\)</span> are treated as <em>random</em> and thus are the only models at Level 3 that get an error term. This leads to</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{alignat*}{1}
+\text{Level 2 (Tooth)} \\
+    \beta_{0}^{(t|p)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t|p)}\right) + \xi_{0}^{(t|p)} \\
+    \beta^{(t|p)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t|p)}\right) \\ \quad \\
+\text{Level 3 (Patient)} \\
+    \beta^{(p)}_{0} &amp;= \beta_{0} + \phi_{0}^{(p)} \\
+    \beta^{(p)}_{1} &amp;= \beta_{1} + \phi_{1}^{(p)} \\
+    \beta^{(p)}_{2} &amp;= \beta_{2}  \\
+    \beta^{(p)}_{3} &amp;= \beta_{3} \\
+    \beta^{(p)}_{4} &amp;= \beta_{4} \\
+    \beta^{(p)}_{5} &amp;= \beta_{5} 
+\end{alignat*}
+\end{split}\]</div>
+<p>As a final step, we need to examine any Level 3 predictors and where they will sit in this model. Looking back at the table from earlier, the only variable we have at the level of patient’s is their <code class="docutils literal notranslate"><span class="pre">age</span></code>. In terms of integrating <code class="docutils literal notranslate"><span class="pre">age</span></code> with the Level 3 models, we need to keep in mind what each of the parameters represents. For instance, <span class="math notranslate nohighlight">\(\beta^{(p)}_{0}\)</span> is the patient-specific intercept across all teeth. Adding <code class="docutils literal notranslate"><span class="pre">age</span></code> here suggests that the average amount of GCF within an individual patient may relate to their age. This is perfectly reasonable, especially as older adults do tend to show more GCF than younger adults. Similarly, <span class="math notranslate nohighlight">\(\beta^{(p)}_{1}\)</span> is the time-slope associated with each patient as a whole, across all teeth. Adding <code class="docutils literal notranslate"><span class="pre">age</span></code> here suggests that the change in GCF may also depend upon the patient’s age. Again, this seems perfectly reasonable.</p>
+<p>By comparison, <span class="math notranslate nohighlight">\(\beta^{(p)}_{2}\)</span> is the slope associated with the relationship between baseline GCF and change in GCF. Adding <code class="docutils literal notranslate"><span class="pre">age</span></code> here suggests that this slope is additionally adjusted by the patient’s age. Although possible, we choose to limit the interactions in this model to only those with <code class="docutils literal notranslate"><span class="pre">time</span></code>. The main questions of this analysis correspond to changes over time, rather than the way patient’s age and other elements interact. This is a simplification we are imposing from the outset for the purpose of keeping this analysis more contained. The implications of adding <code class="docutils literal notranslate"><span class="pre">age</span></code> to each of the remaining Level 3 models are as follows:</p>
+<ul class="simple">
+<li><p>Adding <span class="math notranslate nohighlight">\(\text{age}^{(p)} \)</span> to the model of <span class="math notranslate nohighlight">\(\beta^{(p)}_{2}\)</span> implies <span class="math notranslate nohighlight">\(\left(\text{age}^{(p)} \times \text{GCFb}^{(t|p)}\right)\)</span></p></li>
+<li><p>Adding <span class="math notranslate nohighlight">\(\text{age}^{(p)} \)</span> to the model of <span class="math notranslate nohighlight">\(\beta^{(p)}_{3}\)</span> implies <span class="math notranslate nohighlight">\(\left(\text{age}^{(p)} \times \text{CDA}^{(t|p)}\right)\)</span></p></li>
+<li><p>Adding <span class="math notranslate nohighlight">\(\text{age}^{(p)} \)</span> to the model of <span class="math notranslate nohighlight">\(\beta^{(p)}_{4}\)</span> implies <span class="math notranslate nohighlight">\(\left(\text{time}_{i} \times \text{age}^{(p)} \times \text{GCFb}^{(t|p)}\right)\)</span></p></li>
+<li><p>Adding <span class="math notranslate nohighlight">\(\text{age}^{(p)} \)</span> to the model of <span class="math notranslate nohighlight">\(\beta^{(p)}_{5}\)</span> implies <span class="math notranslate nohighlight">\(\left(\text{time}_{i} \times \text{age}^{(p)} \times \text{CDA}^{(t|p)}\right)\)</span></p></li>
+</ul>
+<p>So we can see that if we want to exclude all interactions beyond those with <code class="docutils literal notranslate"><span class="pre">time</span></code>, we should omit adding <code class="docutils literal notranslate"><span class="pre">age</span></code> to any of these models. This gives a final Level 2 and Level 3 specification of</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
@@ -739,32 +775,35 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
     \beta^{(p)}_{5} &amp;= \beta_{5} 
 \end{alignat*}
 \end{split}\]</div>
-<p>… The full model is</p>
+</section>
+<section id="the-final-model-full-and-simplified">
+<h4>The Final Model (Full and Simplified)<a class="headerlink" href="#the-final-model-full-and-simplified" title="Link to this heading">#</a></h4>
+<p>Taking everything discussed above, the final full model is given by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 1 (Time)} \\
-    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(t)}_{1} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
+    \text{GCF}^{(t|p)}_{i} &amp;= \beta_{0}^{(t|p)} + \left(\beta^{(t|p)}_{1} \times \text{time}_{i}\right) + \eta^{(t|p)}_{i} \\ \quad \\
 \text{Level 2 (Tooth)} \\
-    \beta_{0}^{(t)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\
-    \beta^{(t)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t)}\right) \\ \quad \\
+    \beta_{0}^{(t|p)} &amp;= \beta^{(p)}_{0} + \left(\beta^{(p)}_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{3} \times \text{CDA}^{(t|p)}\right) + \xi_{0}^{(t|p)} \\
+    \beta^{(t|p)}_{1} &amp;= \beta^{(p)}_{1} + \left(\beta^{(p)}_{4} \times \text{GCFb}^{(t|p)}\right) + \left(\beta^{(p)}_{5} \times \text{CDA}^{(t|p)}\right) \\ \quad \\
 \text{Level 3 (Patient)} \\
     \beta^{(p)}_{0} &amp;= \beta_{0} + \left(\beta_{6} \times \text{age}^{(p)}\right) + \phi_{0}^{(p)} \\
     \beta^{(p)}_{1} &amp;= \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)} \\
     \beta^{(p)}_{2} &amp;= \beta_{2}  \\
     \beta^{(p)}_{3} &amp;= \beta_{3} \\
     \beta^{(p)}_{4} &amp;= \beta_{4} \\
-    \beta^{(p)}_{5} &amp;= \beta_{5} 
+    \beta^{(p)}_{5} &amp;= \beta_{5}, 
 \end{alignat*}
 \end{split}\]</div>
-<p>which we can simplify by collapsing the fixed-effects back into the different levels to give</p>
+<p>which is admittedly quite complicated. Luckily, we can simplify this down by collapsing the fixed-effects back into the different levels to give</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 1 (Time)} \\
-    \text{GCF}^{(t)}_{i} &amp;= \beta_{0}^{(t)} + \left(\beta^{(p)}_{1} \times \text{time}_{i}\right) + \left(\beta_{4} \times \text{GCFb}^{(t)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t)} \times \text{time}_{i}\right) + \eta^{(t)}_{i}. \\ \quad \\
+    \text{GCF}^{(t|p)}_{i} &amp;= \beta_{0}^{(t|p)} + \left(\beta^{(p)}_{1} \times \text{time}_{i}\right) + \left(\beta_{4} \times \text{GCFb}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t|p)} \times \text{time}_{i}\right) + \eta^{(t|p)}_{i}. \\ \quad \\
 \text{Level 2 (Tooth)} \\
-    \beta_{0}^{(t)} &amp;= \beta^{(p)}_{0} + \left(\beta_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta_{3} \times \text{CDA}^{(t)}\right) + \xi_{0}^{(t)} \\ \quad \\
+    \beta_{0}^{(t|p)} &amp;= \beta^{(p)}_{0} + \left(\beta_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta_{3} \times \text{CDA}^{(t|p)}\right) + \xi_{0}^{(t|p)} \\ \quad \\
 \text{Level 3 (Patient)} \\
     \beta^{(p)}_{0} &amp;= \beta_{0} + \left(\beta_{6} \times \text{age}^{(p)}\right) + \phi_{0}^{(p)} \\
     \beta^{(p)}_{1} &amp;= \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)} \\
@@ -775,34 +814,60 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 </section>
 <section id="fitting-the-model-in-r">
 <h2>Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code><a class="headerlink" href="#fitting-the-model-in-r" title="Link to this heading">#</a></h2>
+<p>In order to fit the model in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we need to collapse all the levels together. For this example, we need to do this quite carefully. For instance, notice that at Level 1 we have</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\beta^{(p)}_{1} \times \text{time}_{i}\right),
+\]</div>
+<p>but the definition of <span class="math notranslate nohighlight">\(\beta^{(p)}_{1}\)</span> at Level 3 is</p>
+<div class="math notranslate nohighlight">
+\[
+\beta^{(p)}_{1} = \beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)}.
+\]</div>
+<p>So, collapsing these together involves the following substitution</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\beta^{(p)}_{1} \times \text{time}_{i}\right) = \overbrace{\left[\beta_{1} + \left(\beta_{7} \times \text{age}^{(p)}\right) + \phi_{1}^{(p)}\right]}^{\beta^{(p)}_{1}} \times \text{time}_{i},
+\]</div>
+<p>which expands to</p>
+<div class="math notranslate nohighlight">
+\[
+\left(\beta_{1} \times \text{time}_{i}\right) + \left(\beta_{7} \times \text{age}^{(p)} \times  \text{time}_{i}\right) + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right).
+\]</div>
+<p>So, the two-way interaction between <code class="docutils literal notranslate"><span class="pre">age:time</span></code> is formed <em>through</em> the levels.</p>
+<p>Continuing in this fashion results in</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{GCF}^{(t)}_{i} = &amp;\: \beta_{0} + \left(\beta_{1} \times \text{time}_{i}\right) + \left(\beta_{2} \times \text{GCFb}^{(t)}\right) + \left(\beta_{3} \times \text{CDA}^{(t)}\right) + \left(\beta_{6} \times \text{age}^{(p)}\right) + \\ 
-    &amp;\left(\beta_{4} \times \text{GCFb}^{(t)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t)} \times \text{time}_{i}\right) + \left(\beta_{7} \times \text{age}^{(p)} \times \text{time}_{i}\right) + \\
-    &amp;\xi_{0}^{(t)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t)}_{i} 
+    \text{GCF}^{(t|p)}_{i} = &amp;\: \beta_{0} + \left(\beta_{1} \times \text{time}_{i}\right) + \left(\beta_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta_{3} \times \text{CDA}^{(t|p)}\right) + \left(\beta_{6} \times \text{age}^{(p)}\right) + \\ 
+    &amp;\left(\beta_{4} \times \text{GCFb}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{7} \times \text{age}^{(p)} \times \text{time}_{i}\right) + \\
+    &amp;\xi_{0}^{(t|p)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t|p)}_{i} 
 \end{alignat*}
 \end{split}\]</div>
-<p>which does look quite complicated, but consists of an intercept <span class="math notranslate nohighlight">\((\beta_{0})\)</span>; slopes with <code class="docutils literal notranslate"><span class="pre">time</span></code> <span class="math notranslate nohighlight">\((\beta_{1})\)</span>, <code class="docutils literal notranslate"><span class="pre">baseline_GCF</span></code> <span class="math notranslate nohighlight">\((\beta_{2})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA</span></code> <span class="math notranslate nohighlight">\((\beta_{3})\)</span> and <code class="docutils literal notranslate"><span class="pre">age</span></code> <span class="math notranslate nohighlight">\((\beta_{6})\)</span>; interactions <code class="docutils literal notranslate"><span class="pre">baseline_GCF:time</span></code> <span class="math notranslate nohighlight">\((\beta_{4})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA:time</span></code> <span class="math notranslate nohighlight">\((\beta_{5})\)</span> and <code class="docutils literal notranslate"><span class="pre">age:time</span></code> <span class="math notranslate nohighlight">\((\beta_{7})\)</span>; a random intercept per-tooth <span class="math notranslate nohighlight">\(\left(\xi_{0}^{(t)}\right)\)</span>, a random intercept and <code class="docutils literal notranslate"><span class="pre">time</span></code> slope per-patient <span class="math notranslate nohighlight">\(\left(\phi_{0}^{(p)}, \phi_{1}^{(p)}\right)\)</span> and a final error term <span class="math notranslate nohighlight">\(\left(\eta^{(t)}_{i}\right)\)</span>.</p>
-<p>In terms of specifying this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, the fixed-effects are straightforward as the description above leads to <code class="docutils literal notranslate"><span class="pre">fixed</span> <span class="pre">=</span> <span class="pre">gcf</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">base_gcf</span> <span class="pre">+</span> <span class="pre">cda</span> <span class="pre">+</span> <span class="pre">time</span> <span class="pre">+</span> <span class="pre">age</span> <span class="pre">+</span> <span class="pre">time:base_gcf</span> <span class="pre">+</span> <span class="pre">time:cda</span> <span class="pre">+</span> <span class="pre">time:age</span></code>. For the random effects, we start with the error terms</p>
+<p>which consists of an intercept <span class="math notranslate nohighlight">\((\beta_{0})\)</span>; slopes with <code class="docutils literal notranslate"><span class="pre">time</span></code> <span class="math notranslate nohighlight">\((\beta_{1})\)</span>, <code class="docutils literal notranslate"><span class="pre">baseline_GCF</span></code> <span class="math notranslate nohighlight">\((\beta_{2})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA</span></code> <span class="math notranslate nohighlight">\((\beta_{3})\)</span> and <code class="docutils literal notranslate"><span class="pre">age</span></code> <span class="math notranslate nohighlight">\((\beta_{6})\)</span>; interactions between <code class="docutils literal notranslate"><span class="pre">baseline_GCF:time</span></code> <span class="math notranslate nohighlight">\((\beta_{4})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA:time</span></code> <span class="math notranslate nohighlight">\((\beta_{5})\)</span> and <code class="docutils literal notranslate"><span class="pre">age:time</span></code> <span class="math notranslate nohighlight">\((\beta_{7})\)</span>; a random intercept per-tooth <span class="math notranslate nohighlight">\(\left(\xi_{0}^{(t|p)}\right)\)</span>, a random intercept and <code class="docutils literal notranslate"><span class="pre">time</span></code> slope per-patient <span class="math notranslate nohighlight">\(\left(\phi_{0}^{(p)}, \phi_{1}^{(p)}\right)\)</span> and a final error term <span class="math notranslate nohighlight">\(\left(\eta^{(t|p)}_{i}\right)\)</span>.</p>
+<p>In terms of specifying this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, the fixed-effects are straightforward as the description above leads to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">gcf</span> <span class="o">~</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">base_gcf</span> <span class="o">+</span> <span class="n">cda</span> <span class="o">+</span> <span class="n">time</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">base_gcf</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">cda</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">age</span>
+</pre></div>
+</div>
+<p>For the random effects, we start with the error terms</p>
 <div class="math notranslate nohighlight">
 \[
-\xi_{0}^{(t)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t)}_{i}
+\xi_{0}^{(t|p)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t|p)}_{i}
 \]</div>
 <p>and then remove the final errors, as they do not need to be explicitly specified.</p>
 <div class="math notranslate nohighlight">
 \[
-\xi_{0}^{(t)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right).
+\xi_{0}^{(t|p)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right).
 \]</div>
 <p>We then change the conditional notation to give</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
     \xi_{0} &amp;\:|\: t \\
-    \phi_{0} + \left(\phi_{1} \times \text{time}_{i}\right) &amp;\:|\: p \\
+    \phi_{0} + \left(\phi_{1} \times \text{time}_{i}\right) &amp;\:|\: p, \\
 \end{alignat*}
 \end{split}\]</div>
-<p>implying that we need both <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> in the model.</p>
+<p>where we have removed the additional explicit nesting of teeth within patients as <code class="docutils literal notranslate"><span class="pre">lme()</span></code> does not need this (it is implied from the way the data are structured). So this indicates that we need <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> in the model.</p>
 <p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the relevant factor variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(tooth</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">patient</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">age)</span></code>. This gives us full control of the random-effects specification at each level. Our model can therefore be expressed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> using the following syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -828,10 +893,8 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
   Data: veneer 
   Log-restricted-likelihood: -459.1694
   Fixed: gcf ~ 1 + base_gcf + cda + time + age + time:base_gcf + time:cda +      time:age 
-  (Intercept)      base_gcf           cda          time           age 
-  88.89247933   -0.26927505   -2.30330590  -11.18323137   -1.30710933 
-base_gcf:time      cda:time      time:age 
-   0.05086456    0.62792054    0.19630363 
+  (Intercept)      base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
+  88.89247933   -0.26927505   -2.30330590  -11.18323137   -1.30710933    0.05086456    0.62792054    0.19630363 
 
 Random effects:
  Formula: ~1 | tooth
@@ -853,6 +916,8 @@ Number of Groups:
 </div>
 </div>
 </div>
+<p>As expected, there are 4 variances estimates from the 4 error terms. One associated with variance between teeth, one associated with variance between patients, one associated with the time slope between patients and a final residual variance term.</p>
+<p>Usually, at this point, we might also have a look at the marginal covariance structure for a specific tooth within a specific patient. Unfortunately, the <code class="docutils literal notranslate"><span class="pre">getVarCov()</span></code> function does not work for models with more than 2 levels</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">try</span><span class="p">(</span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">))</span>
@@ -866,21 +931,144 @@ Number of Groups:
 </div>
 </div>
 </div>
+<p>As such, our only options here are to try and reconstruct this manually (which is a non-trivial thing to try and do), or we move on without this. In principle, we do not <em>need</em> to see this structure, as the focus of mixed-effects models are not the covariance form. This is what makes them distinct from a method like GLS. In this example, the covariance structure is quite complicated because we have random slopes of time. This makes it harder to infer the structure. So, at this stage, we just have to trust that a suitable structure <em>is</em> being using, given that we have accurately captured the hierarchical nature of these data. This may feel unsatisfying, but we have limited options.</p>
+</section>
+<section id="alternative-models">
+<h2>Alternative Models<a class="headerlink" href="#alternative-models" title="Link to this heading">#</a></h2>
+<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all possible fixed-effects as well as a subset of possible interactions. We have already reasoned about the simplest model containing only 2-way interactions with <code class="docutils literal notranslate"><span class="pre">time</span></code>. It is at this point where we could consider other more complex interaction terms, but we will stick to our original plan to keep this example contained.</p>
+<section id="simplifying-the-random-effects">
+<h3>Simplifying the Random Effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
+<p>Although we have stuck to keeping our original fixed-effects, we could now consider whether to <em>simplify</em> the random effects structure. To do this, we will start by assessing whether the random intercept per-tooth is necessary. As it stands, each tooth within each patient is allowed to differ in GCF. However, it could be that the degree of GCF is fairly constant within an individual patient. We can still allow patients to differ randomly, but within a patient it is conceivable that the conditions that influence the level of GCF are present for <em>all</em> teeth in the mouth, rather than shifting from tooth-to-tooth. This model comparison is below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">tooth</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                  </span><span class="n">patient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                   </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
+
+<span class="n">veneer.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">veneer.full</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">veneer.null</span><span class="p">,</span><span class="n">veneer.full</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" src="../_images/786a8ff99da39a290eabd49ad20e6a06e37552cd532d2f4f1c683e971ecf799d.png" />
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
-In plot.lme(veneer.lme) :
-  Marginal covariance structure not available for more than 2 levels
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            df      BIC
+veneer.null 12 911.7705
+veneer.full 13 974.7828
+[1] 63.01234
 </pre></div>
 </div>
 </div>
 </div>
+<p>suggesting <em>very strong evidence</em> favouring the <em>lower</em> BIC model, which is the one <em>without</em> the tooth-specific intercept. As such, we favour the following model going forward</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The only disadvantage here is that we are no longer treating the teeth as a random sample from a population of teeth within each patient. Instead, we are saying that the specific tooth chosen <em>does not matter</em>. You may or may not find this assumption justifiable, even if the data supports it.</p>
+<p>We could also check whether the random slope of <code class="docutils literal notranslate"><span class="pre">time</span></code> is needed. We suspect it is, given how variable the trajectories were across different patients when we plotted the data earlier. Nevertheless, we can use a more model-driven approach here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                   </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
+
+<span class="n">veneer.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">veneer.full</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">patient</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">veneer.null</span><span class="p">,</span><span class="n">veneer.full</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            df      BIC
+veneer.null 10 953.4876
+veneer.full 12 911.7705
+[1] 41.71715
+</pre></div>
+</div>
+</div>
+</div>
+<p>So this again suggests <em>very strong evidence</em> for the <em>lower</em> BIC model which, in this case, is the one that <em>does</em> contain the random <code class="docutils literal notranslate"><span class="pre">time</span></code> slope per-patient. As such, we retain the more complex model as our preference.</p>
+</section>
+<section id="additional-variance-structures">
+<h3>Additional Variance Structures<a class="headerlink" href="#additional-variance-structures" title="Link to this heading">#</a></h3>
+<p>As a final step before inference, we also need to consider whether any additional variance structures are warranted. We do not have any grouping variables beyond <code class="docutils literal notranslate"><span class="pre">patient</span></code> and <code class="docutils literal notranslate"><span class="pre">tooth</span></code>. Given that <code class="docutils literal notranslate"><span class="pre">patient</span></code> is already present in the random effects, our only option here is to allow a different variance term for each tooth. This may or may not be necessary. It is conceivable that some teeth may be more variable than others, particularly if some are more difficult to sample GCF from than others. However, this may not be dramatic enough to really warrant the extra complexity. We will use a model-based approach to make this decision, as shown below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                   </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
+
+<span class="n">veneer.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">veneer.full</span><span class="p">,</span><span class="w"> </span><span class="n">weights</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">varIdent</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">tooth</span><span class="p">))</span><span class="w"> </span><span class="c1"># allow different variances per-tooth</span>
+<span class="n">mod.comp</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">veneer.null</span><span class="p">,</span><span class="n">veneer.full</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            df      BIC
+veneer.null 12 911.7705
+veneer.full 17 934.4982
+[1] 22.72775
+</pre></div>
+</div>
+</div>
+</div>
+<p>This suggests <em>very strong</em> evidence in favour of the <em>lower</em> BIC model, which is the one <em>without</em> the additional variance terms. As such, the data does not support the idea that teeth differ dramatically in terms of the variability of GCF. As such, we stick with the model <em>without</em> the additional variance structures.</p>
+</section>
+</section>
+<section id="checking-assumptions">
+<h2>Checking Assumptions<a class="headerlink" href="#checking-assumptions" title="Link to this heading">#</a></h2>
+<p>To check the assumptions, we will use the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code>, which we brought into scope at the beginning of the analysis. This results in the following plots. Because we have now simplified the random effects structure down, we are effectively only dealing with 2-levels and so <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> is able to visualise the covariance structure for us.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e2ba09bad4629a099d3405d2da4f3a589b7959d54167fea0546a7e8084cdfe30.png" src="../_images/e2ba09bad4629a099d3405d2da4f3a589b7959d54167fea0546a7e8084cdfe30.png" />
+</div>
+</div>
+<p>Before discussing the residual plots, we will take a moment to explain why the covariance structure looks somewhat peculiar. What this is actually showing is a compound symmetric structure within each time point. However, this is hard to see because the data are arranged as time 1, time 2, time 1, time 2 etc. If we instead rearrange the rows and columns so that within a single patient all values of time 1 come first, followed by all values of time 2, we get</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Sigma.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">getVarCov</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&#39;marginal&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">individual</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span><span class="o">$</span><span class="n">`1`</span>
+<span class="n">idx</span><span class="w">     </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">12</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">2</span><span class="p">),</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">12</span><span class="p">,</span><span class="n">by</span><span class="o">=</span><span class="m">2</span><span class="p">))</span><span class="w"> </span><span class="c1"># rearrange the rows and columns</span>
+<span class="nf">image</span><span class="p">(</span><span class="nf">as</span><span class="p">(</span><span class="n">Sigma.1</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="s">&#39;Matrix&#39;</span><span class="p">))</span><span class="w">        </span><span class="c1"># visualise the rearranged matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/839472607a1b9268a5f8629c2c22f3ceb9bf7343e4deff64d9be2f3e78d9cba4.png" src="../_images/839472607a1b9268a5f8629c2c22f3ceb9bf7343e4deff64d9be2f3e78d9cba4.png" />
+</div>
+</div>
+<p>So now it is much clearer to see that, within a single patient, all teeth at time 1 have the same structure and all teeth at time 2 have the same structure.</p>
+<p>In terms of the residual plots, everything generally looks fine. Although some of the standardised residuals are large, none of them are greater than 3, suggesting no outliers. The distributions of residuals all show heavy tails, suggesting that extreme values are occurring more frequently than we would expect if normality held. However, we do not have a very large sample at the level of patients, as only 12 were included in the current sample. This limits our ability to draw definitive conclusions about the nature of these distributions and so all we can really do is proceed cautiously.</p>
+<p>As a final consideration, we have many variables here and concerns about multicollinearity still exist for a mixed-effects model. As such, we will consult the VIF values.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">vif</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
@@ -888,15 +1076,13 @@ In plot.lme(veneer.lme) :
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time 
-     8.321834      8.480576     37.151996      7.962650     12.208380 
-     cda:time      time:age 
-    12.435790     22.079264 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
+    10.875020     10.589399     15.091231      8.853131     11.306333     11.063674     20.578920 
 </pre></div>
 </div>
 </div>
 </div>
-<p>So, this looks like we have a <em>very</em> big problem with multicolinearity. Notice that the biggest culprit is between <code class="docutils literal notranslate"><span class="pre">time</span></code> and its interactions. Often, this can be down to using <em>un-centered</em> continuous variables. Centering (the act of removing the mean from each variable) helps separate-out the main effect from the interaction when using continuous variables. In doing so, we can dramatically reduce the overlap in the model terms. When working with models like this that contain continuous interactions, it is often a good idea to start by centering all the variables and see if this resolves the problem. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this can be done using</p>
+<p>So, we have a <em>very</em> big problem with multicolinearity. Notice that the biggest culprit is between <code class="docutils literal notranslate"><span class="pre">time</span></code> and its interactions. Often, this can be down to using <em>un-centered</em> continuous variables. Centering (the act of removing the mean from each variable) helps separate-out the main effect from the interaction when using continuous variables. In doing so, we can dramatically reduce the overlap in the model terms. When working with models like this that contain continuous interactions, it is often a good idea to start by centering all the variables and see if this resolves the problem. In <code class="docutils literal notranslate"><span class="pre">R</span></code>, this can be done using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer</span><span class="o">$</span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">veneer</span><span class="o">$</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">base_gcf</span><span class="p">)</span>
@@ -905,8 +1091,7 @@ In plot.lme(veneer.lme) :
 <span class="n">veneer</span><span class="o">$</span><span class="n">age.c</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">veneer</span><span class="o">$</span><span class="n">age</span><span class="w">      </span><span class="o">-</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">age</span><span class="p">)</span>
 
 <span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">age.c</span><span class="p">,</span>
-<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">tooth</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
-<span class="w">                                 </span><span class="n">patient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="p">),</span>
+<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span><span class="w"> </span>
 <span class="p">)</span><span class="w"> </span>
@@ -916,10 +1101,8 @@ In plot.lme(veneer.lme) :
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c 
-         1.701232          1.754961          1.000000          1.604670 
-base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
-         1.679292          1.732705          1.590532 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
+         1.128683          1.136447          1.006248          1.759789          1.133044          1.141009          1.769045 
 </pre></div>
 </div>
 </div>
@@ -928,6 +1111,8 @@ base_gcf.c:time.c      cda.c:time.c      time.c:age.c
 </section>
 <section id="inference">
 <h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h2>
+<p>Finally, we get to the inference element of the analysis. Here, we stick to NHST, but recognise that alternatives are available using the <code class="docutils literal notranslate"><span class="pre">intervals()</span></code> function to produce approximate 95% confidence intervals around the estimates. However, remember that these intervals are based upon knowing the standard error of the distribution of the estimates, which we do not.</p>
+<p>The ANOVA table is given below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">Anova</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">)</span>
@@ -938,58 +1123,78 @@ base_gcf.c:time.c      cda.c:time.c      time.c:age.c
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Analysis of Deviance Table (Type II tests)
 
 Response: gcf
-                    Chisq Df Pr(&gt;Chisq)    
-base_gcf.c         0.2222  1    0.63737    
-cda.c              0.0006  1    0.97979    
-time.c             0.6228  1    0.43000    
-age.c             16.4971  1  4.872e-05 ***
-base_gcf.c:time.c  0.2038  1    0.65168    
-cda.c:time.c       2.7124  1    0.09957 .  
-time.c:age.c       4.4178  1    0.03557 *  
+                   Chisq Df Pr(&gt;Chisq)   
+base_gcf.c        0.0070  1   0.933437   
+cda.c             0.6336  1   0.426055   
+time.c            0.0119  1   0.913133   
+age.c             7.8346  1   0.005126 **
+base_gcf.c:time.c 0.7602  1   0.383270   
+cda.c:time.c      0.2599  1   0.610194   
+time.c:age.c      0.4877  1   0.484953   
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
 </div>
-<p>Note that because these are all single degree-of-freedom tests, there is no need for any follow-up tests. These are not omnibus tests. Instead, these can be taken as asymptotic equivalents to the coefficients tests in the regression table.</p>
+<p>Note that because these are all single degree-of-freedom tests, there is no need for any follow-up tests. These are not omnibus tests. Instead, these can be taken as asymptotic equivalents to the coefficients tests in the regression table. Based on this, there is a significant effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> on GCF, but nothing else. Some caution is needed here as well because the <code class="docutils literal notranslate"><span class="pre">age</span></code> effect is defined at the level of individual patients and thus is only based on 12 individual. This is <em>very small</em>, which could mean that our asymptotic inference is being overly liberal. The <span class="math notranslate nohighlight">\(p\)</span>-value is small, but potentially not enough to give us complete certainty about this, especially when the distributions of the random effects were also quite uncertain. So, we must be particularly cautious here.</p>
+<p>Because all the interaction terms are non-significant, we might consider removing them to simplify the model down. However, we should not just base this on <span class="math notranslate nohighlight">\(p\)</span>-values, so instead we use model comparisons to see whether this is justifiable</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;time.c:age.c&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">veneer.lme</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">:</span><span class="n">age.c</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                   </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">method</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<span class="p">)</span>
+
+<span class="n">veneer.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">veneer.full</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age.c</span><span class="p">)</span><span class="w"> </span><span class="c1"># no time interactions</span>
+<span class="n">mod.comp</span><span class="w">    </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">veneer.null</span><span class="p">,</span><span class="n">veneer.full</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/34241d2bf645115a066569c22e9711e52db4df14b16dccc4daa565bd706d5416.png" src="../_images/34241d2bf645115a066569c22e9711e52db4df14b16dccc4daa565bd706d5416.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>            df      BIC
+veneer.null  9 898.9591
+veneer.full 12 911.7705
+[1] 12.8114
+</pre></div>
 </div>
 </div>
-<p>By default, when plotting a continuous x continuous interaction, the <code class="docutils literal notranslate"><span class="pre">effect()</span></code> function will choose 5 values of one predictor over which to display the slope of the other predictor. So, in this example, 5 values of <code class="docutils literal notranslate"><span class="pre">age</span></code> have been chosen to illustrate how the slope with <code class="docutils literal notranslate"><span class="pre">time</span></code> changes. This can be controlled using the <code class="docutils literal notranslate"><span class="pre">xlevels</span></code> argument, which we can set to a single value to control the number of equally-spaced values chosen. For instance, if we used <code class="docutils literal notranslate"><span class="pre">xlevels=20</span></code>, we would get</p>
+</div>
+<p>This is very strong evidence favouring the lower BIC model, which in this case is the one without the interactions. So, we simplify the model below and re-check the assumptions plots</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;time.c:age.c&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">veneer.lme</span><span class="p">,</span><span class="w"> </span><span class="n">xlevels</span><span class="o">=</span><span class="m">20</span><span class="p">))</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age.c</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time.c</span><span class="o">|</span><span class="n">patient</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="nf">plot.lme</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/47b79b2aa80af61a064d128f0518e6e7b83ca3824cfc3afbc823b1c272a66a90.png" src="../_images/47b79b2aa80af61a064d128f0518e6e7b83ca3824cfc3afbc823b1c272a66a90.png" />
+<img alt="../_images/8347314db1620032bd6e37789c88a211bb84486e4d156763b3144b48fef6a299.png" src="../_images/8347314db1620032bd6e37789c88a211bb84486e4d156763b3144b48fef6a299.png" />
 </div>
 </div>
-<p>The only problem we have here is that the plots are constructed on the <em>centered</em> scale, which is difficult to interpret in terms of the original scale of each variable. To accommodate this, we can calculate the effects first and then rescale them before plotting.</p>
+<p>There are no substantive changes here. We can now plot the slopes associated with all the effects.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">eff</span><span class="w">          </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">effect</span><span class="p">(</span><span class="s">&#39;time.c:age.c&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">veneer.lme</span><span class="p">,</span><span class="w"> </span><span class="n">xlevels</span><span class="o">=</span><span class="m">20</span><span class="p">)</span>
-<span class="n">eff</span><span class="o">$</span><span class="n">x</span><span class="o">$</span><span class="n">time.c</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">eff</span><span class="o">$</span><span class="n">x</span><span class="o">$</span><span class="n">time.c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">time</span><span class="p">),</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="c1"># add mean back in and round</span>
-<span class="n">eff</span><span class="o">$</span><span class="n">x</span><span class="o">$</span><span class="n">age.c</span><span class="w">  </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">eff</span><span class="o">$</span><span class="n">x</span><span class="o">$</span><span class="n">age.c</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="nf">mean</span><span class="p">(</span><span class="n">veneer</span><span class="o">$</span><span class="n">age</span><span class="p">),</span><span class="w">  </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="c1"># add mean back in and round</span>
-<span class="nf">plot</span><span class="p">(</span><span class="n">eff</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">veneer.lme</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/f3154d99687ccdd701bc54a30c18d3c673f8498f2f194a00f6d7b7dfa8985841.png" src="../_images/f3154d99687ccdd701bc54a30c18d3c673f8498f2f194a00f6d7b7dfa8985841.png" />
+<img alt="../_images/d131c3ad5e95cc5a0682a301bda44aa7d32e6f5796f74f2c4d9d3e88d4f087bf.png" src="../_images/d131c3ad5e95cc5a0682a301bda44aa7d32e6f5796f74f2c4d9d3e88d4f087bf.png" />
 </div>
 </div>
-<p>Now we can more easily see the effects on the original scale. The only <em>disadvantage</em> of doing this is that <code class="docutils literal notranslate"><span class="pre">effect</span></code> has chosen the 20 levels of <code class="docutils literal notranslate"><span class="pre">age</span></code> based on sensible rounded values on the <em>centered</em> scale, which does not necessarily equate to sensible rounded values on the <em>un-centered</em> scaled. So, we enm up with some weird values of <code class="docutils literal notranslate"><span class="pre">age</span></code> for each panel. We can provide <code class="docutils literal notranslate"><span class="pre">xlevels</span></code> with a list telling it which values to use for both variables, but we will leave that complexity to one side. Irrespective of the scaling, the result should be clear. As <code class="docutils literal notranslate"><span class="pre">age</span></code> increases, the slope with <code class="docutils literal notranslate"><span class="pre">time</span></code> slowly shifts from negative to positive. Patients in their 20s will show an average <em>decrease</em> in GCF over the course of 3 months. Patients in their 30s will show <em>no change</em> on average. However, patients aged 40 and above will start to show an <em>increase</em> in GCF over the course of 3 months, with this change becoming more pronounced the older they get.</p>
-<p>The overall conclusion here is that</p>
+<p>As we can see, both <code class="docutils literal notranslate"><span class="pre">base_gcf</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> are effectively <em>constant</em> with a large amount of uncertainty. The effects of <code class="docutils literal notranslate"><span class="pre">cda</span></code> is quite subtle, with a large amount of uncertainty. The effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is more clearly <em>negative</em>, with much less uncertainty than the other effects in the model. This suggests that there is a much more consistent pattern of GCF <em>decreasing</em> the older the patient.</p>
+<p>We should interpret this cautiously. At present, all we can say is that older patients exhibit lower GCF levels at veneer-adjacent sites, independent of time and other covariates in the model. However, the origin of this effect remains unclear. The issue is that <code class="docutils literal notranslate"><span class="pre">age</span></code> could be a proxy for other factors not considered. For instance, <code class="docutils literal notranslate"><span class="pre">age</span></code> could influence which teeth have the veneers applied, or it could be that older patients are better at maintaining veneers, visiting the dentist regularly or have different oral hygiene habits than younger patients. We cannot necessarily conclude that this effect is either definitely biological, nor necessarily robust given the small sample of patients and the asymptotic inference used above. So, despite all the effort here, the conclusion is necessarily uncertain and would require more data on more patients across a wide age range to really hone in on what is driving this apparent relationship.</p>
 </section>
 </section>
 
@@ -1051,11 +1256,18 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-ii-expand-to-multiple-structures">Step II: Expand to Multiple Structures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-iii-write-the-higher-level-models">Step III: Write the Higher-level Models</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-to-multiple-patients">Expand to Multiple Patients</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-final-model-full-and-simplified">The Final Model (Full and Simplified)</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-the-model-in-r">Fitting the Model in <code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#alternative-models">Alternative Models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simplifying-the-random-effects">Simplifying the Random Effects</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-variance-structures">Additional Variance Structures</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-assumptions">Checking Assumptions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
 </ul>
   </nav></div>
