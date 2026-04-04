@@ -446,18 +446,30 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
-1    1        1      448       32  0.46        1       NA    0.082     2.00     160        1       1
-2    0        1      460      109 -0.27        1       NA    0.082     2.00     160        1       2
-3    1        1      511       56 -0.03        1       NA    0.082     2.00     160        1       3
-4    0        1      449       83 -0.38        2    -0.11    0.082     3.25     217        1       4
-5    0        1      425       53 -0.03        2    -0.11    0.082     3.25     217        1       5
-6    1        1      450       65  0.76        2    -0.11    0.082     3.25     217        1       6
-7    0        1      452       51 -0.03        2    -0.11    0.082     3.25     217        1       7
-8    0        1      443       66  0.20        2    -0.11    0.082     3.25     217        1       8
-9    1        1      422       88  0.64        2    -0.11    0.082     3.25     217        1       9
-10   0        1      480       -7  0.13        2    -0.11    0.082     3.25     217        1      10
-11   0        1      502       60  0.83        2    -0.11    0.082     3.25     217        1      11
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep
+1    1        1      448       32  0.46        1       NA    0.082     2.00
+2    0        1      460      109 -0.27        1       NA    0.082     2.00
+3    1        1      511       56 -0.03        1       NA    0.082     2.00
+4    0        1      449       83 -0.38        2    -0.11    0.082     3.25
+5    0        1      425       53 -0.03        2    -0.11    0.082     3.25
+6    1        1      450       65  0.76        2    -0.11    0.082     3.25
+7    0        1      452       51 -0.03        2    -0.11    0.082     3.25
+8    0        1      443       66  0.20        2    -0.11    0.082     3.25
+9    1        1      422       88  0.64        2    -0.11    0.082     3.25
+10   0        1      480       -7  0.13        2    -0.11    0.082     3.25
+11   0        1      502       60  0.83        2    -0.11    0.082     3.25
+   classid schoolid childid
+1      160        1       1
+2      160        1       2
+3      160        1       3
+4      217        1       4
+5      217        1       5
+6      217        1       6
+7      217        1       7
+8      217        1       8
+9      217        1       9
+10     217        1      10
+11     217        1      11
 </pre></div>
 </div>
 </div>
@@ -512,14 +524,22 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex             minority      mathkind        mathgain            ses              yearstea        mathknow          housepov     
- boy :588   nonminority:384   Min.   :290.0   Min.   :-110.00   Min.   :-1.61000   Min.   : 0.00   Min.   :-2.5000   Min.   :0.0120  
- girl:602   minority   :806   1st Qu.:439.2   1st Qu.:  35.00   1st Qu.:-0.49000   1st Qu.: 4.00   1st Qu.:-0.7200   1st Qu.:0.0850  
-                              Median :466.0   Median :  56.00   Median :-0.03000   Median :10.00   Median :-0.1300   Median :0.1270  
-                              Mean   :466.7   Mean   :  57.57   Mean   :-0.01298   Mean   :12.21   Mean   : 0.0312   Mean   :0.1782  
-                              3rd Qu.:495.0   3rd Qu.:  77.00   3rd Qu.: 0.39750   3rd Qu.:20.00   3rd Qu.: 0.8500   3rd Qu.:0.2550  
-                              Max.   :629.0   Max.   : 253.00   Max.   : 3.21000   Max.   :40.00   Max.   : 2.6100   Max.   :0.5640  
-                                                                                                   NA&#39;s   :109                       
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex             minority      mathkind        mathgain      
+ boy :588   nonminority:384   Min.   :290.0   Min.   :-110.00  
+ girl:602   minority   :806   1st Qu.:439.2   1st Qu.:  35.00  
+                              Median :466.0   Median :  56.00  
+                              Mean   :466.7   Mean   :  57.57  
+                              3rd Qu.:495.0   3rd Qu.:  77.00  
+                              Max.   :629.0   Max.   : 253.00  
+                                                               
+      ses              yearstea        mathknow          housepov     
+ Min.   :-1.61000   Min.   : 0.00   Min.   :-2.5000   Min.   :0.0120  
+ 1st Qu.:-0.49000   1st Qu.: 4.00   1st Qu.:-0.7200   1st Qu.:0.0850  
+ Median :-0.03000   Median :10.00   Median :-0.1300   Median :0.1270  
+ Mean   :-0.01298   Mean   :12.21   Mean   : 0.0312   Mean   :0.1782  
+ 3rd Qu.: 0.39750   3rd Qu.:20.00   3rd Qu.: 0.8500   3rd Qu.:0.2550  
+ Max.   : 3.21000   Max.   :40.00   Max.   : 2.6100   Max.   :0.5640  
+                                    NA&#39;s   :109                       
     mathprep        classid        schoolid       childid      
  Min.   :1.000   26     :  10   11     :  31   Min.   :   1.0  
  1st Qu.:2.000   42     :  10   12     :  27   1st Qu.: 298.2  
@@ -558,13 +578,20 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
-1 girl minority      448       32  0.46        1       NA    0.082     2.00     160        1       1
-2  boy minority      460      109 -0.27        1       NA    0.082     2.00     160        1       2
-3 girl minority      511       56 -0.03        1       NA    0.082     2.00     160        1       3
-4  boy minority      449       83 -0.38        2    -0.11    0.082     3.25     217        1       4
-5  boy minority      425       53 -0.03        2    -0.11    0.082     3.25     217        1       5
-6 girl minority      450       65  0.76        2    -0.11    0.082     3.25     217        1       6
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   sex minority mathkind mathgain   ses yearstea mathknow housepov mathprep
+1 girl minority      448       32  0.46        1       NA    0.082     2.00
+2  boy minority      460      109 -0.27        1       NA    0.082     2.00
+3 girl minority      511       56 -0.03        1       NA    0.082     2.00
+4  boy minority      449       83 -0.38        2    -0.11    0.082     3.25
+5  boy minority      425       53 -0.03        2    -0.11    0.082     3.25
+6 girl minority      450       65  0.76        2    -0.11    0.082     3.25
+  classid schoolid childid
+1     160        1       1
+2     160        1       2
+3     160        1       3
+4     217        1       4
+5     217        1       5
+6     217        1       6
 </pre></div>
 </div>
 </div>
@@ -611,14 +638,22 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex    minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
-912 girl    minority      474       90  0.04       11     1.75     0.21        2     174       81     912
-913  boy nonminority      430       74 -0.03       11     1.75     0.21        2     174       81     913
-914 girl nonminority      452       44 -0.67       11     1.75     0.21        2     174       81     914
-915 girl nonminority      428       53 -0.42       11     1.75     0.21        2     174       81     915
-916  boy    minority      452       66 -0.73       11     1.75     0.21        2     174       81     916
-917 girl nonminority      485       40 -0.78       11     1.75     0.21        2     174       81     917
-918 girl    minority      458       48 -0.44       11     1.75     0.21        2     174       81     918
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex    minority mathkind mathgain   ses yearstea mathknow housepov
+912 girl    minority      474       90  0.04       11     1.75     0.21
+913  boy nonminority      430       74 -0.03       11     1.75     0.21
+914 girl nonminority      452       44 -0.67       11     1.75     0.21
+915 girl nonminority      428       53 -0.42       11     1.75     0.21
+916  boy    minority      452       66 -0.73       11     1.75     0.21
+917 girl nonminority      485       40 -0.78       11     1.75     0.21
+918 girl    minority      458       48 -0.44       11     1.75     0.21
+    mathprep classid schoolid childid
+912        2     174       81     912
+913        2     174       81     913
+914        2     174       81     914
+915        2     174       81     915
+916        2     174       81     916
+917        2     174       81     917
+918        2     174       81     918
 </pre></div>
 </div>
 </div>
@@ -818,94 +853,77 @@ F-statistic: 3.017 on 4 and 2 DF,  p-value: 0.2641
 \end{split}\]</div>
 <p>So, we now have to work through each of the new school-specific terms and decide whether to treat them as <em>fixed</em> or <em>random</em>. In other words, is each term allowed to differ <em>across schools</em> or not.</p>
 <p>This is a similar process to reasoning about individual classrooms. The minimum we need to accommodate the influence of different schools is to allow the <em>intercept</em> to differ across schools. So, we opt to treat <span class="math notranslate nohighlight">\(\beta_{0}^{(s)}\)</span> as <em>random</em>. This captures the idea that each school is a random sample from a population of schools and that our inference is not restricted to only those schools in our sample. In other word, each school has its own unique level of maths attainment that represents each school’s status as an independent and unique environment.</p>
-<p>… HERE …</p>
-<p>The remaining terms represent a similar complexity to earlier. Although we <em>could</em> keep each one as random, it is very unlikely that the data would support this. Again, you could <em>try</em> but it is likely that this will fail. So, we already desire some degree of <em>simplification</em>. If we take <span class="math notranslate nohighlight">\(\beta_{3}\)</span> as an example, this is the regression slope associated with the experience of each teacher. If we leave this as <em>fixed</em> we are suggesting that the relationship between years of experience and maths improvement is a global effect across all schools. There is no influence of different schools here, there is just a general pattern that (for instance) more experienced teachers are able to engineer the biggest improvements. If we make this <em>random</em>, we are suggesting that the effect of teacher experience differs on a per-school basis. This seems less likely, but we could imagine a scenario where some schools give teachers more freedom to adapt their teaching style and make use of their experience, whereas others may be more rigid in their requirements. In reality, most schools probably would not be able to completely neuter a teacher’s years of experience from influencing student grades. In fact, this would never really be desirable. So, in this case, given our additional desire for simplicity, we choose to treat <span class="math notranslate nohighlight">\(\beta_{3}\)</span> as <em>fixed</em>. In other words, the effect of teacher experience on improvements in maths grades does not depend upon the school they happen to work in.</p>
-<p>We can reason about the terms such as <span class="math notranslate nohighlight">\(\beta_{4}\)</span> (the relationship between maths scores and teacher preparation) and <span class="math notranslate nohighlight">\(\beta_{5}\)</span> (the relationship between maths scores and teacher knowledge) in a similar way and reach a similar conclusion that these terms can be <em>fixed</em>. Terms such as <span class="math notranslate nohighlight">\(\beta_{1}\)</span> (the relationship between maths scores and earlier attainment), <span class="math notranslate nohighlight">\(\beta_{2}\)</span> (the relationship between maths scores and socioeconomic status), <span class="math notranslate nohighlight">\(\text{sex}_{j}\)</span> and <span class="math notranslate nohighlight">\(\text{minority}_{k}\)</span> are a little trickier. However, in these cases it seems unlikely that there would be vast school-specific differences here. It could be that some schools have campaigns designed to reduce performance gaps between sexes, or have specific measures in place to target students will low earlier attainment. However, we need this to be a enough of a consistent difference across schools to create vastly different relationships that depend upon each school individually. Given that we have no knowledge of this, it becomes somewhat fanciful and so, with no other information to hand about these school differences, we choose to fix these terms as well. So, our level 3 model is now</p>
+<p>The remaining terms represent a similar complexity to earlier. Although we <em>could</em> keep each one as random, it is very unlikely that the data would support this. So, we already desire some degree of <em>simplification</em>. If we take <span class="math notranslate nohighlight">\(\beta^{(s)}_{5}\)</span> as an example, this is the regression slope associated with the experience of each teacher. If we leave this as <em>fixed</em> we are suggesting that the relationship between years of experience and maths improvement is a global effect across all schools. There is no influence of different schools here, there is just a general pattern. For instance, more experienced teachers are able to create the biggest student improvements. If we make this <em>random</em>, we are suggesting that the effect of teacher experience differs on a per-school basis. This seems less likely, but we could imagine a scenario where some schools give teachers more freedom to adapt their teaching style, whereas others may be more rigid in their requirements. In reality, most schools probably would not be able to completely neuter a teacher’s years of experience from influencing student grades. So, in this case, given our additional desire for simplicity, we choose to treat <span class="math notranslate nohighlight">\(\beta_{3}\)</span> as <em>fixed</em>. In other words, the effect of teacher experience on improvements in maths grades does not depend upon the school they happen to work in.</p>
+<p>We can reason about the terms such as <span class="math notranslate nohighlight">\(\beta^{(s)}_{6}\)</span> (the relationship between maths scores and teacher preparation) and <span class="math notranslate nohighlight">\(\beta^{(s)}_{7}\)</span> (the relationship between maths scores and teacher knowledge) in a similar way and reach a similar conclusion that these terms can be <em>fixed</em>. Terms such as <span class="math notranslate nohighlight">\(\beta^{(c|s)}_{1}\)</span> (the relationship between maths scores and earlier attainment), <span class="math notranslate nohighlight">\(\beta^{(c|s)}_{2}\)</span> (the relationship between maths scores and socioeconomic status), <span class="math notranslate nohighlight">\(\beta^{(c|s)}_{3}\)</span> (sex differences) and <span class="math notranslate nohighlight">\(\beta^{(c|s)}_{4}\)</span> (minority differences) are a little trickier. However, in all these cases it seems less likely that there would be vast school-specific differences here. It could be that some schools have campaigns designed to reduce performance gaps between sexes, or have specific measures in place to target students will low earlier attainment. However, we need this to be a enough of a consistent difference across schools to create vastly different relationships that depend upon each school individually. As we have no knowledge of this, it becomes somewhat fanciful and so we choose to fix these terms as well. So, our level 3 model is now</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 3 (School)} \\
-    \text{mean}^{(s)} &amp;= \text{mean} + \phi^{(s)} \\
-    \text{sex}^{(s)}_{j} &amp;= \text{sex}_{j} \\
-    \text{minority}^{(s)}_{k} &amp;= \text{minority}_{k} \\
-    \beta_{1}^{(s)} &amp;= \beta_{1} \\
-    \beta_{2}^{(s)} &amp;= \beta_{2}\\
-    \beta_{3}^{(s)} &amp;= \beta_{3} \\
-    \beta_{4}^{(s)} &amp;= \beta_{4} \\
-    \beta_{5}^{(s)} &amp;= \beta_{5} \\
+    \beta^{(s)}_{0} &amp;= \beta_{0} + \phi_{0}^{(s)} \\
+    \beta^{(s)}_{1} &amp;= \beta_{1} \\
+    \beta^{(s)}_{2} &amp;= \beta_{2} \\
+    \beta^{(s)}_{3} &amp;= \beta_{3} \\
+    \beta^{(s)}_{4} &amp;= \beta_{4} \\
+    \beta^{(s)}_{5} &amp;= \beta_{5} \\
+    \beta^{(s)}_{6} &amp;= \beta_{6} \\
+    \beta^{(s)}_{7} &amp;= \beta_{7}
 \end{alignat*}
 \end{split}\]</div>
-<p>Because <span class="math notranslate nohighlight">\(\text{mean}^{(s)}\)</span> is the only <em>random</em> term, this is the only model with an error-term. This means we will be able to simplify this specification down dramatically, but we keep it in its full form for the moment.</p>
-<p>Our final step is deciding whether there are any <em>school-level</em> variables that we wish to include in the Level 3 models. Looking back at the data description from earlier, we can see that the only school-level variable is <code class="docutils literal notranslate"><span class="pre">housepov</span></code>, representing the proportion of local houses around the school that are below the poverty line. As we saw at Level 2, this will enter first as an additional predictor for the mean, suggesting that average maths attainment within a specific school is influenced by the amount of local poverty. For the remaining models, this would enter as an interaction with the term being modelled. For instance, we could explain the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> across schools in terms of a global effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> plus the interaction between <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">housepov</span></code>. This would imply that the degree of local poverty impacts boys and girls differently, in terms of their maths attainment. This does not seem a wholly obvious thing to include in the model without having more information to suggest otherwise. So, much like the Level 2 model, we maintain simplicity by not entertaining any additional interactions.Based on all this, the final Level 3 specification is</p>
+<p>Because <span class="math notranslate nohighlight">\(\beta^{(s)}_{0}\)</span> is the only <em>random</em> term, this is the only model with an error-term. As such, we will be able to simplify this specification down dramatically, but will keep it in its full form for the moment.</p>
+<p>Our final step is deciding whether there are any <em>school-level</em> variables that we wish to include in the Level 3 models. Looking back at the data description from earlier, we can see that the only school-level variable is <code class="docutils literal notranslate"><span class="pre">housepov</span></code>, representing the proportion of houses local to the school that are below the poverty line. As we saw at Level 2, this will enter first as an additional predictor for the mean, suggesting that average maths attainment within a specific school is influenced by the amount of local poverty. For the remaining models, this would enter as an interaction. For instance, we could explain the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> across schools in terms of a global effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> plus the interaction <code class="docutils literal notranslate"><span class="pre">sex:housepov</span></code>. This would imply that the degree of local poverty impacts boys and girls differently, in terms of their maths attainment. This does not seem a wholly obvious thing to include in the model without having more information to suggest otherwise. So, much like the Level 2 model, we maintain simplicity by not entertaining any additional interactions. Based on all this, the final Level 3 specification is</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
 \text{Level 3 (School)} \\
-    \text{mean}^{(s)} &amp;= \text{mean} + \left(\beta_{6} \times \text{housepov}^{(s)}\right) + \phi^{(s)} \\
-    \text{sex}^{(s)}_{j} &amp;= \text{sex}_{j} \\
-    \text{minority}^{(s)}_{k} &amp;= \text{minority}_{k} \\
-    \beta_{1}^{(s)} &amp;= \beta_{1} \\
-    \beta_{2}^{(s)} &amp;= \beta_{2}\\
-    \beta_{3}^{(s)} &amp;= \beta_{3} \\
-    \beta_{4}^{(s)} &amp;= \beta_{4} \\
-    \beta_{5}^{(s)} &amp;= \beta_{5} \\
+    \beta^{(s)}_{0} &amp;= \beta_{0} + \left(\beta_{8} \times \text{housepov}^{(s)}\right) + \phi_{0}^{(s)} \\
+    \beta^{(s)}_{1} &amp;= \beta_{1} \\
+    \beta^{(s)}_{2} &amp;= \beta_{2} \\
+    \beta^{(s)}_{3} &amp;= \beta_{3} \\
+    \beta^{(s)}_{4} &amp;= \beta_{4} \\
+    \beta^{(s)}_{5} &amp;= \beta_{5} \\
+    \beta^{(s)}_{6} &amp;= \beta_{6} \\
+    \beta^{(s)}_{7} &amp;= \beta_{7}
 \end{alignat*}
 \end{split}\]</div>
 </section>
 <section id="the-final-model-full-and-simplified">
 <h4>The Final Model (Full and Simplified)<a class="headerlink" href="#the-final-model-full-and-simplified" title="Link to this heading">#</a></h4>
-<p>The full model is now (<em>deep breath</em>)</p>
+<p>The full model is now</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-\text{Level 1 (Student)} \\
-    \text{mathgain}^{(c)}_{ijk} &amp;= \text{mean}^{(c)} + \text{sex}^{(c)}_{j} + \text{minority}^{(c)}_{k} + \left(\beta^{(c)}_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2}^{(c)} \times \text{ses}_{i}\right) + \eta^{(c)}_{ijk} \\ \quad \\
-\text{Level 2 (Classroom)} \\
-    \text{mean}^{(c)}         &amp;= \text{mean}^{(s)} + \left(\beta_{3}^{(s)} \times \text{yearstea}^{(c)}\right) + \left(\beta_{4}^{(s)} \times \text{mathprep}^{(c)}\right) + \left(\beta_{5}^{(s)} \times \text{mathknow}^{(c)}\right) + \xi^{(c)} \\
-    \text{sex}^{(c)}_{j}      &amp;= \text{sex}^{(s)}_{j}  \\
-    \text{minority}^{(c)}_{k} &amp;= \text{minority}^{(s)}_{k} \\  
-    \beta^{(c)}_{1}           &amp;= \beta_{1}^{(s)} \\
-    \beta^{(c)}_{2}           &amp;= \beta_{2}^{(s)} \\ \quad \\
-\text{Level 3 (School)} \\
-    \text{mean}^{(s)} &amp;= \text{mean} + \left(\beta_{6} \times \text{housepov}^{(s)}\right) + \phi^{(s)} \\
-    \text{sex}^{(s)}_{j} &amp;= \text{sex}_{j} \\
-    \text{minority}^{(s)}_{k} &amp;= \text{minority}_{k} \\
-    \beta_{1}^{(s)} &amp;= \beta_{1} \\
-    \beta_{2}^{(s)} &amp;= \beta_{2}\\
-    \beta_{3}^{(s)} &amp;= \beta_{3} \\
-    \beta_{4}^{(s)} &amp;= \beta_{4} \\
-    \beta_{5}^{(s)} &amp;= \beta_{5} \\
+    \text{Level 1 (Student)} \\
+        \text{mathgain}^{(c|s)}_{ijk} &amp;= \beta^{(c|s)}_{0} + \left(\beta^{(c|s)}_{1} \times \text{mathkind}_{i}\right) + \left(\beta^{(c|s)}_{2} \times \text{ses}_{i}\right) + \left(\beta^{(c|s)}_{3} \times \text{sex}_{j}\right) + \left(\beta^{(c|s)}_{4} \times \text{minority}_{k}\right) + \eta^{(c|s)}_{ijk} \\ \quad \\
+    \text{Level 2 (Classroom)} \\
+        \beta^{(c|s)}_{0} &amp;= \beta^{(s)}_{0} + \left(\beta^{(s)}_{5} \times \text{yearstea}^{(c|s)}\right) + \left(\beta^{(s)}_{6} \times \text{mathprep}^{(c|s)}\right) + \left(\beta^{(s)}_{7} \times \text{mathknow}^{(c|s)}\right) + \xi_{0}^{(c|s)} \\
+        \beta^{(c|s)}_{1} &amp;= \beta^{(s)}_{1} \\
+        \beta^{(c|s)}_{2} &amp;= \beta^{(s)}_{2} \\
+        \beta^{(c|s)}_{3} &amp;= \beta^{(s)}_{3} \\
+        \beta^{(c|s)}_{4} &amp;= \beta^{(s)}_{4} \\ \quad \\
+    \text{Level 3 (School)} \\
+        \beta^{(s)}_{0} &amp;= \beta_{0} + \left(\beta_{8} \times \text{housepov}^{(s)}\right) + \phi_{0}^{(s)} \\
+        \beta^{(s)}_{1} &amp;= \beta_{1} \\
+        \beta^{(s)}_{2} &amp;= \beta_{2} \\
+        \beta^{(s)}_{3} &amp;= \beta_{3} \\
+        \beta^{(s)}_{4} &amp;= \beta_{4} \\
+        \beta^{(s)}_{5} &amp;= \beta_{5} \\
+        \beta^{(s)}_{6} &amp;= \beta_{6} \\
+        \beta^{(s)}_{7} &amp;= \beta_{7}
 \end{alignat*}
 \end{split}\]</div>
-<p>which is pretty complicated and unwieldly. However, we can simplify this dramatically by first collapsing the fixed Level 3 terms back into Level 2</p>
+<p>which is pretty complicated and unwieldly. However, we can simplify this dramatically by collapsing the fixed terms back into the various levels. We start at Level 3 and collapse any models <em>without</em> an error term back into Level 2. We then go to the collapsed Level 2 and collapse any models <em>without</em> an error term back into Level 1. This results in</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-\text{Level 1} \\
-    \text{mathgain}^{(c)}_{ijk} &amp;= \text{mean}^{(c)} + \text{sex}^{(c)}_{j} + \text{minority}^{(c)}_{k} + \left(\beta^{(c)}_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2}^{(c)} \times \text{ses}_{i}\right) + \eta^{(c)}_{ijk} \\ \quad \\
-\text{Level 2} \\
-    \text{mean}^{(c)}         &amp;= \text{mean}^{(s)} + \left(\beta_{3} \times \text{yearstea}^{(c)}\right) + \left(\beta_{4} \times \text{mathprep}^{(c)}\right) + \left(\beta_{5} \times \text{mathknow}^{(c)}\right) + \xi^{(c)} \\
-    \text{sex}^{(c)}_{j}      &amp;= \text{sex}_{j}  \\
-    \text{minority}^{(c)}_{k} &amp;= \text{minority}_{k} \\  
-    \beta^{(c)}_{1}           &amp;= \beta_{1} \\
-    \beta^{(c)}_{2}           &amp;= \beta_{2} \\ \quad \\
-\text{Level 3} \\
-    \text{mean}^{(s)} &amp;= \text{mean} + \left(\beta_{6} \times \text{housepov}^{(s)}\right) + \phi^{(s)} \\
+    \text{Level 1 (Student)} \\
+        \text{mathgain}^{(c|s)}_{ijk} &amp;= \beta^{(c|s)}_{0} + \left(\beta_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2} \times \text{ses}_{i}\right) + \left(\beta_{3} \times \text{sex}_{j}\right) + \left(\beta_{4} \times \text{minority}_{k}\right) + \eta^{(c|s)}_{ijk} \\ \quad \\
+    \text{Level 2 (Classroom)} \\
+        \beta^{(c|s)}_{0} &amp;= \beta^{(s)}_{0} + \left(\beta_{5} \times \text{yearstea}^{(c|s)}\right) + \left(\beta_{6} \times \text{mathprep}^{(c|s)}\right) + \left(\beta_{7} \times \text{mathknow}^{(c|s)}\right) + \xi_{0}^{(c|s)} \\ \quad \\
+    \text{Level 3 (School)} \\
+        \beta^{(s)}_{0} &amp;= \beta_{0} + \left(\beta_{8} \times \text{housepov}^{(s)}\right) + \phi_{0}^{(s)} \\
 \end{alignat*}
 \end{split}\]</div>
-<p>and then collapsing the fixed Level 2 terms back into Level 1</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}
-\begin{alignat*}{1}
-\text{Level 1 (Student)} \\
-    \text{mathgain}^{(c)}_{ijk} &amp;= \text{mean}^{(c)} + \text{sex}_{j} + \text{minority}_{k} + \left(\beta_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2} \times \text{ses}_{i}\right) + \eta^{(c)}_{ijk} \\ \quad \\
-\text{Level 2 (Classroom)} \\
-    \text{mean}^{(c)}         &amp;= \text{mean}^{(s)} + \left(\beta_{3} \times \text{yearstea}^{(c)}\right) + \left(\beta_{4} \times \text{mathprep}^{(c)}\right) + \left(\beta_{5} \times \text{mathknow}^{(c)}\right) + \xi^{(c)} \\ \quad \\
-\text{Level 3 (School)} \\
-    \text{mean}^{(s)} &amp;= \text{mean} + \left(\beta_{6} \times \text{housepov}^{(s)}\right) + \phi^{(s)} \\
-\end{alignat*}
-\end{split}\]</div>
-<p>So now the model form should be much clearer. We are assuming 3 separate distributions for the data. The highest-level distribution represents the population of all schools. The next level represents the distribution of classes within a single school, and the lowest-level represents the distribution of students within a single class from a single school. The average attainment score of a school is influenced by the population average attainment plus the effect of local poverty. The average attainment within a single class is influence by the school average plus effects associated with the teacher of that class. Finally, the attainment of a single pupil is influenced by the class average  plus effects associated with their own personal characteristics and background.</p>
+<p>Now the model form should be much clearer. We are assuming 3 separate distributions for the data. The highest-level distribution represents the population of all schools. The next level represents the distribution of classes within a single school, and the lowest-level represents the distribution of students within a single class from a single school. The average attainment score of a school (Level 3) is influenced by the population average attainment plus the effect of local poverty. The average attainment within a single class (Level 2) is influence by the school average plus effects associated with the teacher of that class. Finally, the attainment of a single pupil (Level 1) is influenced by the class average plus effects associated with their own personal characteristics and background.</p>
 </section>
 </section>
 </section>
@@ -914,47 +932,49 @@ F-statistic: 3.017 on 4 and 2 DF,  p-value: 0.2641
 <p>In order to fit the model above in <code class="docutils literal notranslate"><span class="pre">R</span></code>, we have to collapse all the levels together. After doing this and organising the terms in a logical order, we have</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{alignat*}{2}
-\text{mathgain}^{(c)}_{ijk} = &amp;\: \text{mean} + \text{sex}_{j} + \text{minority}_{k} + \left(\beta_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2} \times \text{ses}_{i}\right) + \\
-                                &amp;\left(\beta_{3} \times \text{yearstea}^{(c)}\right) + \left(\beta_{4} \times \text{mathprep}^{(c)}\right) + \left(\beta_{5} \times \text{mathknow}^{(c)}\right) + \\
-                                &amp;\left(\beta_{6} \times \text{housepov}^{(s)}\right) + \\
-                                &amp;\phi^{(s)} + \xi^{(c)} + \eta^{(c)}_{ijk}
+\begin{alignat*}{1}
+        \text{mathgain}^{(c|s)}_{ijk} &amp;= \beta_{0} + \left(\beta_{1} \times \text{mathkind}_{i}\right) + \left(\beta_{2} \times \text{ses}_{i}\right) + \left(\beta_{3} \times \text{sex}_{j}\right) + \left(\beta_{4} \times \text{minority}_{k}\right) + \\
+        &amp;\quad\left(\beta_{5} \times \text{yearstea}^{(c|s)}\right) + \left(\beta_{6} \times \text{mathprep}^{(c|s)}\right) + \left(\beta_{7} \times \text{mathknow}^{(c|s)}\right) + \\
+        &amp;\quad\left(\beta_{8} \times \text{housepov}^{(s)}\right) + \\ 
+        &amp;\quad\phi_{0}^{(s)} + \xi_{0}^{(c|s)} + \eta^{(c|s)}_{ijk}
 \end{alignat*}
 \end{split}\]</div>
-<p>Notice that we have tried to keep terms associated with students, classrooms and schools together, as well as separating out the error terms. In terms of the random effects specification, we start with the error terms</p>
+<p>Notice that we have tried to keep terms associated with <em>students</em>, <em>classrooms</em> and <em>schools</em> together, as well as separating out the error terms. In terms of the random effects specification, we start with the error terms</p>
 <div class="math notranslate nohighlight">
 \[
-\phi^{(s)} + \xi^{(c)} + \eta^{(c)}_{ijk}
+\phi_{0}^{(s)} + \xi_{0}^{(c|s)} + \eta^{(c|s)}_{ijk}
 \]</div>
-<p>and then remove the final error term that has indices that match the raw data. This gives</p>
+<p>and then remove the error term with indices that match the raw data. This gives</p>
 <div class="math notranslate nohighlight">
 \[
-\phi^{(s)} + \xi^{(c)}. 
+\phi_{0}^{(s)} + \xi_{0}^{(c|s)}.
 \]</div>
-<p>Now, we change the notation to make the conditional aspects of these terms clearer. However, notice that these terms have <em>different</em> conditional superscripts. One is associated with <em>schools</em> and one is associated with <em>classes</em>. So we have</p>
+<p>Now, we change the notation to make the conditional aspects of these terms clearer. We also get rid of the nesting of classroom inside school, because <code class="docutils literal notranslate"><span class="pre">lme()</span></code> does not need this (as it is inferred from the way the data are organised). This gives</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \phi &amp;| s \\
-    \xi  &amp;| c \\
+    \phi_{0} \; &amp;| \; s \\
+    \xi_{0} \;  &amp;| \; c
 \end{alignat*}
 \end{split}\]</div>
 <p>implying that we need both <code class="docutils literal notranslate"><span class="pre">1|schoolid</span></code> and <code class="docutils literal notranslate"><span class="pre">1|classid</span></code> in the model.</p>
 <p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the clustering variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|classid</span></code> and <code class="docutils literal notranslate"><span class="pre">1|schoolid</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(classid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">schoolid</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1)</span></code>. This gives us full control of the random-effects specification at each level. Our model can therefore be expressed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> uisng the following syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
-<span class="w">                     </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
-<span class="w">                                   </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
-<span class="w">                     </span><span class="n">data</span><span class="o">=</span><span class="n">classroom</span><span class="p">,</span>
-<span class="w">                     </span><span class="n">control</span><span class="o">=</span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># pupil</span>
+<span class="w">                                                </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w">  </span><span class="c1"># classroom</span>
+<span class="w">                                                </span><span class="n">housepov</span><span class="p">,</span><span class="w">                         </span><span class="c1"># school</span>
+<span class="w">                     </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
+<span class="w">                     </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
+<span class="w">                     </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
 <span class="w">                     </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>There are a couple of elements to note here. Firstly, we have again had to change the optimiser to get this model to fit. Secondly, because the data contains <code class="docutils literal notranslate"><span class="pre">NA</span></code> values, we have had to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> what to do with them. By default, <code class="docutils literal notranslate"><span class="pre">lme()</span></code> will refuse to fit a model on data that contains <code class="docutils literal notranslate"><span class="pre">NA</span></code>. Although we have indicated that mixed-effects models are useful in cases of missing data, they cannot be fit to data with non-numeric substitutes for that missing data. As such, we have to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> to <em>remove</em> those values before fitting. The data are then missing by <em>omission</em>, rather than containing some indication of their missingness.</p>
+<p>There are a couple of elements to note here. Firstly, we have had to change the optimiser to get this model to fit. Secondly, because the data contains <code class="docutils literal notranslate"><span class="pre">NA</span></code> values, we have had to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> what to do with them. By default, <code class="docutils literal notranslate"><span class="pre">lme()</span></code> will refuse to fit a model on data that contains <code class="docutils literal notranslate"><span class="pre">NA</span></code>. Although we have indicated that mixed-effects models are useful in cases of missing data, they cannot be fit to data with non-numeric substitutes for that missing data. As such, we have to tell <code class="docutils literal notranslate"><span class="pre">lme()</span></code> to <em>remove</em> those values before fitting. The data are then missing by <em>omission</em>.</p>
 <p>Printing the model output below should give us everything that we expect.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -965,26 +985,28 @@ F-statistic: 3.017 on 4 and 2 DF,  p-value: 0.2641
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
   Data: classroom 
-  Log-restricted-likelihood: -5159.077
-  Fixed: mathgain ~ 1 + sex + minority + mathkind + ses + yearstea + mathprep +      mathknow + housepov 
-     (Intercept)          sexgirl minorityminority         mathkind              ses         yearstea         mathprep         mathknow 
-     280.5753000       -1.1818489       -7.5017659       -0.4700709        5.1755649        0.0476315        1.0794518        0.8819618 
+  Log-restricted-likelihood: -5152.934
+  Fixed: mathgain ~ 1 + mathkind + ses + sex + minority + yearstea + mathprep +      mathknow + housepov 
+     (Intercept)         mathkind              ses          sexgirl 
+    283.89040520      -0.47576705       5.33640107      -1.33157216 
+minorityminority         yearstea         mathprep         mathknow 
+     -7.51521159       0.03219507       1.05353830       1.88078665 
         housepov 
-      -5.6236280 
+     -8.24878322 
 
 Random effects:
- Formula: ~1 | classid
+ Formula: ~1 | schoolid
         (Intercept)
-StdDev:    9.063104
+StdDev:    8.770192
 
- Formula: ~1 | schoolid %in% classid
+ Formula: ~1 | classid %in% schoolid
         (Intercept) Residual
-StdDev:    9.063104 26.71224
+StdDev:    9.260187  26.7201
 
 Number of Observations: 1081
 Number of Groups: 
-              classid schoolid %in% classid 
-                  285                   285 
+             schoolid classid %in% schoolid 
+                  105                   285 
 </pre></div>
 </div>
 </div>
@@ -1004,51 +1026,71 @@ Number of Groups:
 </div>
 </div>
 </div>
-<p>As such, our only options here are to try and reconstruct this manually (which is a non-trivial thing to try and do), or we move on without this. In principle, we do not <em>need</em> to see this structure, as the focus of mixed-effects models are not the covariance form. This is what makes them distinct from a method like GLS. In this example, we can easily <em>infer</em> the structure based on what we have estimated. Given that we have a variance term for classes (<span class="math notranslate nohighlight">\(\sigma^{2}_{\text{class}}\)</span>), a variance term for schools (<span class="math notranslate nohighlight">\(\sigma^{2}_{\text{school}}\)</span>) and a residual variance term (<span class="math notranslate nohighlight">\(\sigma^{2}\)</span>), we can infer that we will have a covariance block for each school individually, and within each school we will have sub-blocks for each classroom. The covariance between all observations from different school will be 0. The covariance between different classrooms from the same school will be <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{school}}\)</span> and the covariance between students within the same classroom will be <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{class}} + \sigma^{2}_{\text{school}}\)</span>. The variance terms on the diagonal will all be <span class="math notranslate nohighlight">\(\sigma^{2}_{\text{class}} + \sigma^{2}_{\text{school}} + \sigma^{2}\)</span>.</p>
+<p>As such, our only options here are to try and reconstruct this manually (which is a non-trivial thing to try and do), or we move on without this. In principle, we do not <em>need</em> to see this structure, as the focus of mixed-effects models are not the covariance form. This is what makes them distinct from a method like GLS. As long as we have captured the structure of the data within the model, we can assume that some suitable marginal covariance has been fit. In this case, we expect there to be covariance blocks for each classroom within larger blocks for each school.</p>
 </section>
 <section id="alternative-models">
 <h2>Alternative Models<a class="headerlink" href="#alternative-models" title="Link to this heading">#</a></h2>
-<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all fixed-effects and have reasoned that many of the alternative random effects structures are either not sensible or not possible. However, this would now be an opportunity to test this on the actual data. For example, if we felt very strongly that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we could perform a comparison with a model containing an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. This would encode the idea that there is a difference in attainment between boys and girls, but that this differs across schools. We do not think this is really the case, but for the purpose of illustration we could test it in the following way. Here, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function, where we can pass in a model and then just indicate the arguments that we want to change. This is helpful when we have a lot of options, but only want to change one small thing.</p>
+<p>At this point, we would usually consider alternative models and make some model comparisons. For this particular model, we have currently included all fixed-effects and have reasoned that many of the alternative random effects structures are either not sensible or not possible. However, this would now be an opportunity to test this on the actual data. For example, if we felt very strongly that the effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> should differ on a per-school basis, then we could perform a comparison with a model containing an additional random-effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code> at the school-level. This would encode the idea that there is a difference in attainment between boys and girls, but that this differs across schools. Give that we do not think this is really the case, we will leave the comparison as an exercise.</p>
+<section id="simplifying-the-random-effects">
+<h3>Simplifying the Random-effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
+<p>At this stage, we can also consider simplifying the random effects. However, for this example, the random effects structure cannot get any simpler. The only thing we could do is drop either <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> or <code class="docutils literal notranslate"><span class="pre">classid</span></code> entirely. We do have a theoretical reason for keeping both of these aspects, but could see what the data itself suggests.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
-<span class="w">                </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
-<span class="w">                                 </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w">     </span><span class="c1"># random intercept only</span>
-<span class="w">                </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
-<span class="w">                </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
-<span class="w">                </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span>
-<span class="w">                </span><span class="n">method</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme.null.1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># pupil</span>
+<span class="w">                                                       </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w">  </span><span class="c1"># classroom</span>
+<span class="w">                                                       </span><span class="n">housepov</span><span class="p">,</span><span class="w">                         </span><span class="c1"># school</span>
+<span class="w">                            </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">schoolid</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                            </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span>
+<span class="w">                            </span><span class="n">method</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s">&#39;ML&#39;</span>
 <span class="p">)</span>
 
-<span class="n">lme.full</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                                         </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="p">)</span><span class="w"> </span><span class="c1"># sex included</span>
-<span class="p">)</span>
+<span class="n">classroom.lme.null.2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">classroom.lme.null.1</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="o">|</span><span class="n">classid</span><span class="p">)</span>
+<span class="n">classroom.lme.full</span><span class="w">   </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">classroom.lme.null.1</span><span class="p">,</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                                                   </span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">))</span>
 
-<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="n">lme.full</span><span class="p">)</span>
+<span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">classroom.lme.null.1</span><span class="p">,</span><span class="w"> </span><span class="n">classroom.lme.null.2</span><span class="p">,</span><span class="w"> </span><span class="n">classroom.lme.full</span><span class="p">)</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
-<span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">])</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span><span class="w"> </span><span class="c1"># school random    vs classroom random</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]))</span><span class="w"> </span><span class="c1"># school random    vs both random</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]))</span><span class="w"> </span><span class="c1"># classroom random vs both random</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         df      BIC
-lme.null 12 10414.98
-lme.full 14 10426.98
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                     df      BIC
+classroom.lme.null.1 11 10406.87
+classroom.lme.null.2 11 10407.99
+classroom.lme.full   12 10403.28
+[1] 1.121678
+[1] 3.59354
+[1] 4.715218
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 11.99776
+</div>
+</div>
+<p>The model where <em>both</em> <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> and <code class="docutils literal notranslate"><span class="pre">classid</span></code> are random has the <em>lowest</em> BIC of the 3 options. The comparison between <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> on its own and both terms being random is only suggestive of <em>weak-to-positive</em> evidence favouring the more complex model. The comparison between <code class="docutils literal notranslate"><span class="pre">classid</span></code> on its own and both terms being random is suggestive of <em>positive</em> evidence favouring the more complex model. So, it seems like <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> is the more important random term, reflecting the idea that different schools are genuinely different entities in terms of maths attainment. By comparison, <code class="docutils literal notranslate"><span class="pre">classid</span></code> is slightly more uncertain, suggesting that we <em>could</em> treat different classrooms as largely the same within a single school. However, given that there is slightly positive evidence in favour of retaining this, we stick to keeping <em>both</em> terms as random. We therefore stick to the following model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># pupil</span>
+<span class="w">                                                </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w">  </span><span class="c1"># classroom</span>
+<span class="w">                                                </span><span class="n">housepov</span><span class="p">,</span><span class="w">                         </span><span class="c1"># school</span>
+<span class="w">                     </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
+<span class="w">                     </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
+<span class="w">                     </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
+<span class="w">                     </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>This suggests <em>very strong evidence</em> in favour of the lower BIC model, which is the one <em>without</em> a random effect of <code class="docutils literal notranslate"><span class="pre">sex</span></code>. This is not wholly surprising because we didn’t <em>really</em> entertain this idea in the first place. However, this does demonstrate how you can use model comparisons to help make these decisions.</p>
-<section id="simplifying-the-random-effects">
-<h3>Simplifying the Random-effects<a class="headerlink" href="#simplifying-the-random-effects" title="Link to this heading">#</a></h3>
-<p>At this stage, we would also entertain the idea of simplifying the random effects. However, for this example, the random effects structure cannot get any simpler. The only thing we could do is drop either <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> or <code class="docutils literal notranslate"><span class="pre">classid</span></code> entirely. However, we want to keep these as we want to embed the idea of both school and classroom representing random samples from a larger population. Otherwise, our inference is restricted to only the classes we have sampled, only the schools we have sampled, or both. So, for this example, we leave everything how it is.</p>
 </section>
 <section id="additional-variance-structures">
 <h3>Additional Variance Structures<a class="headerlink" href="#additional-variance-structures" title="Link to this heading">#</a></h3>
-<p>As a final step before inference, we also need to consider whether any additional variance structures are warranted. Although we cannot <em>see</em> the covariance structure for this model, we have inferred that it does not allow variances to differ between classrooms or between schools. Although we <em>might</em> think to add this in to a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> structure, we have issues with this dataset. In terms of both classrooom</p>
+<p>As a final step before inference, we also need to consider whether any additional variance structures are warranted. Although we cannot <em>see</em> the covariance structure for this model, we can inferred that because only a single variance term is estimated for <code class="docutils literal notranslate"><span class="pre">schoolid</span></code> and for <code class="docutils literal notranslate"><span class="pre">classid</span></code>, this does not allow variances to differ between schools or between classrooms. However, it seems unlikely that variation in maths attainment would be identical for every school and every classroom. Although we <em>might</em> think to add this to a <code class="docutils literal notranslate"><span class="pre">weights=</span></code> structure, we have issues with this dataset. In terms of both classrooom</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">classid</span><span class="p">)</span>
@@ -1056,24 +1098,38 @@ lme.full 14 10426.98
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
-  5   3   3   6   1   5   1   4   3   2   4   5   9   4   1   6   3   1   2   3   4   8   1   1   4  10   6   5   3   4   4   4   4   1   4   1 
- 37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72 
-  1   7   2   3   5  10   3   6   5   5   1   4   6   4   6   2   5   4   5   5   4   1   4   3   2   2   2   5   1   6   2   4   3   1   2   3 
- 73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101 102 103 104 105 106 107 108 
-  3   1   6   4   1   8   5   6   8   5   7   1   7   5   1   2   3   2   4   1   1   6   2   8   2   5   1   1   2   3   3   6   4   2   4   3 
-109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 
-  4   4   3   2   3   4   4   2   8   1   1   8   6   6   8   1   4   6   3   4   3   4   2   3   3   4   7   6   2   5   4   2   5   4   6   3 
-145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 
-  5   3   5   4   4   1   2   6   6   2   3   6   4   8   4   3   4   2   1   5   6   4   5   7   6   2   1   4   2   7   3   4   3   2   2   6 
-181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 
-  1   5   3   5   1   6   1   4   9   8   1   2   2   2   4   3   2   2   1   6   5   3   2   2   9   5   6   4   2   3   4   4   3   1   2   2 
-217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 
-  8   2   4   2   2   4   4   5   3   2   2   3   5   2   8   2   1   7   6   2   3   1   2   3   5   7   4   1   3   4   5   6   1   2   3   6 
-253 254 255 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 
-  9   2   6   1   4   3   8   3   1   5   3   7   4   5   3   5   2   3   3   1   5   1   3   7   7   8   7   5   4   2   2   3   3   6   5   4 
-289 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306 307 308 309 310 311 312 
-  5   3   4   4   4   3   1   7   5   5   6   5   2   7   4   4   4   4   4   3   3   3   2   4 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20 
+  5   3   3   6   1   5   1   4   3   2   4   5   9   4   1   6   3   1   2   3 
+ 21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40 
+  4   8   1   1   4  10   6   5   3   4   4   4   4   1   4   1   1   7   2   3 
+ 41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60 
+  5  10   3   6   5   5   1   4   6   4   6   2   5   4   5   5   4   1   4   3 
+ 61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80 
+  2   2   2   5   1   6   2   4   3   1   2   3   3   1   6   4   1   8   5   6 
+ 81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 
+  8   5   7   1   7   5   1   2   3   2   4   1   1   6   2   8   2   5   1   1 
+101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 
+  2   3   3   6   4   2   4   3   4   4   3   2   3   4   4   2   8   1   1   8 
+121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 
+  6   6   8   1   4   6   3   4   3   4   2   3   3   4   7   6   2   5   4   2 
+141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 
+  5   4   6   3   5   3   5   4   4   1   2   6   6   2   3   6   4   8   4   3 
+161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 
+  4   2   1   5   6   4   5   7   6   2   1   4   2   7   3   4   3   2   2   6 
+181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 
+  1   5   3   5   1   6   1   4   9   8   1   2   2   2   4   3   2   2   1   6 
+201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 
+  5   3   2   2   9   5   6   4   2   3   4   4   3   1   2   2   8   2   4   2 
+221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 
+  2   4   4   5   3   2   2   3   5   2   8   2   1   7   6   2   3   1   2   3 
+241 242 243 244 245 246 247 248 249 250 251 252 253 254 255 256 257 258 259 260 
+  5   7   4   1   3   4   5   6   1   2   3   6   9   2   6   1   4   3   8   3 
+261 262 263 264 265 266 267 268 269 270 271 272 273 274 275 276 277 278 279 280 
+  1   5   3   7   4   5   3   5   2   3   3   1   5   1   3   7   7   8   7   5 
+281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297 298 299 300 
+  4   2   2   3   3   6   5   4   5   3   4   4   4   3   1   7   5   5   6   5 
+301 302 303 304 305 306 307 308 309 310 311 312 
+  2   7   4   4   4   4   4   3   3   3   2   4 
 </pre></div>
 </div>
 </div>
@@ -1086,18 +1142,24 @@ lme.full 14 10426.98
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36 
- 11  10  14   6   6  12  14  16   6  18  31  27   9  15  13   6   9   4  11  12  17   4   5   8   7  15  21  10   8   3  22   9  22   7  11   8 
- 37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72 
- 11   9  12   7   9  18   4  17   5  13  10   6   8  12   4   9   8  10  13  10   8   5   4  13  11  13   3  10   9   8  12  16   5  19  27  11 
- 73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101 102 103 104 105 106 107 
- 10   3  15  27  24  15  12   7   9  19  12  14  20   7  10   6   4   3  16   9  21  15   5   8   6   2  19  13  16  11   8   6  10   2  10 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20 
+ 11  10  14   6   6  12  14  16   6  18  31  27   9  15  13   6   9   4  11  12 
+ 21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40 
+ 17   4   5   8   7  15  21  10   8   3  22   9  22   7  11   8  11   9  12   7 
+ 41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60 
+  9  18   4  17   5  13  10   6   8  12   4   9   8  10  13  10   8   5   4  13 
+ 61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80 
+ 11  13   3  10   9   8  12  16   5  19  27  11  10   3  15  27  24  15  12   7 
+ 81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 
+  9  19  12  14  20   7  10   6   4   3  16   9  21  15   5   8   6   2  19  13 
+101 102 103 104 105 106 107 
+ 16  11   8   6  10   2  10 
 </pre></div>
 </div>
 </div>
 </div>
-<p>we can see that there are <em>many</em> separate values. Realistically, it is not going to be possible for the model to estimate 312 different variances for each classroom, or 107 different variances for the different schools. Even if we were to try it, some classrooms and some schools do not have enough data to support this. Some classrooms only have a single observation, with some schools only having 2 observations. This is just not enough to realistically estimate variance parameters. If you try this, the estimation will fail.</p>
-<p>So, do we have any other options? Well, there are two other factors in the data that <em>might</em> be homogeneous in terms of variance: <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. It is not unrealistic that boys and girls or children from minority and non-minority backgrounds may have different degrees of variation in their attainment scores. Furthermore, if we look at the amount of data for each factor we have</p>
+<p>we can see that there are <em>many</em> separate values. Realistically, it is not going to be possible for the model to estimate 312 different variances for each classroom, or 107 different variances for the different schools. Even if we were to try it, some classrooms and some schools do not have enough data to support this. Some classrooms only have a single observation, with some schools only having 2 observations. This is just not enough to realistically estimate the variance parameters. If you try this, the estimation will fail.</p>
+<p>So, do we have any other options? Well, there are two other factors in the data that <em>might</em> be homogeneous in terms of variance: <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. It is not unrealistic that boys vs girls or children from minority vs non-minority backgrounds may have different degrees of variation in their attainment scores. Furthermore, if we look at the amount of data for each factor we have</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">classroom</span><span class="o">$</span><span class="n">sex</span><span class="p">,</span><span class="n">classroom</span><span class="o">$</span><span class="n">minority</span><span class="p">)</span>
@@ -1117,9 +1179,11 @@ lme.full 14 10426.98
 <p>The code below compares model with different variances for <code class="docutils literal notranslate"><span class="pre">sex</span></code>, <code class="docutils literal notranslate"><span class="pre">minority</span></code> and both <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. For this final model, we use the <code class="docutils literal notranslate"><span class="pre">varComb()</span></code> function, which allows multiple variance structures to be combined together. Again, we use the <code class="docutils literal notranslate"><span class="pre">update()</span></code> function as a convenient way of changing the options.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
-<span class="w">                </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
-<span class="w">                                 </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">lme.null</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># pupil</span>
+<span class="w">                                           </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w">  </span><span class="o">+</span><span class="w"> </span><span class="c1"># classroom</span>
+<span class="w">                                           </span><span class="n">housepov</span><span class="p">,</span><span class="w">                         </span><span class="c1"># school</span>
+<span class="w">                </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                 </span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
 <span class="w">                </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
 <span class="w">                </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
 <span class="w">                </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span><span class="p">,</span>
@@ -1133,53 +1197,33 @@ lme.full 14 10426.98
 
 <span class="n">mod.comp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">BIC</span><span class="p">(</span><span class="n">lme.null</span><span class="p">,</span><span class="n">lme.full.1</span><span class="p">,</span><span class="n">lme.full.2</span><span class="p">,</span><span class="n">lme.full.3</span><span class="p">)</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">mod.comp</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span><span class="w"> </span><span class="c1"># no variance vs sex variance</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]))</span><span class="w"> </span><span class="c1"># no variance vs minority variance</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span><span class="w"> </span><span class="c1"># no variance vs sex + minority variance</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           df      BIC
-lme.null   12 10414.98
-lme.full.1 13 10420.70
-lme.full.2 13 10420.81
-lme.full.3 14 10426.29
+lme.null   12 10403.28
+lme.full.1 13 10409.22
+lme.full.2 13 10409.22
+lme.full.3 14 10414.95
+[1] 5.937794
+[1] 5.937151
+[1] 11.66695
 </pre></div>
 </div>
 </div>
 </div>
-<p>In terms of comparisons, the model with no additional variance structure and the models with either <code class="docutils literal notranslate"><span class="pre">sex</span></code> or <code class="docutils literal notranslate"><span class="pre">minority</span></code> show changes in BIC of</p>
+<p>In terms of comparisons, the model with no additional variance structure vs the models with either <code class="docutils literal notranslate"><span class="pre">sex</span></code> or <code class="docutils literal notranslate"><span class="pre">minority</span></code> suggest <em>positive evidence</em> in favour of the lower BIC model, which is the one <em>without</em> the additional variance structures.  Similarly, the comparison between the model with no additional variance structure and the model with <em>both</em> <code class="docutils literal notranslate"><span class="pre">sex</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code> suggests <em>very strong evidence</em> favouring the lower BIC model. So, in all cases, it seems that the model <em>without</em> the additional variance parameters is the better fit to the data. So, based on all this, our final model is</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">2</span><span class="p">]))</span>
-<span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">3</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5.721084
-[1] 5.831384
-</pre></div>
-</div>
-</div>
-</div>
-<p>Both suggesting <em>positive evidence</em> in favour of the lower BIC model. In terms of comparison with the model containing <em>both</em> additional variance terms, we have</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mod.comp</span><span class="o">$</span><span class="n">BIC</span><span class="p">[</span><span class="m">4</span><span class="p">]))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 11.3156
-</pre></div>
-</div>
-</div>
-</div>
-<p>which is now <em>very strong evidence</em> favouring the lower BIC model. So, in all cases, it seems that the model <em>without</em> the additional variance parameters is the better fit to the data. So, based on all this, our final model is</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">housepov</span><span class="p">,</span>
-<span class="w">                     </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
-<span class="w">                                      </span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">classroom.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="n">mathgain</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathkind</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ses</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minority</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># pupil</span>
+<span class="w">                                                </span><span class="n">yearstea</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathprep</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">mathknow</span><span class="w"> </span><span class="o">+</span><span class="w">  </span><span class="c1"># classroom</span>
+<span class="w">                                                </span><span class="n">housepov</span><span class="p">,</span><span class="w">                         </span><span class="c1"># school</span>
+<span class="w">                     </span><span class="n">random</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">schoolid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">classid</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">),</span>
 <span class="w">                     </span><span class="n">data</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">classroom</span><span class="p">,</span>
 <span class="w">                     </span><span class="n">control</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">),</span>
 <span class="w">                     </span><span class="n">na.action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">na.omit</span>
@@ -1195,14 +1239,14 @@ lme.full.3 14 10426.29
 <p>To check the assumptions, we will use the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code>, which we brought into scope at the beginning of the analysis. This results in the following plots.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot.lme</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">vcov.id</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/3ac06ec7dca45ad3f39af285c0e5d7f1669d2ec7ff58f9590987a5594bc0f7b6.png" src="../_images/3ac06ec7dca45ad3f39af285c0e5d7f1669d2ec7ff58f9590987a5594bc0f7b6.png" />
+<img alt="../_images/4ab788e0b31bf3052d1f5c0a0a03cc5c58de3842a21dfa84d80f11028d136c0f.png" src="../_images/4ab788e0b31bf3052d1f5c0a0a03cc5c58de3842a21dfa84d80f11028d136c0f.png" />
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Warning message:
-In plot.lme(classroom.lme) :
+In plot.lme(classroom.lme, vcov.id = &quot;1&quot;) :
   Marginal covariance structure not available for more than 2 levels
 </pre></div>
 </div>
@@ -1212,33 +1256,48 @@ In plot.lme(classroom.lme) :
 <p>In terms of these plots, the distributional assumptions of the random effects appear very well-met. The distributional assumptions of the residuals less so, due to some slightly heavier tails than expected. This is no doubt due to some outliers, as can be seen on the Residual vs Fitted plot, where there are quite a few points above the standardised cut-off of 3 standard deviations. We can look at these points using</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">res.norm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">asList</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="n">idx</span><span class="w">      </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">res.norm</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
-<span class="n">mod.data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nlme</span><span class="o">::</span><span class="nf">getData</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
-<span class="n">outliers</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mod.data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">res.norm</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">resid</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">=</span><span class="s">&quot;normalized&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">level</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="n">idx</span><span class="w">                 </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">which</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">res.norm</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+<span class="n">mod.data</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nlme</span><span class="o">::</span><span class="nf">getData</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">)</span>
+<span class="n">outliers</span><span class="w">            </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mod.data</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="p">]</span>
+<span class="n">outliers</span><span class="o">$</span><span class="n">norm.resid</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">res.norm</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
 <span class="nf">print</span><span class="p">(</span><span class="n">outliers</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      sex    minority mathkind mathgain   ses yearstea mathknow housepov mathprep classid schoolid childid
-76   girl    minority      475      166 -0.14        6    -0.14    0.085     2.00     147        8      76
-312  girl nonminority      542      138  2.27        9     0.43    0.050     3.00     104       27     312
-462   boy    minority      448      -51 -0.72        1    -1.09    0.279     1.50       9       40     462
-539   boy    minority      290      253 -0.40       25     1.57    0.257     3.17      82       47     539
-585   boy    minority      488      142 -0.28       27     0.47    0.101     2.00      14       53     585
-664  girl nonminority      629      -84  2.33       13     0.89    0.170     2.74      22       62     664
-665  girl nonminority      501      179  2.00       13     0.89    0.170     2.74      22       62     665
-754   boy    minority      368      218 -1.14        6    -0.30    0.430     3.25     152       70     754
-812   boy nonminority      510      147 -0.47        2    -0.19    0.367     2.50      42       75     812
-981  girl nonminority      547      133  0.28       16    -0.27    0.107     2.00     196       85     981
-985   boy    minority      431      -28  0.56        2     0.00    0.537     2.50     132       86     985
-1146  boy    minority      376       11  0.62       34    -1.28    0.126     2.00      44      102    1146
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      sex    minority mathkind mathgain   ses yearstea mathknow housepov
+76   girl    minority      475      166 -0.14        6    -0.14    0.085
+312  girl nonminority      542      138  2.27        9     0.43    0.050
+462   boy    minority      448      -51 -0.72        1    -1.09    0.279
+539   boy    minority      290      253 -0.40       25     1.57    0.257
+585   boy    minority      488      142 -0.28       27     0.47    0.101
+664  girl nonminority      629      -84  2.33       13     0.89    0.170
+665  girl nonminority      501      179  2.00       13     0.89    0.170
+754   boy    minority      368      218 -1.14        6    -0.30    0.430
+812   boy nonminority      510      147 -0.47        2    -0.19    0.367
+981  girl nonminority      547      133  0.28       16    -0.27    0.107
+985   boy    minority      431      -28  0.56        2     0.00    0.537
+1146  boy    minority      376       11  0.62       34    -1.28    0.126
+     mathprep classid schoolid childid norm.resid
+76       2.00     147        8      76   4.238365
+312      3.00     104       27     312   3.517395
+462      1.50       9       40     462  -3.871770
+539      3.17      82       47     539   4.152008
+585      2.00      14       53     585   3.336690
+664      2.74      22       62     664  -3.235539
+665      2.74      22       62     665   4.394029
+754      3.25     152       70     754   4.104226
+812      2.50      42       75     812   3.630436
+981      2.00     196       85     981   3.917863
+985      2.50     132       86     985  -3.469928
+1146     2.00      44      102    1146  -3.286523
 </pre></div>
 </div>
 </div>
 </div>
-<p>A few details about this process. Firstly, we want the residuals associated with the original measurements, not the residuals at the level of classrooms or schools. This is what the <code class="docutils literal notranslate"><span class="pre">level=1</span></code> and <code class="docutils literal notranslate"><span class="pre">asList=FALSE</span></code> options are doing. We can then find the indices (row numbers) associated with those points with normalised residuals greater than 3. However, remember that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> <em>removed</em> some data due to us passing the <code class="docutils literal notranslate"><span class="pre">na.omit</span></code> option. As such, the indices of the residuals will now no longer match the raw data. To solve this, we ask <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to give us the data it used for the fitting, not the raw data. This what <code class="docutils literal notranslate"><span class="pre">nlme::getData()</span></code> does. This then allows us to successfully identify the correct points.</p>
+<p>A few details about this process. Firstly, we want the residuals associated with the original measurements, not the residuals at the level of classrooms or schools. This is what the <code class="docutils literal notranslate"><span class="pre">level=1</span></code> option is doing. We can then find the indices (row numbers) associated with those points with normalised residuals greater than 3 standard deviations. However, remember that <code class="docutils literal notranslate"><span class="pre">lme()</span></code> <em>removed</em> some data due to us passing the <code class="docutils literal notranslate"><span class="pre">na.omit</span></code> option. As such, the indices of the residuals will now no longer match the raw data. To solve this, we ask <code class="docutils literal notranslate"><span class="pre">nlme</span></code> to give us the data it used for the fitting. This what <code class="docutils literal notranslate"><span class="pre">nlme::getData()</span></code> does. This then allows us to successfully identify the correct points.</p>
 <p>In terms of what to do with the outliers, the difficulties in these types of data are always the reasons <em>why</em> a certain point is flagged as an outlier. If it corresponds to a measurement error of some kind, then removal may be justified. Otherwise, it is difficult to argue for removal when the point represents genuine data. As an example, if we look at the value the model predicts for the first child labelled an outlier</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1247,15 +1306,15 @@ In plot.lme(classroom.lme) :
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   147/8 
-67.40124 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   8/147 
+63.98987 
 attr(,&quot;label&quot;)
 [1] &quot;Predicted values&quot;
 </pre></div>
 </div>
 </div>
 </div>
-<p>We can see that they are predicted to gain <code class="docutils literal notranslate"><span class="pre">67.40</span></code> points in maths. However, this actual student gained <code class="docutils literal notranslate"><span class="pre">166</span></code> points</p>
+<p>We can see that they are predicted to gain <code class="docutils literal notranslate"><span class="pre">63.99</span></code> points in maths. However, this actual student gained <code class="docutils literal notranslate"><span class="pre">166</span></code> points</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">outliers</span><span class="o">$</span><span class="n">mathgain</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>
@@ -1268,8 +1327,8 @@ attr(,&quot;label&quot;)
 </div>
 </div>
 </div>
-<p>which is more than the model expected. As such, they have a high residual value. But, crucially, do we think we should remove a student from the sample for <em>doing well</em>? Are high achievers automatically incorrect values and should be removed because our model does not predict them? Arguably, the answer is <em>no</em>. These students represent genuine data. Indeed, the fact that they are classes as outliers is almost the <em>definition</em> of being a high achiever. Despite their environment and personal circumstances, these children will just do very well. Removing them would artificially bias the accuracy of our model.</p>
-<p>A similar argument can be made about outliers at the other end of the spectrum. Consider the 6th outlier identified. This student is predicted to <em>gain</em> 4.74 points over the year</p>
+<p>which is more than the model expected. As such, they have a high residual value. But, crucially, do we think we should remove a student from the sample for <em>doing well</em>? Are high achievers automatically incorrect values and should be removed because our model does not predict them? Arguably, the answer is <em>no</em>. These students represent genuine data. Indeed, the fact that they are classed as outliers is almost the <em>definition</em> of being a high achiever. Despite their environment and personal circumstances, these children will just do very well. Removing them would artificially bias the accuracy of our model.</p>
+<p>A similar argument can be made about outliers at the other end of the spectrum. Consider the 6th outlier identified. This student is predicted to <em>gain</em> 4.81 points over the year</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">predict</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">,</span><span class="w"> </span><span class="n">outliers</span><span class="p">[</span><span class="m">6</span><span class="p">,])</span>
@@ -1277,8 +1336,8 @@ attr(,&quot;label&quot;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   22/62 
-4.738723 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   62/22 
+4.814216 
 attr(,&quot;label&quot;)
 [1] &quot;Predicted values&quot;
 </pre></div>
@@ -1307,8 +1366,8 @@ attr(,&quot;label&quot;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     sex minority mathkind      ses yearstea mathprep mathknow housepov 
-1.001639 1.181395 1.092153 1.102613 1.034432 1.033154 1.038698 1.095134 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mathkind      ses      sex minority yearstea mathprep mathknow housepov 
+1.073510 1.079254 1.001206 1.129058 1.038771 1.036658 1.026382 1.072116 
 </pre></div>
 </div>
 </div>
@@ -1330,21 +1389,21 @@ attr(,&quot;label&quot;)
 
 Response: mathgain
             Chisq Df Pr(&gt;Chisq)    
-sex        0.4691  1   0.493418    
-minority  10.3609  1   0.001287 ** 
-mathkind 429.9890  1  &lt; 2.2e-16 ***
-ses       16.3806  1  5.181e-05 ***
-yearstea   0.1546  1   0.694143    
-mathprep   0.8080  1   0.368701    
-mathknow   0.5744  1   0.448534    
-housepov   0.4075  1   0.523242    
+mathkind 436.6670  1  &lt; 2.2e-16 ***
+ses       17.3646  1  3.085e-05 ***
+sex        0.6002  1   0.438494    
+minority   9.3266  1   0.002259 ** 
+yearstea   0.0752  1   0.783902    
+mathprep   0.8404  1   0.359290    
+mathknow   2.6796  1   0.101644    
+housepov   0.6597  1   0.416683    
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 </pre></div>
 </div>
 </div>
 </div>
-<p>As we can see, by the standards of NHST, we have significant effects of <code class="docutils literal notranslate"><span class="pre">minority</span></code>, <code class="docutils literal notranslate"><span class="pre">mathkind</span></code> and <code class="docutils literal notranslate"><span class="pre">ses</span></code>. These are all asymptotic tests, but given that our sample at every level of the model is in the hundreds, we have fewer concerns about this approach. Interestingly, these are all suggestive that it is the characteristics of the students themselves that affects their attainment, not their learning environment. We plot all these effects below</p>
+<p>As we can see, by the standards of NHST, we have significant effects of <code class="docutils literal notranslate"><span class="pre">mathkind</span></code>, <code class="docutils literal notranslate"><span class="pre">ses</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. These are all asymptotic tests, but given that our sample at every level of the model is in the hundreds, we have fewer concerns about this approach. Interestingly, these are all suggestive that it is the characteristics of the students themselves that affects their attainment, not their learning environment. We plot all these effects below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="nf">allEffects</span><span class="p">(</span><span class="n">classroom.lme</span><span class="p">))</span>
@@ -1352,10 +1411,10 @@ Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/024c576df3acf8635a59ef02703f77c67627729a83de33c0f44459a28cfa0749.png" src="../_images/024c576df3acf8635a59ef02703f77c67627729a83de33c0f44459a28cfa0749.png" />
+<img alt="../_images/6fcd392a9614c4c774b11d2ff99a5d45eb933550e50cccc57a1a48ea4b726b5f.png" src="../_images/6fcd392a9614c4c774b11d2ff99a5d45eb933550e50cccc57a1a48ea4b726b5f.png" />
 </div>
 </div>
-<p>Of interest is that many of these effects are subtly suggestive of a relationship, but the uncertainty is very high. The clearest and most certain effects are those associated with <code class="docutils literal notranslate"><span class="pre">minority</span></code>, <code class="docutils literal notranslate"><span class="pre">mathkind</span></code> and <code class="docutils literal notranslate"><span class="pre">ses</span></code>. Given that none of these are omnibus effects, there is no need for any further testing. As such, we can conclude that the strongest predictors of a student’s maths performance are as follows:</p>
+<p>Of interest is that many of these effects are subtly suggestive of a relationship, but the uncertainty is very high. The clearest and most certain effects are those associated with <code class="docutils literal notranslate"><span class="pre">mathkind</span></code>, <code class="docutils literal notranslate"><span class="pre">ses</span></code> and <code class="docutils literal notranslate"><span class="pre">minority</span></code>. Given that none of these are omnibus effects, there is no need for any further testing. As such, we can conclude that the strongest predictors of a student’s maths performance are as follows:</p>
 <ul class="simple">
 <li><p><em>Minority status</em></p>
 <ul>

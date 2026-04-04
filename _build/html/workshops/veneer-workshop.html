@@ -409,7 +409,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="pchn63112-workshop-clustered-longitudinal-data-example">
 <h1>PCHN63112 Workshop: Clustered Longitudinal Data Example<a class="headerlink" href="#pchn63112-workshop-clustered-longitudinal-data-example" title="Link to this heading">#</a></h1>
-<p>In this example,we will examine building a mixed-effects model for longitudinal data that are also clustered. This will demonstrate how the multilevel framework extends beyond two levels, as well as how this can be integrated into a mixed-effects model. This is also a larger example, especially when interactions are considered. This will lead to a more complex expression for the model, but one which is a simple generalisation of other examples we have seen. Of particular importance is that this example shows a model where <em>all</em> the variables are continuous. This will be an important bridge before seeing examples that are a <em>mixture</em> of categorical and continuous.</p>
+<p>In this example,we will examine building a mixed-effects model for longitudinal data that are also clustered. This will demonstrate how the multilevel framework extends beyond two levels, as well as how this can be integrated into a mixed-effects model. This is also a larger example, especially when interactions are considered. This will lead to a more complex expression for the model, but one which is a simple generalisation of other examples we have seen.</p>
 <section id="loading-packages">
 <h2>Loading Packages<a class="headerlink" href="#loading-packages" title="Link to this heading">#</a></h2>
 <p>We will start by loading all the packages that we need at the beginning. This will tidy-up the output, allow any messages or warnings to not clutter up the rest of the output and not bury any packages within the main body of the analysis. We also use <code class="docutils literal notranslate"><span class="pre">source()</span></code> on the file <code class="docutils literal notranslate"><span class="pre">plot-lme.R</span></code>. This needs to be in the current working directory and will bring the custom function <code class="docutils literal notranslate"><span class="pre">plot.lme()</span></code> into scope.</p>
@@ -516,14 +516,22 @@ See ?effectsTheme for details.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda              time          gcf       
- 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000   Min.   :3.0   Min.   : 3.00  
- 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417   1st Qu.:3.0   1st Qu.:10.00  
- 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000   Median :4.5   Median :17.50  
- 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182   Mean   :4.5   Mean   :23.59  
- 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250   3rd Qu.:6.0   3rd Qu.:32.00  
- 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000   Max.   :6.0   Max.   :87.00  
- (Other):38                                                                                         
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    patient   tooth        age           base_gcf          cda        
+ 1      :12   6 :16   Min.   :21.00   Min.   : 3.00   Min.   :-3.000  
+ 3      :12   7 :20   1st Qu.:29.00   1st Qu.:10.00   1st Qu.: 3.417  
+ 4      :12   8 :20   Median :46.00   Median :15.00   Median : 5.000  
+ 6      :12   9 :18   Mean   :39.87   Mean   :17.38   Mean   : 5.182  
+ 7      :12   10:22   3rd Qu.:50.75   3rd Qu.:25.00   3rd Qu.: 7.250  
+ 8      :12   11:14   Max.   :62.00   Max.   :42.00   Max.   :11.000  
+ (Other):38                                                           
+      time          gcf       
+ Min.   :3.0   Min.   : 3.00  
+ 1st Qu.:3.0   1st Qu.:10.00  
+ Median :4.5   Median :17.50  
+ Mean   :4.5   Mean   :23.59  
+ 3rd Qu.:6.0   3rd Qu.:32.00  
+ Max.   :6.0   Max.   :87.00  
+                              
 </pre></div>
 </div>
 </div>
@@ -839,14 +847,14 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{alignat*}{1}
-    \text{GCF}^{(t|p)}_{i} = &amp;\: \beta_{0} + \left(\beta_{1} \times \text{time}_{i}\right) + \left(\beta_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta_{3} \times \text{CDA}^{(t|p)}\right) + \left(\beta_{6} \times \text{age}^{(p)}\right) + \\ 
-    &amp;\left(\beta_{4} \times \text{GCFb}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{7} \times \text{age}^{(p)} \times \text{time}_{i}\right) + \\
-    &amp;\xi_{0}^{(t|p)} + \phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \eta^{(t|p)}_{i} 
+    \text{GCF}^{(t|p)}_{i} &amp;= \beta_{0} + \left(\beta_{1} \times \text{time}_{i}\right) + \\ 
+                             &amp;\quad\left(\beta_{2} \times \text{GCFb}^{(t|p)}\right) + \left(\beta_{3} \times \text{CDA}^{(t|p)}\right) + \left(\beta_{4} \times \text{GCFb}^{(t|p)} \times \text{time}_{i}\right) + \left(\beta_{5} \times \text{CDA}^{(t|p)} \times \text{time}_{i}\right) \\
+                             &amp;\quad\left(\beta_{6} \times \text{age}^{(p)}\right) + \left(\beta_{7} \times \text{age}^{(p)} \times \text{time}_{i}\right) + \\
+                            &amp;\quad\phi_{0}^{(p)} + \left(\phi_{1}^{(p)} \times \text{time}_{i}\right) + \xi_{0}^{(t|p)} + \eta^{(t|p)}_{i} 
 \end{alignat*}
 \end{split}\]</div>
-<p>which consists of an intercept <span class="math notranslate nohighlight">\((\beta_{0})\)</span>; slopes with <code class="docutils literal notranslate"><span class="pre">time</span></code> <span class="math notranslate nohighlight">\((\beta_{1})\)</span>, <code class="docutils literal notranslate"><span class="pre">baseline_GCF</span></code> <span class="math notranslate nohighlight">\((\beta_{2})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA</span></code> <span class="math notranslate nohighlight">\((\beta_{3})\)</span> and <code class="docutils literal notranslate"><span class="pre">age</span></code> <span class="math notranslate nohighlight">\((\beta_{6})\)</span>; interactions between <code class="docutils literal notranslate"><span class="pre">baseline_GCF:time</span></code> <span class="math notranslate nohighlight">\((\beta_{4})\)</span>, <code class="docutils literal notranslate"><span class="pre">CDA:time</span></code> <span class="math notranslate nohighlight">\((\beta_{5})\)</span> and <code class="docutils literal notranslate"><span class="pre">age:time</span></code> <span class="math notranslate nohighlight">\((\beta_{7})\)</span>; a random intercept per-tooth <span class="math notranslate nohighlight">\(\left(\xi_{0}^{(t|p)}\right)\)</span>, a random intercept and <code class="docutils literal notranslate"><span class="pre">time</span></code> slope per-patient <span class="math notranslate nohighlight">\(\left(\phi_{0}^{(p)}, \phi_{1}^{(p)}\right)\)</span> and a final error term <span class="math notranslate nohighlight">\(\left(\eta^{(t|p)}_{i}\right)\)</span>.</p>
-<p>In terms of specifying this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, the fixed-effects are straightforward as the description above leads to</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">gcf</span> <span class="o">~</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">base_gcf</span> <span class="o">+</span> <span class="n">cda</span> <span class="o">+</span> <span class="n">time</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">base_gcf</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">cda</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">age</span>
+<p>where we have separated-out terms associated with <em>time</em>, <em>tooth</em>, <em>patient</em> and <em>error</em>. In terms of specifying this in <code class="docutils literal notranslate"><span class="pre">R</span></code>, the fixed-effects are straightforward as the description above leads to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fixed</span> <span class="o">=</span> <span class="n">gcf</span> <span class="o">~</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">time</span> <span class="o">+</span> <span class="n">base_gcf</span> <span class="o">+</span> <span class="n">cda</span> <span class="n">time</span><span class="p">:</span><span class="n">base_gcf</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">cda</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span> <span class="n">time</span><span class="p">:</span><span class="n">age</span>
 </pre></div>
 </div>
 <p>For the random effects, we start with the error terms</p>
@@ -871,12 +879,14 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 <p>How do we do this? The way <code class="docutils literal notranslate"><span class="pre">lme()</span></code> handles this situation is by passing a <code class="docutils literal notranslate"><span class="pre">list</span></code> to the <code class="docutils literal notranslate"><span class="pre">random=</span></code> option. Within this list, we label each field using the relevant factor variable and then give the model formula. Due to the labelling, the conditional syntax is implied and does not need to be given explicitly. So, for both <code class="docutils literal notranslate"><span class="pre">1|tooth</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">time|patient</span></code> we can use <code class="docutils literal notranslate"><span class="pre">list(tooth</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1,</span> <span class="pre">patient</span> <span class="pre">=</span> <span class="pre">~</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">age)</span></code>. This gives us full control of the random-effects specification at each level. Our model can therefore be expressed to <code class="docutils literal notranslate"><span class="pre">lme()</span></code> using the following syntax</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="o">:</span><span class="n">age</span><span class="p">,</span>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">veneer.lme</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">lme</span><span class="p">(</span><span class="n">fixed</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">gcf</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w">                                      </span><span class="c1"># time</span>
+<span class="w">                                      </span><span class="n">base_gcf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">base_gcf</span><span class="o">:</span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cda</span><span class="o">:</span><span class="n">time</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="c1"># tooth</span>
+<span class="w">                                      </span><span class="n">age</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">age</span><span class="o">:</span><span class="n">time</span><span class="p">,</span><span class="w">                             </span><span class="c1"># patient</span>
 <span class="w">                  </span><span class="n">random</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">(</span><span class="n">tooth</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="p">,</span>
 <span class="w">                                 </span><span class="n">patient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time</span><span class="p">),</span>
 <span class="w">                  </span><span class="n">data</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">veneer</span><span class="p">,</span><span class="w"> </span>
 <span class="w">                  </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">lmeControl</span><span class="p">(</span><span class="n">opt</span><span class="o">=</span><span class="s">&#39;optim&#39;</span><span class="p">)</span><span class="w"> </span>
-<span class="p">)</span><span class="w"> </span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -892,9 +902,11 @@ F-statistic:   NaN on 1 and 0 DF,  p-value: NA
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Linear mixed-effects model fit by REML
   Data: veneer 
   Log-restricted-likelihood: -459.1694
-  Fixed: gcf ~ 1 + base_gcf + cda + time + age + time:base_gcf + time:cda +      time:age 
-  (Intercept)      base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
-  88.89247933   -0.26927505   -2.30330590  -11.18323137   -1.30710933    0.05086456    0.62792054    0.19630363 
+  Fixed: gcf ~ 1 + time + base_gcf + cda + base_gcf:time + cda:time +      age + age:time 
+  (Intercept)          time      base_gcf           cda           age 
+  88.89247933  -11.18323137   -0.26927505   -2.30330590   -1.30710933 
+time:base_gcf      time:cda      time:age 
+   0.05086456    0.62792054    0.19630363 
 
 Random effects:
  Formula: ~1 | tooth
@@ -1076,8 +1088,10 @@ veneer.full 17 934.4982
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time      cda:time      time:age 
-    10.875020     10.589399     15.091231      8.853131     11.306333     11.063674     20.578920 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     base_gcf           cda          time           age base_gcf:time 
+    10.875020     10.589399     15.091231      8.853131     11.306333 
+     cda:time      time:age 
+    11.063674     20.578920 
 </pre></div>
 </div>
 </div>
@@ -1101,8 +1115,10 @@ veneer.full 17 934.4982
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
-         1.128683          1.136447          1.006248          1.759789          1.133044          1.141009          1.769045 
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       base_gcf.c             cda.c            time.c             age.c 
+         1.128683          1.136447          1.006248          1.759789 
+base_gcf.c:time.c      cda.c:time.c      time.c:age.c 
+         1.133044          1.141009          1.769045 
 </pre></div>
 </div>
 </div>
@@ -1190,7 +1206,7 @@ veneer.full 12 911.7705
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d131c3ad5e95cc5a0682a301bda44aa7d32e6f5796f74f2c4d9d3e88d4f087bf.png" src="../_images/d131c3ad5e95cc5a0682a301bda44aa7d32e6f5796f74f2c4d9d3e88d4f087bf.png" />
+<img alt="../_images/19e2a04a111a3ded5c8a446aea88f52d4fe9c3bcc2f7acdd2b60d698f434b17c.png" src="../_images/19e2a04a111a3ded5c8a446aea88f52d4fe9c3bcc2f7acdd2b60d698f434b17c.png" />
 </div>
 </div>
 <p>As we can see, both <code class="docutils literal notranslate"><span class="pre">base_gcf</span></code> and <code class="docutils literal notranslate"><span class="pre">time</span></code> are effectively <em>constant</em> with a large amount of uncertainty. The effects of <code class="docutils literal notranslate"><span class="pre">cda</span></code> is quite subtle, with a large amount of uncertainty. The effect of <code class="docutils literal notranslate"><span class="pre">age</span></code> is more clearly <em>negative</em>, with much less uncertainty than the other effects in the model. This suggests that there is a much more consistent pattern of GCF <em>decreasing</em> the older the patient.</p>
