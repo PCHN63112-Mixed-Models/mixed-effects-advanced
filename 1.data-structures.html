@@ -6,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Data Structures &#8212; More Advanced Uses of Mixed-effects Models</title>
   
@@ -31,10 +31,10 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/test.css?v=90b7ad94" />
@@ -50,11 +50,11 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -323,7 +323,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -347,7 +347,7 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -505,11 +505,13 @@
 <h2>Step 3. Determine whether you have clusters<a class="headerlink" href="#step-3-determine-whether-you-have-clusters" title="Link to this heading">#</a></h2>
 <p>As a final step, you need to determine whether there are any <em>clustering</em> structures. To do this, you need to think carefully because it can be easy to mix up a <em>grouping variable</em> and a <em>clustering variable</em>. In principle, a <em>grouping variable</em> (such as experimental treatment, diagnosis or sex) is something that each unit <em>HAS</em>, with only a fixed number of levels of interest. By comparison, a <em>clustering variable</em> (such as litter, clinic or school) is something that each unit is <em>IN</em>, with a selection of levels representing a random sample of all possible levels.</p>
 <figure class="align-right">
-<a class="reference internal image-reference" href="_images/rubber_bands.jpg"><img alt="_images/rubber_bands.jpg" src="_images/rubber_bands.jpg" style="width: 200px;" /></a>
+<a class="reference internal image-reference" href="_images/rubber_bands.jpg"><img alt="_images/rubber_bands.jpg" src="_images/rubber_bands.jpg" style="width: 200px;" />
+</a>
 </figure>
 <p>We can use a <em>visual metaphor</em> here to try and make the distinction clear: <em>rubber bands</em> vs <em>sticky notes</em>. Clusters are <em>rubber bands</em> that tie certain units together due to a shared context. Each rubber band is only one possibility from a range of other possibilities. For instance, we only sample a small number of possible rat litters, or schools or clinics. By comparison, <em>grouping variables</em> are <em>sticky notes</em> that label a characteristic of each unit. For instance, we can label which treatment each unit received, or which diagnosis they have been given. These are not random samples from all possible levels of treatment or diagnosis, rather they correspond to an fixed set of labels within this experiment.</p>
 <figure class="align-left">
-<a class="reference internal image-reference" href="_images/sticky_notes.webp"><img alt="_images/sticky_notes.webp" src="_images/sticky_notes.webp" style="width: 200px;" /></a>
+<a class="reference internal image-reference" href="_images/sticky_notes.webp"><img alt="_images/sticky_notes.webp" src="_images/sticky_notes.webp" style="width: 200px;" />
+</a>
 </figure>
 <p>Going back to the example datasets, rat pups are clustered within <em>litters</em>. “Litter” is not a characteristic of an individual rat pup, it is something the pup is <em>IN</em> rather than something the pup <em>HAS</em>. The litters in the experiment are a random sample of all possible rat litters, rather than an exhaustive set of experimental manipulations. The differences between the litters is not a systematic effect that we are interested in, rather each litter represents a <em>shared latent influence</em>. Similarly, students are clustered within <em>classes</em>, which are further clustered within <em>schools</em>. The classes are a random sample of all possible maths classes and the schools are a random sample of all possible schools. Each student is <em>IN</em> a class and <em>IN</em> a school, rather than the class or school being something the student <em>HAS</em>. Differences between classes and schools are not taken as a systematic effect of interest, rather they are taken as indicative of <em>shared latent influences</em> (same teachers, same school environment, same classmates, same local area etc.) that make some units more similar to each other than others.</p>
 <p>Importantly, defining something as a <em>clustering</em> variable is a <em>modelling decision</em> that should reflect reality. Whether something is treated as a clustering variable or not is <em>our decision</em>. The model does not care. The point is that treating a variable as a <em>rubber band</em> rather than a <em>sticky note</em> has implications for what the model assumes and subsequently does with that information. So do not think that there is a <em>right</em> or <em>wrong</em> here. This decision is a modelling one, rather than a fact of the universe. The more importance element will be understanding the <em>consequences</em> of this decision.</p>
@@ -530,7 +532,7 @@
 </aside>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="ratbrain-foot" role="note">
+<aside class="footnote brackets" id="ratbrain-foot" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Which would be rather hard for a rat to do while its head is cut open, but we digress…</p>
 </aside>
@@ -597,11 +599,12 @@
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-structure">Types of Structure</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#clustered">Clustered</a></li>
